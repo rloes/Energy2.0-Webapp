@@ -7,3 +7,5 @@ const useAuthStore = create((set) => ({
     email: "",
     setState: (name, value) => set((state) => ({[name]: value}))
 }))
+
+export default useAuthStore

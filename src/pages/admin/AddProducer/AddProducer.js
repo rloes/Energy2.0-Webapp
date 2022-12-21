@@ -5,6 +5,7 @@ import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent
 import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
+import useNotificationStore from "../../../stores/useNotificationStore";
 
 const initalValues = {
     name: "Testanlage",
@@ -40,6 +41,8 @@ function AddProducer(props) {
     const navigate = useNavigate()
     const {producerId} = useParams()
     const {apiRequest} = useApi()
+    const setNotification = useNotificationStore(state => state.setNotification)
+
     const handleSensorChange = (e) => {
         const {name, value} = e.target
         setValues((prevState) => ({
@@ -52,13 +55,19 @@ function AddProducer(props) {
     }
 
     const handleSave = () => {
-        const method = producerId? "PUT":"POST"
-        const url =producerId? "producers/"+producerId+"/":"producers/"
+        const method = producerId ? "PUT" : "POST"
+        const url = producerId ? "producers/" + producerId + "/" : "producers/"
 
         apiRequest({
             url: url, method: method, requestData: values, formatData: formatApiData
         }).then((response) => {
-            if (response.status === 201 || response.status === 200) navigate('/solaranlagen')
+            if (response.status === 201 || response.status === 200) {
+                navigate('/solaranlagen')
+                setNotification({
+                    message: "Solaranlage wurde " + producerId ? "gespeichert" : "angelegt",
+                    severity: "success"
+                })
+            }
         }).catch((e) => {
             console.log(e)
         })
@@ -66,7 +75,7 @@ function AddProducer(props) {
 
     useEffect(() => {
         if (producerId !== null) {
-            apiRequest({method:"get", url: "producers/"+producerId+"/"}).then(res => {
+            apiRequest({method: "get", url: "producers/" + producerId + "/"}).then(res => {
                 setValues(res.data)
             }).catch((e) => console.log(e))
         }
@@ -74,7 +83,7 @@ function AddProducer(props) {
 
     return (
         <div>
-            <h2 className={"page-title"}>Solaranlage {producerId? "bearbeiten":"hinzufügen"}</h2>
+            <h2 className={"page-title"}>Solaranlage {producerId ? "bearbeiten" : "hinzufügen"}</h2>
             <WidgetComponent>
                 <form className={"flex flex-col gap-4 px-4"}>
                     <TextField name={"name"} value={values.name} onChange={handleChange} placeholder={"Name"}
@@ -98,7 +107,7 @@ function AddProducer(props) {
                                placeholder={"Netzzähler"} label={"Netzzähler"}/>
 
                     <StyledButton onClick={handleSave}>
-                        {producerId? "Speichern":"Anlegen"}
+                        {producerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
                 </form>
             </WidgetComponent>

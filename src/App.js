@@ -4,6 +4,8 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Layout from "./pages/Layout";
 import AddProducer from "./pages/admin/AddProducer/AddProducer";
 import ListProducers from "./pages/admin/ListProducers/ListProducers";
+import {Alert, Snackbar} from "@mui/material";
+import NotificationBar from "./components/NotificationBar";
 
 function App() {
     return (
@@ -19,6 +21,7 @@ function App() {
                     </Route>
                     <Route path={"/login"} element={<Login/>}/>
                 </Routes>
+            <NotificationBar/>
         </BrowserRouter>
     );
 }

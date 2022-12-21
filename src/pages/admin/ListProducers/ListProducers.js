@@ -15,6 +15,7 @@ import {DeleteForever, Edit} from "@mui/icons-material";
 import {Link, useNavigate} from 'react-router-dom'
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
+import useNotificationStore from "../../../stores/useNotificationStore";
 
 const tableColumns = ['name', 'peakPower']
 const columnTitles = {
@@ -27,12 +28,13 @@ function ListProducers(props) {
     const {data, error, loading, request} = useQuery({url: "producers/", method: "get", requestOnLoad: true})
     const {apiRequest} = useApi()
     const navigate = useNavigate()
+    const setNotification = useNotificationStore(state => state.setNotification)
 
     const handleDelete = (id) => {
         apiRequest({
             url: 'producers/'+id+"/",
             method: "DELETE"
-        }).then(request)
+        }).then(request, error => setNotification({message: "Ein Fehler ist aufgetreten", severity: "error"}))
     }
 
     if (error) {
@@ -74,7 +76,7 @@ function ListProducers(props) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {loading ?
+                            {loading || error ?
                                 <TableRow>
                                     <TableCell>
                                         <div>
