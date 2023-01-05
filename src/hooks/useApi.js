@@ -12,7 +12,7 @@ function useApi(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    async function apiRequest({method, url, requestData, formatData, noAuthorization}) {
+    async function apiRequest({method, url, requestData, formatData, noAuthorization, throwError=false}) {
         try {
             if (formatData) {
                 formatData(requestData)
@@ -29,7 +29,9 @@ function useApi(props) {
             response.data = camelize(response.data) //api sends snake_case but camelCase needed
             return response
         } catch (error) {
-            const status = error.response.status
+            let errorHandled = false
+            console.log(error)
+            const status = error.response?.status || error.message
             console.log(status)
             if (status === 401 || status === 403) {
                 setAuthStore('token', '')
@@ -38,8 +40,18 @@ function useApi(props) {
                     message: status === 401 ? "Sie müssen angemeldet sein" : "Sie haben keine Berechtigung dafür",
                     severity: "error"
                 })
+                errorHandled = true
             }
-            throw error
+            if(throwError) {
+                throw error
+            }else{
+                if(!errorHandled) {
+                    setNotification({
+                        message: error.message,
+                        severity: "error"
+                    })
+                }
+            }
         }
     }
 

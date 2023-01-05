@@ -11,7 +11,19 @@ function useForm(initialValues) {
         }))
     }
 
-    return {values, handleChange, setValues}
+    function handleNestedChange(e) {
+        const { name, value } = e.target;
+        const names = name.split('.');
+        setValues(prevState => ({
+            ...prevState,
+            [names[0]]: {
+                ...prevState[names[0]],
+                [names[1]]: value
+            }
+        }));
+    }
+
+    return {values, handleChange, handleNestedChange, setValues}
 }
 
 export default useForm;

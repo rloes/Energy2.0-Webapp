@@ -20,7 +20,7 @@ function Login(props) {
 
     const handleLogin = () => {
         apiRequest({
-            method: 'post', url: '/login/', requestData: values, noAuthorization:true
+            method: 'post', url: '/login/', requestData: values, noAuthorization:true, throwError:true
         })
             .then(res => {
                 setAuthStore('token', res.data.token)
@@ -31,7 +31,7 @@ function Login(props) {
                 if(error.response.status === 400){
                     setNotification({message: "Anmeldung fehlgeschlagen", severity:"error"})
                 }else {
-                    setNotification({message:"Ein Fehler ist aufgetreten", severity:"error"})
+                    setNotification({message:error.message || "Ein Fehler ist aufgetreten", severity:"error"})
                 }
             })
     }

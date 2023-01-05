@@ -37,22 +37,11 @@ const formatApiData = (data) => {
 
 function AddProducer(props) {
 
-    const {values, handleChange, setValues} = useForm(initalValues)
+    const {values, handleChange, setValues, handleNestedChange} = useForm(initalValues)
     const navigate = useNavigate()
     const {producerId} = useParams()
     const {apiRequest} = useApi()
     const setNotification = useNotificationStore(state => state.setNotification)
-
-    const handleSensorChange = (e) => {
-        const {name, value} = e.target
-        setValues((prevState) => ({
-            ...prevState,
-            [name]: {
-                deviceId: value,
-                type: prevState[name].type
-            }
-        }))
-    }
 
     const handleSave = () => {
         const method = producerId ? "PUT" : "POST"
@@ -68,13 +57,15 @@ function AddProducer(props) {
                     severity: "success"
                 })
             }
-        }).catch((e) => {
-            console.log(e)
         })
     }
 
+    /**
+     * If a producerId is defined => a existing producer is being edited.
+     * Therefore on component render, the current values for that producer is fetched.
+     */
     useEffect(() => {
-        if (producerId !== null) {
+        if (producerId) {
             apiRequest({method: "get", url: "producers/" + producerId + "/"}).then(res => {
                 setValues(res.data)
             }).catch((e) => console.log(e))
@@ -100,10 +91,10 @@ function AddProducer(props) {
                                    endAdornment: <InputAdornment position="end"
                                                                  className={"!font-semibold text-black"}>kWp</InputAdornment>,
                                }}/>
-                    <TextField name={"productionSensor"} value={values.productionSensor.deviceId}
-                               onChange={handleSensorChange} placeholder={"Produktionszähler"}
+                    <TextField name={"productionSensor.deviceId"} value={values.productionSensor.deviceId}
+                               onChange={handleNestedChange} placeholder={"Produktionszähler"}
                                label={"Produktionszählernummer"}/>
-                    <TextField name={"gridSensor"} value={values.gridSensor.deviceId} onChange={handleSensorChange}
+                    <TextField name={"gridSensor.deviceId"} value={values.gridSensor.deviceId} onChange={handleNestedChange}
                                placeholder={"Netzzähler"} label={"Netzzähler"}/>
 
                     <StyledButton onClick={handleSave}>

@@ -34,7 +34,10 @@ function ListProducers(props) {
         apiRequest({
             url: 'producers/'+id+"/",
             method: "DELETE"
-        }).then(request, error => setNotification({message: "Ein Fehler ist aufgetreten", severity: "error"}))
+        }).then(() => {
+            request().then(() => setNotification({message: "Produzent "+id+" gelöscht", severity:"warning"}))
+
+        })
     }
 
     if (error) {
