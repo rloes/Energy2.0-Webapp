@@ -11,6 +11,16 @@ function useForm(initialValues) {
         }))
     }
 
+    /**
+     * example state could be:
+     * state = {
+     *     nested.state : {
+     *         name: "",
+     *         age: ""
+     *     }
+     * }
+     * @param e
+     */
     function handleNestedChange(e) {
         const { name, value } = e.target;
         const names = name.split('.');

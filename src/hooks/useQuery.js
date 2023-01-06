@@ -4,9 +4,7 @@ import useApi from "./useApi";
 
 
 /**
- * hook that is used for all API requests
- * @param options
- * @returns {{request: ((function(): Promise<*|undefined>)|*), data: unknown, error: string, loading: boolean}}
+ * can be used for get request, to generalize refresh requests and deletions from lists (eg. ListProducer, ListConsumer etc)
  */
 function useQuery(options) {
     const {
@@ -43,15 +41,15 @@ function useQuery(options) {
     }
 
     useEffect(() => {
-        if(requestOnLoad) {
+        if (requestOnLoad) {
             request()
-        }else{
+        } else {
             setLoading(false)
         }
     }, [])
 
     useEffect(() => {
-        if(data ||error){
+        if (data || error) {
             setLoading(false)
             console.log(data, error)
         }
