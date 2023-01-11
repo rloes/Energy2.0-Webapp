@@ -6,7 +6,7 @@ import StyledButton from "../StyledButton";
 const menuStructure = {
     "Verwaltung": [
         {name: "Dashboard", link: "", icon: <Dashboard/>},
-        {name: "Kunden", link: "", icon: <Person/>},
+        {name: "Kunden", link: "/kunden/erstellen", icon: <Person/>},
         {name: "Solaranlagen", link: "/solaranlagen", icon: <SolarPower/>},
         {name: "Tarife", link: "", icon: <RequestQuote/>},
     ],
