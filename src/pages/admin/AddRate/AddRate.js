@@ -29,3 +29,72 @@ const formatApiData = (data) => {
     return data
 }
 
+
+function AddRate(props) {
+
+    const {values, handleChange, setValues, handleNestedChange} = useForm(initalValues)
+    const navigate = useNavigate()
+    const {rateId} = useParams()
+    const {apiRequest} = useApi()
+    const setNotification = useNotificationStore(state => state.setNotification)
+
+    const handleSave = () => {
+        const method = rateId ? "PUT" : "POST"
+        const url = rateId ? "rates/" + rateId + "/" : "rates/"
+
+        apiRequest({
+            url: url, method: method, requestData: values, formatData: formatApiData
+        }).then((response) => {
+            if (response.status === 201 || response.status === 200) {
+                navigate('/tarife')
+                setNotification({
+                    message: "Tarif wurde " + rateId ? "gespeichert" : "angelegt",
+                    severity: "success"
+                })
+            }
+        })
+    }
+
+    /**
+     * If a producerId is defined => a existing producer is being edited.
+     * Therefore on component render, the current values for that producer is fetched.
+     */
+    useEffect(() => {
+        if (rateId) {
+            apiRequest({method: "get", url: "rates/" + rateId + "/"}).then(res => {
+                setValues(res.data)
+            }).catch((e) => console.log(e))
+        }
+    }, [rateId])
+
+    return (
+        <div>
+            <h2 className={"page-title"}>Tarif {rateId ? "bearbeiten" : "hinzufügen"}</h2>
+            <WidgetComponent>
+                <form className={"flex flex-col gap-4 px-4"}>
+                    <TextField name={"name"} value={values.name} onChange={handleChange} placeholder={"Name"}
+                               label={"Name"}/>
+                    <TextField name={"price"} value={values.price} onChange={handleChange}
+                               placeholder={"Preis"} label={"Preis"}/>
+                    <TextField name={"reduced_price"} value={values.reduced_price} onChange={handleChange}
+                               placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
+                    <TextField name={"flexible"} value={values.flexible} onChange={handleChange}
+                               placeholder={"Flexibel"} label={"Flexibel"}/>
+                    <TextField name={"start_time"} value={values.start_time} onChange={handleChange}
+                               placeholder={"Startzeit"} label={"Startzeit"}/>
+                    <TextField name={"end_time"} value={values.end_time} onChange={handleChange}
+                               placeholder={"Endzeit"} label={"Endzeit"}/>
+                    <TextField name={"start_date"} value={values.start_date} onChange={handleChange}
+                               placeholder={"Startdatum"} label={"Startdatum"}/>
+                    <TextField name={"end_date"} value={values.end_date} onChange={handleChange}
+                               placeholder={"Enddatum"} label={"Enddatum"}/>
+                    <StyledButton onClick={handleSave}>
+                        {rateId ? "Speichern" : "Anlegen"}
+                    </StyledButton>
+                </form>
+            </WidgetComponent>
+        </div>
+    );
+}
+
+export default AddRate;
