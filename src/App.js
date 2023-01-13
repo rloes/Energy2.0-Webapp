@@ -7,7 +7,6 @@ import ListProducers from "./pages/admin/ListProducers/ListProducers";
 import AddRate from "./pages/admin/AddRate/AddRate";
 import ListRates from "./pages/admin/ListRates/ListRates";
 import { Alert, Snackbar } from "@mui/material";
-import NotificationBar from "./components/NotificationBar";
 import AddConsumer from "./pages/admin/AddConsumer/AddConsumer";
 
 function App() {
@@ -29,7 +28,6 @@ function App() {
         </Route>
         <Route path={"/login"} element={<Login />} />
       </Routes>
-      <NotificationBar />
     </BrowserRouter>
   );
 }

@@ -16,13 +16,13 @@ import { DeleteForever, Edit } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
-import useNotificationStore from "../../../stores/useNotificationStore";
 
-const tableColumns = ["name", "price", "flexible"];
+const tableColumns = ["name", "reduced_price", "grid_price", "flexible"];
 const columnTitles = {
   name: "Bezeichnung",
-  price: "Preis",
-  flexible: "Flexibel",
+  reduced_price: "PV-Preis (ct/kWh)",
+  grid_price: "Netzpreis (ct/kWh)",
+  flexible: "Flexibler Tarif",
 };
 
 function ListRates(props) {
@@ -33,22 +33,12 @@ function ListRates(props) {
   });
   const { apiRequest } = useApi();
   const navigate = useNavigate();
-  const setNotification = useNotificationStore(
-    (state) => state.setNotification
-  );
 
   const handleDelete = (id) => {
     apiRequest({
       url: "rates/" + id + "/",
       method: "DELETE",
-    }).then(() => {
-      request().then(() =>
-        setNotification({
-          message: "Tarif " + id + " gelöscht",
-          severity: "warning",
-        })
-      );
-    });
+    }).then(request);
   };
 
   if (error) {
@@ -92,10 +82,7 @@ function ListRates(props) {
                 data.map((rate) => (
                   <TableRow>
                     {tableColumns.map((column) => (
-                      <TableCell>
-                        {rate[column]}
-                        {column === "price" && " ct/kWh"}
-                      </TableCell>
+                      <TableCell>{rate[column]}</TableCell>
                     ))}
                     <TableCell>
                       <StyledButton
