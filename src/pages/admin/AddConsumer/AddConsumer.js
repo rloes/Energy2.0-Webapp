@@ -2,10 +2,8 @@ import React, { useEffect } from "react";
 import {
   Autocomplete,
   Button,
-  Chip,
   InputAdornment,
   TextField as MuiTextField,
-  Stack,
 } from "@mui/material";
 import useForm from "../../../hooks/useForm";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
@@ -80,6 +78,18 @@ function AddConsumer(props) {
         .catch((e) => console.log(e));
     }
   }, [consumerId]);
+
+  /**
+   * Fetches currently existing tariffs to be referenced in the multiselect list
+   * below when to enter the tariffs the consumer has chosen.
+   */
+  const [tariffs, setTariffs] = useState([]);
+  useEffect(() => {
+    apiRequest({ method: "get", url: "Tarife/" }).then((res) => {
+      setTariffs(res.data);
+    });
+  }, []);
+
   return (
     <div>
       <h2 className={"page-title"}>
@@ -140,7 +150,7 @@ function AddConsumer(props) {
           <Autocomplete
             multiple
             id="tags-standard"
-            options={values.rates}
+            options={values.rates} // currently a placeholder, to be replaced by tariffs
             renderInput={(params) => (
               <TextField
                 {...params}
