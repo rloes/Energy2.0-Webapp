@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  Autocomplete,
   Button,
   InputAdornment,
   TextField as MuiTextField,
@@ -66,8 +65,8 @@ function AddConsumer(props) {
   };
 
   /**
-   * If a consumerId is defined => an existing consumer is being edited.
-   * Therefore on component render, the current values for that consumer are fetched.
+   * If a consumerId is defined => a existing consumer is being edited.
+   * Therefore on component render, the current values for that consumer is fetched.
    */
   useEffect(() => {
     if (consumerId) {
@@ -78,18 +77,6 @@ function AddConsumer(props) {
         .catch((e) => console.log(e));
     }
   }, [consumerId]);
-
-  /**
-   * Fetches currently existing tariffs to be referenced in the multiselect list
-   * below when to enter the tariffs the consumer has chosen.
-   */
-  const [tariffs, setTariffs] = useState([]);
-  useEffect(() => {
-    apiRequest({ method: "get", url: "Tarife/" }).then((res) => {
-      setTariffs(res.data);
-    });
-  }, []);
-
   return (
     <div>
       <h2 className={"page-title"}>
@@ -147,18 +134,12 @@ function AddConsumer(props) {
             placeholder={"Sensorzählernummer"}
             label={"Sensorzählernummer"}
           />
-          <Autocomplete
-            multiple
-            id="tags-standard"
-            options={values.rates} // currently a placeholder, to be replaced by tariffs
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                label="Tarife"
-                placeholder="Tarif auswählen"
-              />
-            )}
+          <TextField
+            name={"rates"}
+            value={values.rates}
+            onChange={handleChange}
+            placeholder={"Tarife"}
+            label={"Tarife"}
           />
           <StyledButton
             variant={"contained"}
