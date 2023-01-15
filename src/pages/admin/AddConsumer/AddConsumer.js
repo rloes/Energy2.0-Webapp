@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Autocomplete,
   Button,
   InputAdornment,
   TextField as MuiTextField,
@@ -10,6 +11,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
+import Checkbox from "@mui/material/Checkbox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const initalValues = {
   name: "test",
@@ -24,7 +28,7 @@ const initalValues = {
     device_id: "92983928",
     type: "CM",
   },
-  rates: ["http://localhost:8000/rates/2/"],
+  rates: ["http://localhost:8000/rates/2/", "GoGreen"],
 };
 const TextField = (props) => {
   return <MuiTextField className={"!min-w-[500px]"} {...props} />;
@@ -57,12 +61,27 @@ function AddConsumer(props) {
       if (response.status === 201 || response.status === 200) {
         navigate("/kunden");
         setNotification({
-          message: "Kunde wurde " + consumerId ? "gespeichert" : "angelegt",
+          message: "Kunde wurde " + (consumerId ? "gespeichert" : "angelegt"),
           severity: "success",
         });
       }
     });
   };
+
+  /**
+   * Fetches currently existing tariffs to be referenced in the multiselect list
+   * below when to enter the tariffs the consumer has chosen.
+   */
+  const [tariffs, setTariffs] = useState([]);
+  useEffect(() => {
+    apiRequest({ method: "get", url: "rates/" }).then((res) => {
+      setTariffs(res.data);
+    });
+  }, []);
+
+  // Falls doch lieber Checkbox gewünscht ist --> eine der Auswahlarten löschen
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   /**
    * If a consumerId is defined => a existing consumer is being edited.
@@ -134,12 +153,41 @@ function AddConsumer(props) {
             placeholder={"Sensorzählernummer"}
             label={"Sensorzählernummer"}
           />
-          <TextField
-            name={"rates"}
-            value={values.rates}
-            onChange={handleChange}
-            placeholder={"Tarife"}
-            label={"Tarife"}
+          <Autocomplete
+            multiple
+            id="tags-outlined"
+            options={values.rates} // currently a placeholder, to be replaced by tariffs
+            filterSelectedOptions
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Tarife"
+                placeholder="Tarife auswählen"
+              />
+            )}
+          />
+          <Autocomplete
+            multiple
+            id="checkboxes-tags-demo"
+            options={[values.rates]} // currently a placeholder, to be replaced by tariffs
+            disableCloseOnSelect
+            renderOption={(rate) => (
+              <li key={rate}>
+                <Checkbox
+                  icon={icon}
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                />
+                {rate}
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Tarife"
+                placeholder="Tarife auswählen"
+              />
+            )}
           />
           <StyledButton
             variant={"contained"}
