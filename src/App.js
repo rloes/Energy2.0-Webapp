@@ -6,6 +6,7 @@ import AddProducer from "./pages/admin/AddProducer/AddProducer";
 import ListProducers from "./pages/admin/ListProducers/ListProducers";
 import {Alert, Snackbar} from "@mui/material";
 import NotificationBar from "./components/NotificationBar";
+import Dashboard_mfh from "./pages/admin/Dashboard/Dashboard_mfh"
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Routes>
                     <Route element={<Layout />}>
                         <Route index element={<div />}/>
+                        <Route path={"dashboard"} element={<Dashboard_mfh/>}/>
                         <Route path={"solaranlagen"}>
                             <Route index element={<ListProducers/>} />
                             <Route path={"erstellen"} element={<AddProducer/>}/>
