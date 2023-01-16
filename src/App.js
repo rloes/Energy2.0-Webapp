@@ -7,6 +7,8 @@ import ListProducers from "./pages/admin/ListProducers/ListProducers";
 import {Alert, Snackbar} from "@mui/material";
 import NotificationBar from "./components/NotificationBar";
 import AddConsumer from "./pages/admin/AddConsumer/AddConsumer";
+import ListRates from "./pages/admin/ListRates/ListRates";
+import AddRate from "./pages/admin/AddRate/AddRate";
 
 function App() {
     return (
@@ -21,6 +23,11 @@ function App() {
                         </Route>
                         <Route path={"kunden"}>
                             <Route path={"erstellen"} element={<AddConsumer />}/>
+                        </Route>
+                        <Route path={"tarife"}>
+                            <Route index element={<ListRates />} />
+                            <Route path={"erstellen"} element={<AddRate />} />
+                            <Route path={":rateId/bearbeiten"} element={<AddRate />} />
                         </Route>
                     </Route>
                     <Route path={"/login"} element={<Login/>}/>

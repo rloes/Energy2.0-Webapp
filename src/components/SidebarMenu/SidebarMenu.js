@@ -8,7 +8,7 @@ const menuStructure = {
         {name: "Dashboard", link: "", icon: <Dashboard/>},
         {name: "Kunden", link: "/kunden/erstellen", icon: <Person/>},
         {name: "Solaranlagen", link: "/solaranlagen", icon: <SolarPower/>},
-        {name: "Tarife", link: "", icon: <RequestQuote/>},
+        {name: "Tarife", link: "/tarife", icon: <RequestQuote/>},
     ],
     "Support": [
         {name: "Kontakt", link: "", icon: <Phone/>},
