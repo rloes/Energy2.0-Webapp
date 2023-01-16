@@ -11,9 +11,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
-import Checkbox from "@mui/material/Checkbox";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 const initalValues = {
   name: "test",
@@ -39,8 +36,13 @@ const formatApiData = (data) => {
 };
 
 function AddConsumer(props) {
-  const { values, handleChange, setValues, handleNestedChange } =
-    useForm(initalValues);
+  const {
+    values,
+    handleChange,
+    setValues,
+    handleNestedChange,
+    handleSelectChange,
+  } = useForm(initalValues);
   const navigate = useNavigate();
   const { consumerId } = useParams();
   const { apiRequest } = useApi();
@@ -72,16 +74,12 @@ function AddConsumer(props) {
    * Fetches currently existing tariffs to be referenced in the multiselect list
    * below when to enter the tariffs the consumer has chosen.
    */
-  const [tariffs, setTariffs] = useState([]);
+  const [rates, setRates] = useState([]);
   useEffect(() => {
     apiRequest({ method: "get", url: "rates/" }).then((res) => {
-      setTariffs(res.data);
+      setRates(res.data);
     });
   }, []);
-
-  // Falls doch lieber Checkbox gewünscht ist --> eine der Auswahlarten löschen
-  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   /**
    * If a consumerId is defined => a existing consumer is being edited.
@@ -156,31 +154,11 @@ function AddConsumer(props) {
           <Autocomplete
             multiple
             id="tags-outlined"
-            options={values.rates} // currently a placeholder, to be replaced by tariffs
+            options={rates}
+            getOptionLabel={(option) => option.name}
             filterSelectedOptions
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Tarife"
-                placeholder="Tarife auswählen"
-              />
-            )}
-          />
-          <Autocomplete
-            multiple
-            id="checkboxes-tags-demo"
-            options={[values.rates]} // currently a placeholder, to be replaced by tariffs
             disableCloseOnSelect
-            renderOption={(rate) => (
-              <li key={rate}>
-                <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{ marginRight: 8 }}
-                />
-                {rate}
-              </li>
-            )}
+            onChange={(value) => handleSelectChange(value)}
             renderInput={(params) => (
               <TextField
                 {...params}
