@@ -98,7 +98,10 @@ function AddProducer(props) {
                                placeholder={"Netzzähler"} label={"Netzzähler"}/>
 
                     <StyledButton onClick={handleSave}>
-                        {producerId? "Speichern":"Anlegen"}
+                        {producerId ? "Speichern" : "Anlegen"}
+                    </StyledButton>
+                    <StyledButton onClick={() => navigate("/solaranlagen")}>
+                    Abbrechen
                     </StyledButton>
                 </form>
             </WidgetComponent>
