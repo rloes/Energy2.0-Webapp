@@ -10,13 +10,14 @@ import NotificationBar from "./components/NotificationBar";
 import AddConsumer from "./pages/admin/AddConsumer/AddConsumer";
 import ListRates from "./pages/admin/ListRates/ListRates";
 import AddRate from "./pages/admin/AddRate/AddRate";
+import Dashboard_mfh from "./pages/admin/Dashboard/Dashboard_mfh"
 
 function App() {
     return (
         <BrowserRouter>
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route index element={<div />}/>
+                        <Route index element={<Dashboard_mfh />}/>
                         <Route path={"solaranlagen"}>
                             <Route index element={<ListProducers/>} />
                             <Route path={"erstellen"} element={<AddProducer/>}/>
@@ -34,7 +35,7 @@ function App() {
                     <Route element={<Layout />}>
                         <Route index element={<div />}/>
                         <Route path={"tarife"}>
-                            <Route index element={<ListProducers/>} />  
+                            <Route index element={<ListProducers/>} />
                             <Route path={"erstellen"} element={<AddRate/>}/>
                             <Route path={":rateId/bearbeiten"} element={<AddRate/>} />
                         </Route>
