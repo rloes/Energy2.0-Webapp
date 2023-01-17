@@ -53,7 +53,8 @@ function AddConsumer(props) {
      * Handles changes to the autocomplete component.
      */
     function handleSelectChange(value) {
-        const selectedUrls = value.map((option) => option.url);
+        const selectedUrls = value.map((option) => option.url)
+        console.log(selectedUrls)
         setValues((prevState) => ({
             ...prevState,
             rates: selectedUrls,
@@ -172,6 +173,7 @@ function AddConsumer(props) {
                         getOptionLabel={(option) => option.name}
                         filterSelectedOptions
                         disableCloseOnSelect
+                        isOptionEqualToValue={(option, value) => option.url === value.url}
                         onChange={(event, value) => handleSelectChange(value)}
                         renderInput={(params) => (
                             <TextField
