@@ -100,6 +100,9 @@ function AddProducer(props) {
                     <StyledButton onClick={handleSave}>
                         {producerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
+                    <StyledButton onClick={() => navigate("/solaranlagen")}>
+                    Abbrechen
+                    </StyledButton>
                 </form>
             </WidgetComponent>
         </div>
