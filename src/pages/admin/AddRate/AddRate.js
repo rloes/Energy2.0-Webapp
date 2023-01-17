@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
-import {Button, InputAdornment, TextField as MuiTextField} from "@mui/material";
+import {Button, InputAdornment, Switch, TextField as MuiTextField} from "@mui/material";
 import useForm from "../../../hooks/useForm";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
 import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
+import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 
 const initalValues = {
     "name": "Tarif 1",
@@ -80,13 +81,13 @@ function AddRate(props) {
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
                     <TextField name={"flexible"} value={values.flexible} onChange={handleChange}
                                placeholder={"Flexibel"} label={"Flexibel"}/>
-                    <TextField name={"start_time"} value={values.start_time} onChange={handleChange}
+                    <TextField type="time" name={"start_time"} value={values.start_time} onChange={handleChange}
                                placeholder={"Startzeit"} label={"Startzeit"}/>
-                    <TextField name={"end_time"} value={values.end_time} onChange={handleChange}
+                    <TextField type="time" name={"end_time"} value={values.end_time} onChange={handleChange}
                                placeholder={"Endzeit"} label={"Endzeit"}/>
-                    <TextField name={"start_date"} value={values.start_date} onChange={handleChange}
+                    <TextField type="date" name={"start_date"} value={values.start_date} onChange={handleChange}
                                placeholder={"Startdatum"} label={"Startdatum"}/>
-                    <TextField name={"end_date"} value={values.end_date} onChange={handleChange}
+                    <TextField type="date" name={"end_date"} value={values.end_date} onChange={handleChange}
                                placeholder={"Enddatum"} label={"Enddatum"}/>
                     <StyledButton onClick={handleSave}>
                         {rateId ? "Speichern" : "Anlegen"}

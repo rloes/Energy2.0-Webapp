@@ -4,6 +4,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Layout from "./pages/Layout";
 import AddProducer from "./pages/admin/AddProducer/AddProducer";
 import ListProducers from "./pages/admin/ListProducers/ListProducers";
+import ListRates from "./pages/admin/ListRates/ListRates";
 import AddRate from './pages/admin/AddRate/AddRate';
 import {Alert, Snackbar} from "@mui/material";
 import NotificationBar from "./components/NotificationBar";
@@ -23,7 +24,7 @@ function App() {
                     <Route element={<Layout />}>
                         <Route index element={<div />}/>
                         <Route path={"tarife"}>
-                            <Route index element={<ListProducers/>} />  
+                            <Route index element={<ListRates/>} />  
                             <Route path={"erstellen"} element={<AddRate/>}/>
                             <Route path={":rateId/bearbeiten"} element={<AddRate/>} />
                         </Route>
