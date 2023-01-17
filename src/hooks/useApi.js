@@ -8,7 +8,7 @@ import useNotificationStore from "../stores/useNotificationStore";
 
 function useApi(props) {
     // Authorization Toke received and stored on login
-    const token = useAuthStore((state => state.token))
+    const token = localStorage.getItem('token');
     const setAuthStore = useAuthStore(state => state.setState)
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)

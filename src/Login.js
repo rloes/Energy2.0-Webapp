@@ -8,6 +8,8 @@ import useAuthStore from "./stores/useAuthStore";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "./stores/useNotificationStore";
 
+
+
 function Login(props) {
 
     const {values, handleChange} = useForm({
@@ -23,6 +25,7 @@ function Login(props) {
             method: 'post', url: '/login/', requestData: values, noAuthorization:true, throwError:true
         })
             .then(res => {
+                localStorage.setItem('token', res.data.token);
                 setAuthStore('token', res.data.token)
                 navigate('/solaranlagen')
                 setNotification({message:"Angemeldet", severity:"success"})
