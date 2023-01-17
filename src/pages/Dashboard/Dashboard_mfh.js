@@ -1,12 +1,12 @@
 import React from 'react';
 import {Box, Button, IconButton, Typography, useTheme} from "@mui/material"
-import StatBox from '../../../components/Dashboard_mfh/StatBox'
-import LineChart from '../../../components/Dashboard_mfh/LineChart';
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import StatBox from './components/StatBox'
+import LineChart from './components/LineChart';
+import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
 import {ThemeProvider, createTheme } from '@mui/system';
-import Header from "../../../components/Dashboard_mfh/Header"
-import { tokens } from "../../../theme";
-import ElevatedBox from "../../../components/Dashboard_mfh/ElevatedBox"
+import Header from "./components/Header"
+import { tokens } from "../../theme";
+import ElevatedBox from "./components/ElevatedBox"
 //ICONS
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import EuroSymbolSharpIcon from '@mui/icons-material/EuroSymbolSharp';

@@ -1,4 +1,4 @@
-import { withStyles } from '@material-ui/core/styles';
+//import {withStyles} from "@mui/styles";
 
 const styles = {
   root: {
@@ -12,4 +12,5 @@ function ElevatedBox(props) {
   return <div className={classes.root}>{props.children}</div>;
 }
 
-export default withStyles(styles)(ElevatedBox);
+// export default withStyles(styles)(ElevatedBox);
+export default ElevatedBox;

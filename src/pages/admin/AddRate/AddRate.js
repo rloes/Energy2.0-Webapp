@@ -6,17 +6,16 @@ import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
-import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 
 const initalValues = {
     "name": "Tarif 1",
     "price": 10.50,
-    "reduced_price": 1,
+    "reducedPrice": 1,
     "flexible": false,
-    "start_time": new Date("2023-01-01"),
-    "end_time": new Date("2023-12-31"),
-    "start_date": new Date("2023-01-01"),
-    "end_date": new Date("2023-12-31")
+    "startTime": "",
+    "endTime": "",
+    "startDate": "",
+    "endDate": ""
 }
 
 const TextField = (props) => {
@@ -77,18 +76,22 @@ function AddRate(props) {
                                label={"Name"}/>
                     <TextField name={"price"} value={values.price} onChange={handleChange}
                                placeholder={"Preis"} label={"Preis"}/>
-                    <TextField name={"reduced_price"} value={values.reduced_price} onChange={handleChange}
+                    <TextField name={"reducedPrice"} value={values.reducedPrice} onChange={handleChange}
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
                     <TextField name={"flexible"} value={values.flexible} onChange={handleChange}
                                placeholder={"Flexibel"} label={"Flexibel"}/>
-                    <TextField type="time" name={"start_time"} value={values.start_time} onChange={handleChange}
-                               placeholder={"Startzeit"} label={"Startzeit"}/>
-                    <TextField type="time" name={"end_time"} value={values.end_time} onChange={handleChange}
-                               placeholder={"Endzeit"} label={"Endzeit"}/>
-                    <TextField type="date" name={"start_date"} value={values.start_date} onChange={handleChange}
-                               placeholder={"Startdatum"} label={"Startdatum"}/>
-                    <TextField type="date" name={"end_date"} value={values.end_date} onChange={handleChange}
-                               placeholder={"Enddatum"} label={"Enddatum"}/>
+                    <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
+                               placeholder={"Startzeit"} label={"Startzeit"} type={"time"} InputLabelProps={{
+                        shrink: true,
+                    }}/>
+                    <TextField name={"endTime"} value={values.endTime} onChange={handleChange} placeholder={"Endzeit"}
+                               label={"Endzeit"} type="time" InputLabelProps={{
+                        shrink: true,
+                    }}/>
+                    <TextField name={"startDate"} value={values.startDate} onChange={handleChange}
+                               placeholder={"Startdatum"} label={"Startdatum"} type={"date"}/>
+                    <TextField name={"endDate"} value={values.endDate} onChange={handleChange}
+                               placeholder={"Endzeit"} label={"Endzeit"} type={"date"}/>
                     <StyledButton onClick={handleSave}>
                         {rateId ? "Speichern" : "Anlegen"}
                     </StyledButton>

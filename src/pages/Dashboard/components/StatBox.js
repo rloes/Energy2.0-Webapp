@@ -1,5 +1,5 @@
 import { Box,Typography,useTheme } from '@mui/material'
-import WidgetComponent from "../WidgetComponent/WidgetComponent"
+import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent"
 import ElevatedBox from './ElevatedBox'
 
 const StatBox =({title,subtitle,icon,increase}) => {
