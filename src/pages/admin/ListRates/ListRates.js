@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
     CircularProgress,
     Table,
@@ -7,57 +7,52 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Button, IconButton
+    Button,
+    IconButton,
 } from "@mui/material";
 import useQuery from "../../../hooks/useQuery";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
 import {DeleteForever, Edit} from "@mui/icons-material";
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
-import useNotificationStore from "../../../stores/useNotificationStore";
 
-const tableColumns = ['name', 'peakPower']
+const tableColumns = ["name", "reducedPrice", "price", "flexible"];
 const columnTitles = {
     name: "Bezeichnung",
-    peakPower: "Installierte Leistung"
-}
+    reducedPrice: "PV-Preis (ct/kWh)",
+    price: "Netzpreis (ct/kWh)",
+    flexible: "Flexibler Tarif",
+};
 
-function ListProducers(props) {
-
-    const {data, error, loading, request} = useQuery({url: "producers/", method: "get", requestOnLoad: true})
-    const {apiRequest} = useApi()
-    const navigate = useNavigate()
-    const setNotification = useNotificationStore(state => state.setNotification)
+function ListRates(props) {
+    const {data, error, loading, request} = useQuery({
+        url: "rates/",
+        method: "get",
+        requestOnLoad: true,
+    });
+    const {apiRequest} = useApi();
+    const navigate = useNavigate();
 
     const handleDelete = (id) => {
         apiRequest({
-            url: 'producers/'+id+"/",
-            method: "DELETE"
-        }).then(() => {
-            request().then(() => setNotification({message: "Produzent "+id+" gelöscht", severity:"warning"}))
-
-        })
-    }
+            url: "rates/" + id + "/",
+            method: "DELETE",
+        }).then(request);
+    };
 
     if (error) {
-        return (
-            <div>error</div>
-        )
+        return <div>error</div>;
     }
 
     return (
         <div>
-            <h2 className={"page-title"}>Solaranlagenverwaltung</h2>
+            <h2 className={"page-title"}>Tarifverwaltung</h2>
             <WidgetComponent>
                 <div className={"flex"}>
-                    <h3 className={"text-lg font-bold px-4"}>
-                        Solaranlagen
-                    </h3>
+                    <h3 className={"text-lg font-bold px-4"}>Tarife</h3>
                     <Link to={"./erstellen"}>
-                        <StyledButton>
-                            Solaranlage hinzufügen
-                        </StyledButton>
+                        <StyledButton>Tarif hinzufügen</StyledButton>
                     </Link>
                 </div>
                 <TableContainer>
@@ -66,20 +61,16 @@ function ListProducers(props) {
                             <TableRow>
                                 {tableColumns.map((column) => (
                                     <TableCell>
-                                        <h4 className={"font-semibold"}>
-                                            {columnTitles[column]}
-                                        </h4>
+                                        <h4 className={"font-semibold"}>{columnTitles[column]}</h4>
                                     </TableCell>
                                 ))}
                                 <TableCell>
-                                    <h4 className={"font-bold"}>
-                                        Aktionen
-                                    </h4>
+                                    <h4 className={"font-bold"}>Aktionen</h4>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {loading || error ?
+                            {loading || error ? (
                                 <TableRow>
                                     <TableCell>
                                         <div>
@@ -87,27 +78,30 @@ function ListProducers(props) {
                                         </div>
                                     </TableCell>
                                 </TableRow>
-                                :
-                                data.map((producer) => (
+                            ) : (
+                                data.map((rate) => (
                                     <TableRow>
                                         {tableColumns.map((column) => (
-                                            <TableCell>
-                                                {producer[column]}{column === "peakPower" && " kWp"}
-                                            </TableCell>
+                                            <TableCell>{column !== "flexible" ? rate[column] :
+                                                rate[column] ? "ja" : "nein"}</TableCell>
+
                                         ))}
                                         <TableCell>
-                                            <StyledButton startIcon={<Edit/>} onClick={() => {
-                                                navigate('./'+producer.id+"/bearbeiten")
-                                            }}>
+                                            <StyledButton
+                                                startIcon={<Edit/>}
+                                                onClick={() => {
+                                                    navigate("./" + rate.id + "/bearbeiten");
+                                                }}
+                                            >
                                                 Bearbeiten
                                             </StyledButton>
-                                            <IconButton onClick={() => handleDelete(producer.id)}>
-                                                <DeleteForever />
+                                            <IconButton onClick={() => handleDelete(rate.id)}>
+                                                <DeleteForever/>
                                             </IconButton>
                                         </TableCell>
                                     </TableRow>
                                 ))
-                            }
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -116,4 +110,4 @@ function ListProducers(props) {
     );
 }
 
-export default ListProducers;
+export default ListRates;

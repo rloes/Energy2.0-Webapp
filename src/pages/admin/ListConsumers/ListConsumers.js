@@ -17,25 +17,29 @@ import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 
-const tableColumns = ['name', 'peakPower']
+const tableColumns = ['id', 'name', 'contract', 'mail', 'phone']
 const columnTitles = {
-    name: "Bezeichnung",
-    peakPower: "Installierte Leistung"
+    id: "Kunden-ID",
+    name: "Name",
+    contract: "Vertrag",
+    mail: "E-Mail",
+    phone: "Telefonnumemr"
 }
 
-function ListProducers(props) {
 
-    const {data, error, loading, request} = useQuery({url: "producers/", method: "get", requestOnLoad: true})
+function ListConsumers(props) {
+
+    const {data, error, loading, request} = useQuery({url: "consumers/", method: "get", requestOnLoad: true})
     const {apiRequest} = useApi()
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
     const handleDelete = (id) => {
         apiRequest({
-            url: 'producers/'+id+"/",
+            url: 'consumers/'+id+"/",
             method: "DELETE"
         }).then(() => {
-            request().then(() => setNotification({message: "Produzent "+id+" gelöscht", severity:"warning"}))
+            request().then(() => setNotification({message: "Kunde "+id+" gelöscht", severity:"warning"}))
 
         })
     }
@@ -48,15 +52,15 @@ function ListProducers(props) {
 
     return (
         <div>
-            <h2 className={"page-title"}>Solaranlagenverwaltung</h2>
+            <h2 className={"page-title"}>Kundenverwaltung</h2>
             <WidgetComponent>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>
-                        Solaranlagen
+                        Kunden
                     </h3>
                     <Link to={"./erstellen"}>
                         <StyledButton>
-                            Solaranlage hinzufügen
+                            Kunde hinzufügen
                         </StyledButton>
                     </Link>
                 </div>
@@ -88,20 +92,20 @@ function ListProducers(props) {
                                     </TableCell>
                                 </TableRow>
                                 :
-                                data.map((producer) => (
+                                data.map((consumer) => (
                                     <TableRow>
                                         {tableColumns.map((column) => (
                                             <TableCell>
-                                                {producer[column]}{column === "peakPower" && " kWp"}
+                                                {consumer[column]}{column === "peakPower" && " kWp"}
                                             </TableCell>
                                         ))}
                                         <TableCell>
                                             <StyledButton startIcon={<Edit/>} onClick={() => {
-                                                navigate('./'+producer.id+"/bearbeiten")
+                                                navigate('./'+consumer.id+"/bearbeiten")
                                             }}>
                                                 Bearbeiten
                                             </StyledButton>
-                                            <IconButton onClick={() => handleDelete(producer.id)}>
+                                            <IconButton onClick={() => handleDelete(consumer.id)}>
                                                 <DeleteForever />
                                             </IconButton>
                                         </TableCell>
@@ -116,4 +120,4 @@ function ListProducers(props) {
     );
 }
 
-export default ListProducers;
+export default ListConsumers;

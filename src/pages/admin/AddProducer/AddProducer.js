@@ -5,6 +5,7 @@ import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent
 import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
+import useNotificationStore from "../../../stores/useNotificationStore";
 
 const initalValues = {
     name: "Testanlage",
@@ -36,37 +37,36 @@ const formatApiData = (data) => {
 
 function AddProducer(props) {
 
-    const {values, handleChange, setValues} = useForm(initalValues)
+    const {values, handleChange, setValues, handleNestedChange} = useForm(initalValues)
     const navigate = useNavigate()
     const {producerId} = useParams()
     const {apiRequest} = useApi()
-    const handleSensorChange = (e) => {
-        const {name, value} = e.target
-        setValues((prevState) => ({
-            ...prevState,
-            [name]: {
-                deviceId: value,
-                type: prevState[name].type
-            }
-        }))
-    }
+    const setNotification = useNotificationStore(state => state.setNotification)
 
     const handleSave = () => {
-        const method = producerId? "PUT":"POST"
-        const url =producerId? "producers/"+producerId+"/":"producers/"
+        const method = producerId ? "PUT" : "POST"
+        const url = producerId ? "producers/" + producerId + "/" : "producers/"
 
         apiRequest({
             url: url, method: method, requestData: values, formatData: formatApiData
         }).then((response) => {
-            if (response.status === 201 || response.status === 200) navigate('/solaranlagen')
-        }).catch((e) => {
-            console.log(e)
+            if (response.status === 201 || response.status === 200) {
+                navigate('/solaranlagen')
+                setNotification({
+                    message: "Solaranlage wurde " + producerId ? "gespeichert" : "angelegt",
+                    severity: "success"
+                })
+            }
         })
     }
 
+    /**
+     * If a producerId is defined => a existing producer is being edited.
+     * Therefore on component render, the current values for that producer is fetched.
+     */
     useEffect(() => {
-        if (producerId !== null) {
-            apiRequest({method:"get", url: "producers/"+producerId+"/"}).then(res => {
+        if (producerId) {
+            apiRequest({method: "get", url: "producers/" + producerId + "/"}).then(res => {
                 setValues(res.data)
             }).catch((e) => console.log(e))
         }
@@ -74,7 +74,7 @@ function AddProducer(props) {
 
     return (
         <div>
-            <h2 className={"page-title"}>Solaranlage {producerId? "bearbeiten":"hinzufügen"}</h2>
+            <h2 className={"page-title"}>Solaranlage {producerId ? "bearbeiten" : "hinzufügen"}</h2>
             <WidgetComponent>
                 <form className={"flex flex-col gap-4 px-4"}>
                     <TextField name={"name"} value={values.name} onChange={handleChange} placeholder={"Name"}
@@ -91,14 +91,17 @@ function AddProducer(props) {
                                    endAdornment: <InputAdornment position="end"
                                                                  className={"!font-semibold text-black"}>kWp</InputAdornment>,
                                }}/>
-                    <TextField name={"productionSensor"} value={values.productionSensor.deviceId}
-                               onChange={handleSensorChange} placeholder={"Produktionszähler"}
+                    <TextField name={"productionSensor.deviceId"} value={values.productionSensor.deviceId}
+                               onChange={handleNestedChange} placeholder={"Produktionszähler"}
                                label={"Produktionszählernummer"}/>
-                    <TextField name={"gridSensor"} value={values.gridSensor.deviceId} onChange={handleSensorChange}
+                    <TextField name={"gridSensor.deviceId"} value={values.gridSensor.deviceId} onChange={handleNestedChange}
                                placeholder={"Netzzähler"} label={"Netzzähler"}/>
 
                     <StyledButton onClick={handleSave}>
-                        {producerId? "Speichern":"Anlegen"}
+                        {producerId ? "Speichern" : "Anlegen"}
+                    </StyledButton>
+                    <StyledButton onClick={() => navigate("/solaranlagen")}>
+                    Abbrechen
                     </StyledButton>
                 </form>
             </WidgetComponent>
