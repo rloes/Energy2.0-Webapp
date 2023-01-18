@@ -58,7 +58,14 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
     </FormControl>
 )
 
-const Dashboard_mfh = () => {
+/**
+ *
+ * @param producerId -> können später genutzt werden um ANsicht zu unterscheiden
+ * @param cosumerId
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Dashboard_mfh = ({producerId, cosumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard()

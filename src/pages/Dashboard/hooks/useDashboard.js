@@ -84,7 +84,7 @@ function useDashboard() {
         return _transformedData
     }
 
-    return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading};
+    return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
 }
 
 export default useDashboard;
