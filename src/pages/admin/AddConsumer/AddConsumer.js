@@ -41,7 +41,6 @@ function AddConsumer(props) {
         handleChange,
         setValues,
         handleNestedChange,
-        handleSelectChange,
     } = useForm(initalValues);
     const navigate = useNavigate();
     const {consumerId} = useParams();
@@ -49,6 +48,18 @@ function AddConsumer(props) {
     const setNotification = useNotificationStore(
         (state) => state.setNotification
     );
+
+    /**
+     * Handles changes to the autocomplete component.
+     */
+    function handleSelectChange(value) {
+        const selectedUrls = value.map((option) => option.url)
+        console.log(selectedUrls)
+        setValues((prevState) => ({
+            ...prevState,
+            rates: selectedUrls,
+        }));
+    }
 
     const handleSave = () => {
         const method = consumerId ? "PUT" : "POST";
@@ -71,13 +82,17 @@ function AddConsumer(props) {
     };
 
     /**
-     * Fetches currently existing rates to be referenced in the multiselect list
-     * below when to enter the rates the consumer has chosen.
+     * Fetches currently existing tariffs to be referenced in the multiselect list
+     * below when to enter the tariffs the consumer has chosen.
      */
     const [rates, setRates] = useState([]);
     useEffect(() => {
-        apiRequest({method: "get", url: "rates/"}).then((res) => {
-            setRates(res.data);
+        apiRequest({ method: "get", url: "rates/" }).then((res) => {
+            const ratesWithUrls = res.data.map(rate => ({
+                name: rate.name,
+                url: rate.url
+            }));
+            setRates(ratesWithUrls);
         });
     }, []);
 
@@ -158,6 +173,7 @@ function AddConsumer(props) {
                         getOptionLabel={(option) => option.name}
                         filterSelectedOptions
                         disableCloseOnSelect
+                        isOptionEqualToValue={(option, value) => option.url === value.url}
                         onChange={(value) => handleSelectChange(value)}
                         renderInput={(params) => (
                             <TextField
