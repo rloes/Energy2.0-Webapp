@@ -85,13 +85,15 @@ function AddRate(props) {
                         shrink: true,
                     }}/>
                     <TextField name={"endTime"} value={values.endTime} onChange={handleChange} placeholder={"Endzeit"}
-                               label={"Endzeit"} type="time" InputLabelProps={{
-                        shrink: true,
-                    }}/>
+                               label={"Endzeit"} type="time" InputLabelProps={{shrink: true}}/>
                     <TextField name={"startDate"} value={values.startDate} onChange={handleChange}
-                               placeholder={"Startdatum"} label={"Startdatum"} type={"date"}/>
+                               placeholder={"Startdatum"} label={"Startdatum"} type={"date"} InputLabelProps={{
+                        shrink: true
+                    }}/>
                     <TextField name={"endDate"} value={values.endDate} onChange={handleChange}
-                               placeholder={"Endzeit"} label={"Endzeit"} type={"date"}/>
+                               placeholder={"Endzeit"} label={"Endzeit"} type={"date"} InputLabelProps={{
+                        shrink: true
+                    }}/>
                     <StyledButton onClick={handleSave}>
                         {rateId ? "Speichern" : "Anlegen"}
                     </StyledButton>

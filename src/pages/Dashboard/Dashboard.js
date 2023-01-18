@@ -2,10 +2,7 @@ import React, {useEffect} from 'react';
 import useQuery from "../../hooks/useQuery";
 import PieChart from "./components/PieChart";
 import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
-
-function roundToN(num, n){
-    return Math.round((num + Number.EPSILON) * Math.pow(10,n)) / Math.pow(10,n)
-}
+import {roundToN} from "../../helpers";
 
 function Dashboard(props) {
     const {data, loading, error} = useQuery({method: "GET", url: "/output/?producer_id=12", requestOnLoad: true})
