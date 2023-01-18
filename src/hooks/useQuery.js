@@ -17,7 +17,7 @@ function useQuery(options) {
     const [data, setData] = useState(null)
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(true)
-    const controllerRef = useRef(new AbortController());
+    const controllerRef = new AbortController();
     const {apiRequest} = useApi()
 
 
@@ -25,13 +25,15 @@ function useQuery(options) {
      * Cancels the API request
      */
     const cancel = () => {
-        controllerRef.current.abort();
+        controllerRef.abort();
     };
 
     const request = async () => {
         setLoading(true)
         try {
-            const response = await apiRequest(options)
+            const response = await apiRequest({
+                ...options, signal: controllerRef.signal
+            })
             setData(response.data)
             return response
         } catch (error) {
@@ -46,7 +48,7 @@ function useQuery(options) {
         } else {
             setLoading(false)
         }
-    }, [])
+    }, [url])
 
     useEffect(() => {
         if (data || error) {
@@ -55,7 +57,7 @@ function useQuery(options) {
         }
     }, [data, error])
 
-    return {data, error, loading, request}
+    return {data, error, loading, request, setLoading, cancel}
 }
 
 export default useQuery;

@@ -13,7 +13,15 @@ function useApi(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    async function apiRequest({method, url, requestData, formatData, noAuthorization, throwError = false}) {
+    async function apiRequest({
+                                  method,
+                                  url,
+                                  requestData,
+                                  formatData,
+                                  noAuthorization,
+                                  throwError = false,
+                                  signal = undefined
+                              }) {
         try {
             // if a function is passed via the formatData param, this function is called first
             if (formatData) {
@@ -28,7 +36,8 @@ function useApi(props) {
                     // only add token if one exist and noAuthorization is not set to true
                     ...(token && !noAuthorization) && {"Authorization": "Token " + token}
                 },
-                data: snakeize(requestData) //api uses snake_case
+                data: snakeize(requestData), //api uses snake_case
+                signal: signal
             })
             response.data = camelize(response.data) //api sends snake_case but camelCase needed
             return response
@@ -55,7 +64,7 @@ function useApi(props) {
                 throw error
             } else {
                 // if not and error was not handled yet, a general error notification is sent
-                if (!errorHandled) {
+                if (!errorHandled && status !== "canceled") {
                     setNotification({
                         message: error.message,
                         severity: "error"
