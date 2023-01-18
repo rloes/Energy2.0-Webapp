@@ -78,6 +78,8 @@ function AddRate(props) {
                                placeholder={"Preis"} label={"Preis"}/>
                     <TextField name={"reducedPrice"} value={values.reducedPrice} onChange={handleChange}
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
+                    <Switch name={"flexible"} checked={values.flexible}  onChange={handleChange} 
+                                label={"Flexibel"}/>
                     <TextField name={"flexible"} value={values.flexible} onChange={handleChange}
                                placeholder={"Flexibel"} label={"Flexibel"}/>
                     <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
