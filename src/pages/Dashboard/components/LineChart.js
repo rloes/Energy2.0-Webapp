@@ -18,7 +18,7 @@ function LineChart(props) {
      * @returns {JSX.Element}
      */
     const Line = (lineProps) => (
-        props.selectedTimeframe === 1? <ResponsiveLine {...lineProps} /> : <ResponsiveLineCanvas {...lineProps} />
+        props.selectedTimeframe !== false? <ResponsiveLine {...lineProps} /> : <ResponsiveLineCanvas {...lineProps} />
     )
     return (
         <Line

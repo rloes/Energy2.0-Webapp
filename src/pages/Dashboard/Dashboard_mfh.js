@@ -214,13 +214,13 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                         </Box>
 
                     </Box>
-                    <Box height="250px" m="-20px 0 0 0">
+                    <div className={"flex h-[250px] mt-[-25px] justify-center items-center w-full"}>
                         {transformedData.lineChartData && !loading ?
                             <LineChart data={transformedData.lineChartData}
                                        selectedTimeframe={selectedTimeframe}/>
                             :
                             <CircularProgress/>}
-                    </Box>
+                    </div>
                 </Box>
 
                 {/*WOHNEINHEITEN */}
