@@ -190,7 +190,7 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                             />
                         }
                     />
-                    <Box height="90px" m="-20px 0 0 0">
+                    <Box height="90px" width="250px" m="-20px 0 0 0">
                         <PowerMix data={exampleData} selectedTimeframe={selectedTimeframe} />
                     </Box>
                 </Box>
