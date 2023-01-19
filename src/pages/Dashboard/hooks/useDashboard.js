@@ -10,7 +10,7 @@ function useDashboard() {
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
     const [selectedTimeframe, setSelectedTimeframe] = useState(0)
-    
+
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
         url: "/output/?producer_id=12&" + url,
@@ -52,59 +52,68 @@ function useDashboard() {
         if (!data) {
             return
         }
-        if (data.productions) {
-            const productions = {"id": "Produktion", 'data': []}
-            let production_sum = 0
-            for (let i = 0; i < data.productions.length; i++) {
-                // map through all productions -> set x = datetime and y = produced
-                const production = data.productions[i]
-                if (selectedTimeframe === 0 || selectedTimeframe === 2) {
-                    // if timeframe = 30 days -> reduced to sum per day
-                    // if timeframe = 1 week -> reduce to sum per hour
-                    const add = (val) => production_sum += val
-                    const push = (val) => productions['data'].push(val)
-                    reduceData(production, data.productions, production_sum, add, push, i, 'produced')
-                } else {
-                    productions['data'].push({
-                        "x": production.time,
-                        "y": production.produced
-                    })
+        const producers = data.producers ? Object.values(data.producers) : [{'productions': data.productions}]
+        if (producers) {
+            for (let j = 0; j < producers.length; j++) {
+                const producer = producers[j]
+                const productions = {
+                    "id": data.producers ? "Produktion " + Object.keys(data.producers)[j] : "Produktion",
+                    'data': []
                 }
+                let production_sum = 0
+                for (let i = 0; i < producer.productions.length; i++) {
+                    // map through all productions -> set x = datetime and y = produced
+                    const production = producer.productions[i]
+                    if (selectedTimeframe === 0 || selectedTimeframe === 2) {
+                        // if timeframe = 30 days -> reduced to sum per day
+                        // if timeframe = 1 week -> reduce to sum per hour
+                        const add = (val) => production_sum += val
+                        const push = (val) => productions['data'].push(val)
+                        reduceData(production, producer.productions, production_sum, add, push, i, 'produced')
+                    } else {
+                        productions['data'].push({
+                            "x": production.time,
+                            "y": production.produced
+                        })
+                    }
+                }
+                _transformedData.push(productions)
             }
-            _transformedData.push(productions)
         }
 
         // depending on view(consumer, producer, overall) -> consumers in different objects
-        const consumers = data.consumers? Object.values(data.consumers) : [{'consumptions': data.consumptions}]
-        for (let j = 0; j < consumers.length; j++) {
-            // for each consumer
-            const consumer = consumers[j]
-            const consumptions = {"id": data.consumers? Object.keys(data.consumers)[j] : "Verbrauch", 'data': []}
-            let consumption_sum = 0
-            for (let i = 0; i < consumer.consumptions.length; i++) {
-                // map through all consumptions -> set x = datetime and y = consumption
-                const consumption = consumer.consumptions[i]
-                if (selectedTimeframe === 0 || selectedTimeframe === 2) {
-                    // if timeframe = 30 days -> reduced to sum per day
-                    // if timeframe = 1 week -> reduce to sum per hour
-                    const add = (val) => consumption_sum += val
-                    const push = (val) => consumptions['data'].push(val)
-                    reduceData(consumption, consumer.consumptions, consumption_sum, add, push, i, 'consumption')
-                } else {
-                    consumptions.data.push({
-                        "x": consumption.time,
-                        "y": consumption.consumption
-                    })
+        const consumers = data.consumers ? Object.values(data.consumers) : [{'consumptions': data.consumptions}]
+        if(consumers[0].consumptions) {
+            for (let j = 0; j < consumers.length; j++) {
+                // for each consumer
+                const consumer = consumers[j]
+                const consumptions = {"id": data.consumers ? Object.keys(data.consumers)[j] : "Verbrauch", 'data': []}
+                let consumption_sum = 0
+                for (let i = 0; i < consumer.consumptions.length; i++) {
+                    // map through all consumptions -> set x = datetime and y = consumption
+                    const consumption = consumer.consumptions[i]
+                    if (selectedTimeframe === 0 || selectedTimeframe === 2) {
+                        // if timeframe = 30 days -> reduced to sum per day
+                        // if timeframe = 1 week -> reduce to sum per hour
+                        const add = (val) => consumption_sum += val
+                        const push = (val) => consumptions['data'].push(val)
+                        reduceData(consumption, consumer.consumptions, consumption_sum, add, push, i, 'consumption')
+                    } else {
+                        consumptions.data.push({
+                            "x": consumption.time,
+                            "y": consumption.consumption
+                        })
+                    }
                 }
+                _transformedData.push(consumptions)
             }
-            _transformedData.push(consumptions)
         }
         return _transformedData
     }
 
     const reductions = {
-        0 : (date, nextDate) => date.getDate() !== nextDate.getDate(),
-        2 : (date, nextDate) => date.getHours() !== nextDate.getHours()
+        0: (date, nextDate) => date.getDate() !== nextDate.getDate(),
+        2: (date, nextDate) => date.getHours() !== nextDate.getHours()
     }
     const transformTime = {
         0: (timeStr) => timeStr.split("T")[0] + "T00:00:00",
