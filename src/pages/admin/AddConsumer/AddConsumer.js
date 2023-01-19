@@ -11,6 +11,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
+import {roundToN} from "../../../helpers";
 
 const initalValues = {
     name: "test",
@@ -25,14 +26,16 @@ const initalValues = {
         deviceId: "92983928",
         type: "CM",
     },
-    rates: ["http://localhost:8000/rates/2/", "GoGreen"],
+    rates: [],
 };
 const TextField = (props) => {
     return <MuiTextField className={"!min-w-[500px]"} {...props} />;
 };
 
 const formatApiData = (data) => {
-    return data;
+    const rates = data.rates.map(rate => rate.url)
+    data.rates = rates
+    return data
 };
 
 function AddConsumer(props) {
@@ -52,12 +55,10 @@ function AddConsumer(props) {
     /**
      * Handles changes to the autocomplete component.
      */
-    function handleSelectChange(value) {
-        const selectedUrls = value.map((option) => option.url)
-        console.log(selectedUrls)
+    function handleSelectChange(value, newValue) {
         setValues((prevState) => ({
             ...prevState,
-            rates: selectedUrls,
+            rates: newValue,
         }));
     }
 
@@ -87,12 +88,8 @@ function AddConsumer(props) {
      */
     const [rates, setRates] = useState([]);
     useEffect(() => {
-        apiRequest({ method: "get", url: "rates/" }).then((res) => {
-            const ratesWithUrls = res.data.map(rate => ({
-                name: rate.name,
-                url: rate.url
-            }));
-            setRates(ratesWithUrls);
+        apiRequest({method: "get", url: "rates/"}).then((res) => {
+            setRates(res.data);
         });
     }, []);
 
@@ -160,7 +157,7 @@ function AddConsumer(props) {
                         label={"Produzent"}
                     />
                     <TextField
-                        name={"sensor.device_id"}
+                        name={"sensor.deviceId"}
                         value={values.sensor.deviceId}
                         onChange={handleNestedChange}
                         placeholder={"Sensorzählernummer"}
@@ -170,11 +167,14 @@ function AddConsumer(props) {
                         multiple
                         id="tags-outlined"
                         options={rates}
-                        getOptionLabel={(option) => option.name}
+                        value={values.rates}
+                        getOptionLabel={(option) => option.name + " " +
+                            roundToN(option.price, 0) + "ct/" + roundToN(option.reducedPrice, 0)+"ct"
+                        }
                         filterSelectedOptions
                         disableCloseOnSelect
-                        isOptionEqualToValue={(option, value) => option.url === value.url}
-                        onChange={(value) => handleSelectChange(value)}
+                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        onChange={handleSelectChange}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
