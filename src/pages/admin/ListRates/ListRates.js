@@ -16,6 +16,7 @@ import {DeleteForever, Edit} from "@mui/icons-material";
 import {Link, useNavigate} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
+import {roundToN} from "../../../helpers";
 
 const tableColumns = ["name", "reducedPrice", "price", "flexible"];
 const columnTitles = {
@@ -24,7 +25,7 @@ const columnTitles = {
     price: "Netzpreis (ct/kWh)",
     flexible: "Flexibler Tarif",
 };
-
+// TODO: setNotification einbinden
 function ListRates(props) {
     const {data, error, loading, request} = useQuery({
         url: "rates/",
@@ -82,7 +83,10 @@ function ListRates(props) {
                                 data.map((rate) => (
                                     <TableRow>
                                         {tableColumns.map((column) => (
-                                            <TableCell>{column !== "flexible" ? rate[column] :
+                                            <TableCell>{column !== "flexible" ?
+                                                column === "price" || column === "reducedPrice"?
+                                                    roundToN(Number(rate[column]), 0)+"ct" : rate[column]
+                                                :
                                                 rate[column] ? "ja" : "nein"}</TableCell>
 
                                         ))}
