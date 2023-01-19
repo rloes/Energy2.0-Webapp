@@ -78,24 +78,29 @@ function AddRate(props) {
                                placeholder={"Preis"} label={"Preis"}/>
                     <TextField name={"reducedPrice"} value={values.reducedPrice} onChange={handleChange}
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
-                    <Switch name={"flexible"} checked={values.flexible}  onChange={handleChange} 
-                                label={"Flexibel"}/>
                     <TextField name={"flexible"} value={values.flexible} onChange={handleChange}
                                placeholder={"Flexibel"} label={"Flexibel"}/>
-                    <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
-                               placeholder={"Startzeit"} label={"Startzeit"} type={"time"} InputLabelProps={{
-                        shrink: true,
-                    }}/>
-                    <TextField name={"endTime"} value={values.endTime} onChange={handleChange} placeholder={"Endzeit"}
-                               label={"Endzeit"} type="time" InputLabelProps={{shrink: true}}/>
-                    <TextField name={"startDate"} value={values.startDate} onChange={handleChange}
-                               placeholder={"Startdatum"} label={"Startdatum"} type={"date"} InputLabelProps={{
-                        shrink: true
-                    }}/>
-                    <TextField name={"endDate"} value={values.endDate} onChange={handleChange}
-                               placeholder={"Endzeit"} label={"Endzeit"} type={"date"} InputLabelProps={{
-                        shrink: true
-                    }}/>
+                    {values.flexible ? (
+                        <>
+                            <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
+                                    placeholder={"Startzeit"} label={"Startzeit"} type={"time"} InputLabelProps={{
+                                shrink: true,
+                            }}/>
+                            <TextField name={"endTime"} value={values.endTime} onChange={handleChange} placeholder={"Endzeit"}
+                                    label={"Endzeit"} type="time" InputLabelProps={{shrink: true}}/>
+                            <TextField name={"startDate"} value={values.startDate} onChange={handleChange}
+                                    placeholder={"Startdatum"} label={"Startdatum"} type={"date"} InputLabelProps={{
+                                shrink: true
+                            }}/>
+                            <TextField name={"endDate"} value={values.endDate} onChange={handleChange}
+                                    placeholder={"Endzeit"} label={"Endzeit"} type={"date"} InputLabelProps={{
+                                shrink: true
+                            }}/>
+                        </>) 
+                        :(
+                            null
+                        )
+                    }
                     <StyledButton onClick={handleSave}>
                         {rateId ? "Speichern" : "Anlegen"}
                     </StyledButton>
