@@ -1,5 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Button, InputAdornment, Switch, TextField as MuiTextField} from "@mui/material";
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import useForm from "../../../hooks/useForm";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
 import {useNavigate, useParams} from "react-router-dom";
@@ -11,7 +13,6 @@ const initalValues = {
     "name": "Tarif 1",
     "price": 10.50,
     "reducedPrice": 1,
-    "flexible": false,
     "startTime": "",
     "endTime": "",
     "startDate": "",
@@ -67,6 +68,15 @@ function AddRate(props) {
         }
     }, [rateId])
 
+
+    // Handle state of flexible switch button 
+    const [switchChecked, setStateChecked] = useState(false);
+
+    function handleSwitchChange() {
+        setStateChecked(!switchChecked);
+    }
+
+
     return (
         <div>
             <h2 className={"page-title"}>Tarif {rateId ? "bearbeiten" : "hinzufügen"}</h2>
@@ -78,9 +88,13 @@ function AddRate(props) {
                                placeholder={"Preis"} label={"Preis"}/>
                     <TextField name={"reducedPrice"} value={values.reducedPrice} onChange={handleChange}
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
-                    <Switch name={"flexible"} checked={values.flexible} onChange={handleChange} 
-                                label={"Flexibel"}/>
-                    {values.flexible ? (
+                    <FormGroup>
+                        <FormControlLabel 
+                            control={<Switch checked={switchChecked} onChange={handleSwitchChange}/>} 
+                            label="Flexibel"
+                        />
+                    </FormGroup>
+                    {switchChecked ? (
                         <>
                             <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
                                     placeholder={"Startzeit"} label={"Startzeit"} type={"time"} InputLabelProps={{
