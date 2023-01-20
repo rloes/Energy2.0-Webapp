@@ -29,6 +29,7 @@ function App() {
                         <Route path={"kunden"}>
                             <Route index element={<ListConsumers />} />
                             <Route path={"erstellen"} element={<AddConsumer />}/>
+                            <Route path={":consumerId/bearbeiten"} element={<AddConsumer />}/>
                         </Route>
                         <Route path={"tarife"}>
                             <Route index element={<ListRates />} />

@@ -32,9 +32,16 @@ const TextField = (props) => {
     return <MuiTextField className={"!min-w-[500px]"} {...props} />;
 };
 
-const formatApiData = (data) => {
+const formatApiData = (data, method) => {
+    // before sending it, array of selected array objects have to be converted to array of urls
     const rates = data.rates.map(rate => rate.url)
     data.rates = rates
+    if (method === "PATCH") {
+        // User, Sensor and Producer can only be set on create
+        delete data['user']
+        delete data['sensor']
+        delete data['producer']
+    }
     return data
 };
 
@@ -63,7 +70,7 @@ function AddConsumer(props) {
     }
 
     const handleSave = () => {
-        const method = consumerId ? "PUT" : "POST";
+        const method = consumerId ? "PATCH" : "POST";
         const url = consumerId ? "consumers/" + consumerId + "/" : "consumers/";
 
         apiRequest({
@@ -98,14 +105,29 @@ function AddConsumer(props) {
      * Therefore on component render, the current values for that consumer is fetched.
      */
     useEffect(() => {
-        if (consumerId) {
-            apiRequest({method: "get", url: "consumers/" + consumerId + "/"})
+        if (consumerId && rates) {
+            apiRequest({
+                method: "get",
+                url: "consumers/" + consumerId + "/"
+            })
                 .then((res) => {
-                    setValues(res.data);
+                    // rates have to be stored as objects in values.rates, for the autocomplete component
+                    const _rates = []
+                    rates.map((rate) => {
+                        // rate objects are in rates and rate urls are in res.data.rates
+                        if (res.data.rates.includes(rate.url)) {
+                            // map over each rate url and store the fitting object in values.rates
+                            _rates.push(rate)
+                        }
+                    })
+                    const values = {
+                        ...res.data, rates: _rates
+                    }
+                    setValues(values)
                 })
                 .catch((e) => console.log(e));
         }
-    }, [consumerId]);
+    }, [consumerId, rates]);
     return (
         <div>
             <h2 className={"page-title"}>
@@ -120,21 +142,24 @@ function AddConsumer(props) {
                         placeholder={"Name"}
                         label={"Name"}
                     />
-                    <TextField
-                        name={"user.username"}
-                        value={values.user.username}
-                        onChange={handleNestedChange}
-                        placeholder={"Benutzername"}
-                        label={"Benutzername"}
-                    />
-                    <TextField
-                        name={"user.password"}
-                        value={values.user.password}
-                        onChange={handleNestedChange}
-                        placeholder={"Password"}
-                        label={"Password"}
-                        type={"password"}
-                    />
+                    {!consumerId && // if editing an existing consumer, dont show these fields
+                        <>
+                            <TextField
+                                name={"user.username"}
+                                value={values.user.username}
+                                onChange={handleNestedChange}
+                                placeholder={"Benutzername"}
+                                label={"Benutzername"}
+                            />
+                            <TextField
+                                name={"user.password"}
+                                value={values.user.password}
+                                onChange={handleNestedChange}
+                                placeholder={"Password"}
+                                label={"Password"}
+                                type={"password"}
+                            />
+                        </>}
                     <TextField
                         name={"email"}
                         value={values.email}
@@ -149,27 +174,31 @@ function AddConsumer(props) {
                         placeholder={"Telefonnummer"}
                         label={"Telefonnummer"}
                     />
-                    <TextField
-                        name={"producer"}
-                        value={values.producer}
-                        onChange={handleChange}
-                        placeholder={"Produzent"}
-                        label={"Produzent"}
-                    />
-                    <TextField
-                        name={"sensor.deviceId"}
-                        value={values.sensor.deviceId}
-                        onChange={handleNestedChange}
-                        placeholder={"Sensorzählernummer"}
-                        label={"Sensorzählernummer"}
-                    />
+                    {!consumerId &&
+                        <>
+                            <TextField
+                                name={"producer"}
+                                value={values.producer}
+                                onChange={handleChange}
+                                placeholder={"Produzent"}
+                                label={"Produzent"}
+                            />
+                            <TextField
+                                name={"sensor.deviceId"}
+                                value={values.sensor.deviceId}
+                                onChange={handleNestedChange}
+                                placeholder={"Sensorzählernummer"}
+                                label={"Sensorzählernummer"}
+                            />
+                        </>
+                    }
                     <Autocomplete
                         multiple
                         id="tags-outlined"
                         options={rates}
                         value={values.rates}
                         getOptionLabel={(option) => option.name + " " +
-                            roundToN(option.price, 0) + "ct/" + roundToN(option.reducedPrice, 0)+"ct"
+                            roundToN(option.price, 0) + "ct/" + roundToN(option.reducedPrice, 0) + "ct"
                         }
                         filterSelectedOptions
                         disableCloseOnSelect
@@ -190,13 +219,11 @@ function AddConsumer(props) {
                     >
                         {consumerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
-                    <Button
-                        variant={"contained"}
-                        color={"secondary"}
+                    <StyledButton
                         onClick={() => navigate("/kunden")}
                     >
                         Abbrechen
-                    </Button>
+                    </StyledButton>
                 </form>
             </WidgetComponent>
         </div>

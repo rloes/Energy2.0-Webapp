@@ -91,17 +91,21 @@ function AddProducer(props) {
                                    endAdornment: <InputAdornment position="end"
                                                                  className={"!font-semibold text-black"}>kWp</InputAdornment>,
                                }}/>
-                    <TextField name={"productionSensor.deviceId"} value={values.productionSensor.deviceId}
-                               onChange={handleNestedChange} placeholder={"Produktionszähler"}
-                               label={"Produktionszählernummer"}/>
-                    <TextField name={"gridSensor.deviceId"} value={values.gridSensor.deviceId} onChange={handleNestedChange}
-                               placeholder={"Netzzähler"} label={"Netzzähler"}/>
-
+                    {!producerId &&
+                        <>
+                            <TextField name={"productionSensor.deviceId"} value={values.productionSensor.deviceId}
+                                       onChange={handleNestedChange} placeholder={"Produktionszähler"}
+                                       label={"Produktionszählernummer"}/>
+                            <TextField name={"gridSensor.deviceId"} value={values.gridSensor.deviceId}
+                                       onChange={handleNestedChange}
+                                       placeholder={"Netzzähler"} label={"Netzzähler"}/>
+                        </>
+                    }
                     <StyledButton onClick={handleSave}>
                         {producerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
                     <StyledButton onClick={() => navigate("/solaranlagen")}>
-                    Abbrechen
+                        Abbrechen
                     </StyledButton>
                 </form>
             </WidgetComponent>
