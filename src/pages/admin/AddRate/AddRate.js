@@ -26,14 +26,16 @@ const TextField = (props) => {
 }
 
 const formatApiData = (data) => {
-    data.peakPower = Number(data.peakPower)
+    for(let key of Object.keys(data)){
+        if(data[key] === "") data[key] = null
+    }
     return data
 }
 
 
 function AddRate(props) {
 
-    const {values, handleChange, setValues, handleNestedChange} = useForm(initalValues)
+    const {values, handleChange, setValues} = useForm(initalValues)
     const navigate = useNavigate()
     const {rateId} = useParams()
     const {apiRequest} = useApi()
@@ -56,6 +58,18 @@ function AddRate(props) {
         })
     }
 
+    function handleSwitchChange(e) {
+        const checked = e.target.checked
+        setValues((prevState) => ({
+            ...prevState, flexible: checked, ...!checked &&{
+                "startTime": "",
+                "endTime": "",
+                "startDate": "",
+                "endDate": ""
+            }
+        }));
+    }
+
     /**
      * If a producerId is defined => a existing producer is being edited.
      * Therefore on component render, the current values for that producer is fetched.
@@ -68,19 +82,10 @@ function AddRate(props) {
         }
     }, [rateId])
 
-
-    // Handle state of flexible switch button 
-    const [switchChecked, setStateChecked] = useState(false);
-
-    function handleSwitchChange() {
-        setStateChecked(!switchChecked);
-    }
-
-
     return (
         <div>
             <h2 className={"page-title"}>Tarif {rateId ? "bearbeiten" : "hinzufügen"}</h2>
-            <WidgetComponent>
+            <WidgetComponent className={"transition-[height]"}>
                 <form className={"flex flex-col gap-4 px-4"}>
                     <TextField name={"name"} value={values.name} onChange={handleChange} placeholder={"Name"}
                                label={"Name"}/>
@@ -90,11 +95,11 @@ function AddRate(props) {
                                placeholder={"Reduzierter Preis"} label={"Reduzierter Preis"}/>
                     <FormGroup>
                         <FormControlLabel 
-                            control={<Switch checked={switchChecked} onChange={handleSwitchChange}/>} 
+                            control={<Switch checked={values.flexible} onChange={handleSwitchChange}/>}
                             label="Flexibel"
                         />
                     </FormGroup>
-                    {switchChecked ? (
+                    {values.flexible &&
                         <>
                             <TextField name={"startTime"} value={values.startTime} onChange={handleChange}
                                     placeholder={"Startzeit"} label={"Startzeit"} type={"time"} InputLabelProps={{
@@ -110,10 +115,7 @@ function AddRate(props) {
                                     placeholder={"Endzeit"} label={"Endzeit"} type={"date"} InputLabelProps={{
                                 shrink: true
                             }}/>
-                        </>) 
-                        :(
-                            null
-                        )
+                        </>
                     }
                     <StyledButton onClick={handleSave}>
                         {rateId ? "Speichern" : "Anlegen"}
