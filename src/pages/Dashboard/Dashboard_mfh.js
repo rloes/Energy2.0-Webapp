@@ -12,9 +12,9 @@ import {
 } from "@mui/material"
 import StatBox from './components/StatBox'
 import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
-import {ThemeProvider, createTheme} from '@mui/system';
+import { ThemeProvider, createTheme } from '@mui/system';
 import Header from "./components/Header"
-import {tokens} from "../../theme";
+import { tokens } from "../../theme";
 import ElevatedBox from "./components/ElevatedBox"
 //ICONS
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
@@ -42,7 +42,7 @@ const theme = createTheme({
     },
 });
 
-const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
+const TimeframeSelect = ({ selectedTimeframe, handleSelectChange }) => (
     <FormControl className={"w-[175px]"} size={"small"}>
         <InputLabel id="demo-simple-select-label">Zeit</InputLabel>
         <Select
@@ -65,10 +65,10 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
  * @returns {JSX.Element}
  * @constructor
  */
-const Dashboard_mfh = ({producerId, cosumerId}) => {
+const Dashboard_mfh = ({ producerId, cosumerId }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard()
+    const { transformedData, selectedTimeframe, handleSelectChange, loading } = useDashboard()
 
     return (
         <Box m="0px">
@@ -76,15 +76,15 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
 
             {/*UEBERSCHIFT*/}
             <Box display="flex"
-                 justifyContent="space-between"
-                 alignItems="center"
-                 sx={{
-                     fontSize: "30px",
-                     fontWeight: "bold",
-                     padding: "5px"
-                 }}>
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{
+                    fontSize: "30px",
+                    fontWeight: "bold",
+                    padding: "5px"
+                }}>
 
-                <Header title="Anbietersicht -  Mehrfamilienhaus"/>
+                <Header title="Anbietersicht -  Mehrfamilienhaus" />
                 <TimeframeSelect handleSelectChange={handleSelectChange} selectedTimeframe={selectedTimeframe} />
             </Box>
 
@@ -118,7 +118,7 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                         increase="5%"
                         icon={
                             <BoltSharpIcon
-                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
+                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                             />
                         }
                     />
@@ -142,9 +142,10 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                         title="Einsparung Monat"
                         subtitle="hoeher als im Letzten Monat"
                         increase="+10%"
+                        value={transformedData.totalSavedData}
                         icon={
                             <EuroSymbolSharpIcon
-                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
+                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                             />
                         }
                     />
@@ -170,7 +171,7 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                         increase="+5%"
                         icon={
                             <ElectricalServicesSharpIcon
-                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
+                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                             />
                         }
                     />
@@ -217,9 +218,9 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                     <Box height="250px" m="-20px 0 0 0">
                         {transformedData.lineChartData && !loading ?
                             <LineChart data={transformedData.lineChartData}
-                                       selectedTimeframe={selectedTimeframe}/>
+                                selectedTimeframe={selectedTimeframe} />
                             :
-                            <CircularProgress/>}
+                            <CircularProgress />}
                     </Box>
                 </Box>
 
@@ -277,7 +278,7 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                         <Typography
                             variant="h5"
                             color={colors.greenAccent[500]}
-                            sx={{mt: "15px"}}
+                            sx={{ mt: "15px" }}
                         >
                             Hier Anlagedetails
                         </Typography>
@@ -300,7 +301,7 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                     <Typography
                         variant="h5"
                         fontWeight="600"
-                        sx={{marginBottom: "15px"}}
+                        sx={{ marginBottom: "15px" }}
                     >
                         Wirtschaftliche KPIS
                         <p>Tagesumsatz</p>

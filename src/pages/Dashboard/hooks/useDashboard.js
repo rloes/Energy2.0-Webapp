@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import useQuery from "../../../hooks/useQuery";
-import {FormControl, InputLabel, Select} from "@mui/material";
-import {getMonday, getISODateWithDelta,} from "../../../helpers";
+import { FormControl, InputLabel, Select } from "@mui/material";
+import { getMonday, getISODateWithDelta, } from "../../../helpers";
 
 
 function useDashboard() {
@@ -12,11 +12,11 @@ function useDashboard() {
     const [selectedTimeframe, setSelectedTimeframe] = useState(0)
     // functions to set the url params after a different timeframe is selected
     const timeFrames = {
-        0 : () => "start_date="+getISODateWithDelta(-30),
-        1 : () => "start_date="+getISODateWithDelta(0)+"&end_date="+getISODateWithDelta(1),
-        2 : () => "start_date="+getMonday()
+        0: () => "start_date=" + getISODateWithDelta(-30),
+        1: () => "start_date=" + getISODateWithDelta(0) + "&end_date=" + getISODateWithDelta(1),
+        2: () => "start_date=" + getMonday()
     }
-    const {data, loading, error, request, setLoading, cancel} = useQuery({
+    const { data, loading, error, request, setLoading, cancel } = useQuery({
         method: "GET",
         url: "/output/?producer_id=12&" + url,
         // url: "/output/?producer_id=12",
@@ -38,7 +38,10 @@ function useDashboard() {
 
     // if data is set -> transform
     useEffect(() => {
-        if(data) setTransformedData({"lineChartData": lineChartData(data)})
+        if (data) setTransformedData({
+            "lineChartData": lineChartData(data),
+            "totalSavedData": totalSavedData(data)
+        })
     }, [data])
 
 
@@ -52,7 +55,7 @@ function useDashboard() {
             return
         }
         if (data?.productions) {
-            const productions = {"id": "Produktion", 'data': []}
+            const productions = { "id": "Produktion", 'data': [] }
             for (let i = 0; i < data.productions.length; i++) {
                 // map through all productions -> set x = datetime and y = produced
                 const production = data.productions[i]
@@ -65,11 +68,11 @@ function useDashboard() {
         }
 
         // depending on view(consumer, producer, overall) -> consumers in different objects
-        const consumers = Object.values(data?.consumers) || [{'consumptions': data?.consumptions}]
+        const consumers = Object.values(data?.consumers) || [{ 'consumptions': data?.consumptions }]
         for (let j = 0; j < consumers.length; j++) {
             // for each consumer
             const consumer = consumers[j]
-            const consumptions = {"id": Object.keys(data.consumers)[j] || "Verbrauch", 'data': []}
+            const consumptions = { "id": Object.keys(data.consumers)[j] || "Verbrauch", 'data': [] }
             for (let i = 0; i < consumer.consumptions.length; i++) {
                 // map through all productions -> set x = datetime and y = consumption
                 const consumption = consumer.consumptions[i]
@@ -83,8 +86,28 @@ function useDashboard() {
 
         return _transformedData
     }
+    /**
+     * Fetches total_saved from backend /output/ so that it is usable in box "Einsparung"
+     */
+    const totalSavedData = () => {
+        const total_saved = 0
+        if (!data) {
+            return
+        }
+        else if (data?.producers_total_saved) {
+            total_saved = data?.producers_total_saved
+        }
+        else if (data?.producers.consumers_total_saved) {
+            total_saved = data?.producers.consumers_total_saved
+        }
+        else if (data?.producers.consumers.total_saved) {
+            total_saved = data?.producers.consumers.total_saved
+        }
 
-    return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
+        return total_saved
+    }
+
+    return { lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data };
 }
 
 export default useDashboard;
