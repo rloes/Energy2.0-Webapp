@@ -26,7 +26,7 @@ function useDashboard() {
 
     // functions to set the url params after a different timeframe is selected
     const timeFrames = {
-        0: () => "start_date=" + getISODateWithDelta(-30),
+        0: () => "",
         1: () => "start_date=" + getISODateWithDelta(0) + "&end_date=" + getISODateWithDelta(1),
         2: () => "start_date=" + getMonday()
     }

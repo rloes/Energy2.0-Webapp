@@ -25,7 +25,7 @@ function useApi(props) {
         try {
             // if a function is passed via the formatData param, this function is called first
             if (formatData) {
-                formatData(requestData)
+                formatData(requestData, method)
             }
             // api request
             const response = await axios({
