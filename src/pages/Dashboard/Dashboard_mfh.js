@@ -23,6 +23,7 @@ import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesS
 import useDashboard from "./hooks/useDashboard";
 import useQuery from "../../hooks/useQuery";
 import LineChart from "./components/LineChart";
+import PowerMix from "./components/PowerMix";
 
 const theme = createTheme({
     palette: {
@@ -69,6 +70,21 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard()
+
+    const exampleData = [
+        {
+            "id": "Netz",
+            "label": "netz",
+            "value": 89,
+            "color": "hsl(325, 70%, 50%)"
+          },
+          {
+            "id": "PV",
+            "label": "pv",
+            "value": 25,
+            "color": "hsl(290, 70%, 50%)"
+          }
+    ];
 
     return (
         <Box m="0px">
@@ -174,6 +190,9 @@ const Dashboard_mfh = ({producerId, cosumerId}) => {
                             />
                         }
                     />
+                    <Box height="90px" width="250px" m="-20px 0 0 0">
+                        <PowerMix data={exampleData} selectedTimeframe={selectedTimeframe} />
+                    </Box>
                 </Box>
 
                 {/* ROW 2 */}
