@@ -21,7 +21,7 @@ const initalValues = {
     },
     email: "t@t.de",
     phone: "123",
-    producer: "http://localhost:8000/producers/12/",
+    producer: "",
     sensor: {
         deviceId: "92983928",
         type: "CM",
@@ -45,7 +45,7 @@ const formatApiData = (data, method) => {
     return data
 };
 
-function AddConsumer(props) {
+function AddConsumer({producerId, onClose}) {
     const {
         values,
         handleChange,
@@ -80,7 +80,7 @@ function AddConsumer(props) {
             formatData: formatApiData,
         }).then((response) => {
             if (response.status === 201 || response.status === 200) {
-                navigate("/kunden");
+                handleClose()
                 setNotification({
                     message: "Kunde wurde " + (consumerId ? "gespeichert" : "angelegt"),
                     severity: "success",
@@ -88,6 +88,14 @@ function AddConsumer(props) {
             }
         });
     };
+
+    const handleClose = () => {
+        if (!producerId) {
+            navigate("/kunden");
+        } else {
+            onClose()
+        }
+    }
 
     /**
      * Fetches currently existing tariffs to be referenced in the multiselect list
@@ -128,6 +136,13 @@ function AddConsumer(props) {
                 .catch((e) => console.log(e));
         }
     }, [consumerId, rates]);
+
+    // if AddConsumer is opened as popup in AddProducer -> set producer url
+    useEffect(() => {
+        if (producerId) {
+            handleChange({target: {name: "producer", value: "http://localhost:8000/producers/" + producerId + "/"}})
+        }
+    }, [producerId])
     return (
         <div>
             <h2 className={"page-title"}>
@@ -176,13 +191,14 @@ function AddConsumer(props) {
                     />
                     {!consumerId &&
                         <>
-                            <TextField
-                                name={"producer"}
-                                value={values.producer}
-                                onChange={handleChange}
-                                placeholder={"Produzent"}
-                                label={"Produzent"}
-                            />
+                            {!producerId &&
+                                <TextField
+                                    name={"producer"}
+                                    value={values.producer}
+                                    onChange={handleChange}
+                                    placeholder={"Produzent"}
+                                    label={"Produzent"}
+                                />}
                             <TextField
                                 name={"sensor.deviceId"}
                                 value={values.sensor.deviceId}
@@ -219,9 +235,7 @@ function AddConsumer(props) {
                     >
                         {consumerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
-                    <StyledButton
-                        onClick={() => navigate("/kunden")}
-                    >
+                    <StyledButton onClick={handleClose}>
                         Abbrechen
                     </StyledButton>
                 </form>

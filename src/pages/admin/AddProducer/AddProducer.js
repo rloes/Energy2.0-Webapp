@@ -6,6 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
+import ListConsumers from "../ListConsumers/ListConsumers";
 
 const initalValues = {
     name: "Testanlage",
@@ -109,6 +110,11 @@ function AddProducer(props) {
                     </StyledButton>
                 </form>
             </WidgetComponent>
+            {producerId &&
+                <WidgetComponent>
+                    <ListConsumers producerId={producerId} />
+                </WidgetComponent>
+            }
         </div>
     );
 }
