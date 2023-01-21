@@ -45,6 +45,13 @@ const formatApiData = (data, method) => {
     return data
 };
 
+/**
+ *
+ * @param producerId - if Consumer is added to a specific Producer this var stores the id of it
+ * @param onClose - has to be set if producerId is set. is called to close the popup AddConsumer is rendered in
+ * @returns {JSX.Element}
+ * @constructor
+ */
 function AddConsumer({producerId, onClose}) {
     const {
         values,
