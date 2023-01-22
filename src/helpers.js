@@ -1,4 +1,5 @@
 export function roundToN(num, n){
+    num = Number(num)
     return Math.round((num + Number.EPSILON) * Math.pow(10,n)) / Math.pow(10,n)
 }
 

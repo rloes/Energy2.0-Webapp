@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import ListRates from "./pages/admin/ListRates/ListRates";
 import Dashboard_mfh from "./pages/Dashboard/Dashboard_mfh"
 import ListConsumers from "./pages/admin/ListConsumers/ListConsumers";
+import DashboardWrapper from "./pages/Dashboard/DashboardWrapper";
 
 function App() {
 
@@ -25,11 +26,13 @@ function App() {
                             <Route index element={<ListProducers/>} />
                             <Route path={"erstellen"} element={<AddProducer/>}/>
                             <Route path={":producerId/bearbeiten"} element={<AddProducer/>} />
+                            <Route path={":producerId"} element={<DashboardWrapper />}/>
                         </Route>
                         <Route path={"kunden"}>
                             <Route index element={<ListConsumers />} />
                             <Route path={"erstellen"} element={<AddConsumer />}/>
                             <Route path={":consumerId/bearbeiten"} element={<AddConsumer />}/>
+                            <Route path={":consumerId"} element={<DashboardWrapper />}/>
                         </Route>
                         <Route path={"tarife"}>
                             <Route index element={<ListRates />} />

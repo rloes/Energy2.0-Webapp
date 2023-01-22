@@ -4,7 +4,7 @@ import {FormControl, InputLabel, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta} from "../../../helpers";
 
 
-function useDashboard() {
+function useDashboard(producerId, consumerId) {
 
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
@@ -13,7 +13,8 @@ function useDashboard() {
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
-        url: "/output/?producer_id=12&" + url,
+        url: "/output/?" + (producerId? "producer_id="+producerId+ "&" : consumerId? "consumer_id="+consumerId+"&":"")
+            + url,
         // url: "/output/?consumer_id=3&" + url,
         requestOnLoad: true
     })
@@ -39,7 +40,7 @@ function useDashboard() {
 
     // if data is set -> transform
     useEffect(() => {
-        if (data) setTransformedData({"lineChartData": lineChartData(data)})
+        if (data) setTransformedData((prev) => ({...prev, "lineChartData": lineChartData(data)}))
     }, [data])
 
 
@@ -53,7 +54,7 @@ function useDashboard() {
             return
         }
         const producers = data.producers ? Object.values(data.producers) : [{'productions': data.productions}]
-        if (producers) {
+        if (producers[0].productions) {
             for (let j = 0; j < producers.length; j++) {
                 const producer = producers[j]
                 const productions = {

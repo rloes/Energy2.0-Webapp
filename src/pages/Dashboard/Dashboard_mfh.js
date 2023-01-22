@@ -66,10 +66,10 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
  * @returns {JSX.Element}
  * @constructor
  */
-const Dashboard_mfh = ({producerId, cosumerId}) => {
+const Dashboard_mfh = ({producerId, consumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard()
+    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId)
 
     const exampleData = [
         {

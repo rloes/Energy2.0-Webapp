@@ -18,7 +18,6 @@ import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 import AddConsumer from "../AddConsumer/AddConsumer";
 
-const tableColumns = ['id', 'name', 'contract', 'mail', 'phone']
 const columnTitles = {
     id: "Kunden-ID",
     name: "Name",
@@ -33,7 +32,7 @@ const columnTitles = {
  * @returns {JSX.Element}
  */
 function ListConsumers({producerId}) {
-
+    const tableColumns = !producerId? ['id', 'name', 'contract', 'mail', 'phone'] : ['name']
     const [openDialog, setOpenDialog] = useState(false)
 
     const {data, error, loading, request} = useQuery({
@@ -122,7 +121,7 @@ function ListConsumers({producerId}) {
                                         ))}
                                         <TableCell>
                                             <StyledButton startIcon={<Edit/>} onClick={() => {
-                                                navigate('./' + consumer.id + "/bearbeiten")
+                                                navigate('/kunden/' + consumer.id + "/bearbeiten")
                                             }}>
                                                 Bearbeiten
                                             </StyledButton>

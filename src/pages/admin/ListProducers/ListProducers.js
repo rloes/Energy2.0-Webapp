@@ -89,19 +89,25 @@ function ListProducers(props) {
                                 </TableRow>
                                 :
                                 data.map((producer) => (
-                                    <TableRow>
+                                    <TableRow onClick={() => (navigate(String(producer.id)))}
+                                              className={"cursor-pointer hover:bg-gray-100"} href={String(producer.id)}
+                                    >
                                         {tableColumns.map((column) => (
                                             <TableCell>
                                                 {producer[column]}{column === "peakPower" && " kWp"}
                                             </TableCell>
                                         ))}
                                         <TableCell>
-                                            <StyledButton startIcon={<Edit/>} onClick={() => {
+                                            <StyledButton startIcon={<Edit/>} onClick={(e) => {
+                                                e.stopPropagation()
                                                 navigate('./'+producer.id+"/bearbeiten")
                                             }}>
                                                 Bearbeiten
                                             </StyledButton>
-                                            <IconButton onClick={() => handleDelete(producer.id)}>
+                                            <IconButton onClick={(e) => {
+                                                e.stopPropagation()
+                                                handleDelete(producer.id)
+                                            }}>
                                                 <DeleteForever />
                                             </IconButton>
                                         </TableCell>

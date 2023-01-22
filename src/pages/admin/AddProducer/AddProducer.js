@@ -111,9 +111,7 @@ function AddProducer(props) {
                 </form>
             </WidgetComponent>
             {producerId &&
-                <WidgetComponent>
-                    <ListConsumers producerId={producerId} />
-                </WidgetComponent>
+                <ListConsumers producerId={producerId}/>
             }
         </div>
     );
