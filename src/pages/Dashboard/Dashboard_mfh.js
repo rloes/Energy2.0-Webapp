@@ -139,10 +139,9 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                     }}
                 >
                     <StatBox
-                        title="Einsparung Monat"
+                        title={"Einsparung: " + transformedData.totalSavedData}
                         subtitle="hoeher als im Letzten Monat"
                         increase="+10%"
-                        value={transformedData.totalSavedData}
                         icon={
                             <EuroSymbolSharpIcon
                                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}

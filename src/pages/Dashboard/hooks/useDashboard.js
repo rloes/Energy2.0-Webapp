@@ -3,7 +3,6 @@ import useQuery from "../../../hooks/useQuery";
 import { FormControl, InputLabel, Select } from "@mui/material";
 import { getMonday, getISODateWithDelta, } from "../../../helpers";
 
-
 function useDashboard() {
 
     // transformed data for charts ares stored here after transformation
@@ -90,21 +89,17 @@ function useDashboard() {
      * Fetches total_saved from backend /output/ so that it is usable in box "Einsparung"
      */
     const totalSavedData = () => {
-        const total_saved = 0
-        if (!data) {
-            return
+        let total_saved = 0;
+        if (data) {
+            if (data.producersTotalSaved) {
+                total_saved = data.producersTotalSaved;
+            } else if (data.consumersTotalSaved) {
+                total_saved = data.consumersTotalSaved;
+            } else if (data.totalSaved) {
+                total_saved = data.totalSaved;
+            }
         }
-        else if (data?.producers_total_saved) {
-            total_saved = data?.producers_total_saved
-        }
-        else if (data?.producers.consumers_total_saved) {
-            total_saved = data?.producers.consumers_total_saved
-        }
-        else if (data?.producers.consumers.total_saved) {
-            total_saved = data?.producers.consumers.total_saved
-        }
-
-        return total_saved
+        return total_saved.toFixed(2);
     }
 
     return { lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data };
