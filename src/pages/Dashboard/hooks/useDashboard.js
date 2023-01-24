@@ -40,7 +40,11 @@ function useDashboard(producerId, consumerId) {
 
     // if data is set -> transform
     useEffect(() => {
-        if (data) setTransformedData((prev) => ({...prev, "lineChartData": lineChartData(data)}))
+        if (data) setTransformedData((prev) => ({
+            ...prev,
+            "lineChartData": lineChartData(data),
+            "totalSavedData": totalSavedData(data)
+        }))
     }, [data])
 
 
@@ -111,9 +115,9 @@ function useDashboard(producerId, consumerId) {
                 _transformedData.push(consumptions)
             }
         }
+
         return _transformedData
     }
-
     const reductions = {
         0: (date, nextDate) => date.getDate() !== nextDate.getDate(),
         2: (date, nextDate) => date.getHours() !== nextDate.getHours()
@@ -160,6 +164,23 @@ function useDashboard(producerId, consumerId) {
             })
             add(-sum)
         }
+    }
+
+    /**
+     * Fetches total_saved from backend /output/ so that it is usable in box "Einsparung"
+     */
+    const totalSavedData = () => {
+        let total_saved = 0;
+        if (data) {
+            if (data.producersTotalSaved) {
+                total_saved = data.producersTotalSaved;
+            } else if (data.consumersTotalSaved) {
+                total_saved = data.consumersTotalSaved;
+            } else if (data.totalSaved) {
+                total_saved = data.totalSaved;
+            }
+        }
+        return total_saved.toFixed(2);
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
