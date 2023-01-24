@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import useQuery from "../../../hooks/useQuery";
 import {FormControl, InputLabel, Select} from "@mui/material";
-import {getMonday, getISODateWithDelta} from "../../../helpers";
+import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
 
 
 function useDashboard(producerId, consumerId) {
@@ -9,7 +9,7 @@ function useDashboard(producerId, consumerId) {
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
-    const [selectedTimeframe, setSelectedTimeframe] = useState(0)
+    const [selectedTimeframe, setSelectedTimeframe] = useState(2)
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
@@ -180,7 +180,8 @@ function useDashboard(producerId, consumerId) {
                 total_saved = data.totalSaved;
             }
         }
-        return total_saved.toFixed(2);
+
+        return roundToN(total_saved, 2);
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};

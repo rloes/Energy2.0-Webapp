@@ -31,7 +31,7 @@ const columnTitles = {
  * @param producerId - is set when List is rendered under AddProducer
  * @returns {JSX.Element}
  */
-function ListConsumers({producerId}) {
+function ListConsumers({producerId, withoutTitle=false}) {
     const tableColumns = !producerId? ['id', 'name', 'contract', 'mail', 'phone'] : ['name']
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -62,7 +62,9 @@ function ListConsumers({producerId}) {
 
     return (
         <div>
-            <h2 className={"page-title"}>{producerId ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
+            {!withoutTitle &&
+                <h2 className={"page-title"}>{producerId ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
+            }
             <WidgetComponent>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>

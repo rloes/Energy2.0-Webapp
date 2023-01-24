@@ -16,19 +16,14 @@ import {ThemeProvider, createTheme} from '@mui/system';
 import Header from "./components/Header"
 import {tokens} from "../../theme";
 import ElevatedBox from "./components/ElevatedBox"
-//ICONS
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import EuroSymbolSharpIcon from '@mui/icons-material/EuroSymbolSharp';
 import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesSharp';
 import useDashboard from "./hooks/useDashboard";
-import useQuery from "../../hooks/useQuery";
 import LineChart from "./components/LineChart";
 import PowerMix from "./components/PowerMix";
-//5. Da wir den export getaetigt haben, muessen wir da
-// wo wir wollen, dass die Ausgabe angezeigt wird
-// einen import durchfuehren
-import Wohneinheiten from "./components/Wohneinheiten"
 import Umsaetze from "./components/Umsaetze"
+import ListConsumers from "../admin/ListConsumers/ListConsumers";
 
 const theme = createTheme({
     palette: {
@@ -191,17 +186,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                         increase="+5%"
                         icon={
                             <ElectricalServicesSharpIcon
-                                sx={{color: colors.gr}}// // functions to set the url params after a different timeframe is selected
-                                // const timeFrames = {
-                                //     0: () => "",
-                                //     1: () => "start_date=" + getISODateWithDelta(0) + "&end_date=" + getISODateWithDelta(1),
-                                //     2: () => "start_date=" + getMonday()
-                                // }
-                                // // if selectedTimeFrame changes -> new URL -> new request
-                                // // useEffect(() => {
-                                // //     setUrl(timeFrames[selectedTimeframe])
-                                // //     setLoading(true)
-                                // // }, [selectedTimeframe])eenAccent[600], fontSize: "26px"}}
+                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
                             />
                         }
                     />
@@ -282,7 +267,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                             Wohneinheiten
                         {/*6. Zu guter letzt  muessen wir das ja auch benutzen
                               also wird es hier  mit <Wohneinheiten/> angezeigt*/}
-                        <Wohneinheiten/>
+                        <ListConsumers producerId={producerId} withoutTitle/>
                         
                         </Typography>
                     </Box>
