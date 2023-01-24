@@ -113,19 +113,24 @@ function ListConsumers({producerId}) {
                                 </TableRow>
                                 :
                                 data.map((consumer) => (
-                                    <TableRow>
+                                    <TableRow onClick={() => navigate("/kunden/"+consumer.id)}
+                                    className={"hover:bg-gray-100 cursor-pointer"}>
                                         {tableColumns.map((column) => (
                                             <TableCell>
                                                 {consumer[column]}{column === "peakPower" && " kWp"}
                                             </TableCell>
                                         ))}
                                         <TableCell>
-                                            <StyledButton startIcon={<Edit/>} onClick={() => {
+                                            <StyledButton startIcon={<Edit/>} onClick={(e) => {
+                                                e.stopPropagation()
                                                 navigate('/kunden/' + consumer.id + "/bearbeiten")
                                             }}>
                                                 Bearbeiten
                                             </StyledButton>
-                                            <IconButton onClick={() => handleDelete(consumer.id)}>
+                                            <IconButton onClick={(e) => {
+                                                e.stopPropagation()
+                                                handleDelete(consumer.id)
+                                            }}>
                                                 <DeleteForever/>
                                             </IconButton>
                                         </TableCell>

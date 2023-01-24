@@ -84,11 +84,13 @@ function useDashboard(producerId, consumerId) {
 
         // depending on view(consumer, producer, overall) -> consumers in different objects
         const consumers = data.consumers ? Object.values(data.consumers) : [{'consumptions': data.consumptions}]
+        // const consumers = [{'consumptions': data.consumptions}]
         if(consumers[0].consumptions) {
             for (let j = 0; j < consumers.length; j++) {
                 // for each consumer
                 const consumer = consumers[j]
                 const consumptions = {"id": data.consumers ? Object.keys(data.consumers)[j] : "Verbrauch", 'data': []}
+                // const consumptions = {"id": "Verbrauch", 'data': []}
                 let consumption_sum = 0
                 for (let i = 0; i < consumer.consumptions.length; i++) {
                     // map through all consumptions -> set x = datetime and y = consumption
