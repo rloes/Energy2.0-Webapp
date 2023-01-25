@@ -43,7 +43,8 @@ function useDashboard(producerId, consumerId) {
         if (data) setTransformedData((prev) => ({
             ...prev,
             "lineChartData": lineChartData(data),
-            "totalSavedData": totalSavedData(data)
+            "totalSavedData": totalSavedData(data),
+            "ConsumptionData": ConsumptionData(data)
         }))
     }, [data])
 
@@ -182,6 +183,23 @@ function useDashboard(producerId, consumerId) {
         }
 
         return roundToN(total_saved, 2);
+    }
+
+    const ConsumptionData = () => {
+        let CC = 0;
+        if (data) {
+            if (data.consumersTotalConsumption) {
+                CC = data.consumersTotalConsumption;
+            } else if (data.totalConsumption) {
+                CC = data.totalConsumption;
+            } else if (data.producersTotalConsumption
+            ) {
+                CC = data.producersTotalConsumption
+                ;
+            }
+        }
+
+        return roundToN(CC, 2);
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};

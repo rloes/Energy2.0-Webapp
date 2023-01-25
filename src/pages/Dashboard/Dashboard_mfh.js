@@ -129,7 +129,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                     }}
                 >
                     <StatBox
-                        title="Verbrauch aktuell"
+                        title={"Verbrauch: " + transformedData.ConsumptionData}
                         subtitle="hoeher als im letzten Monat"
                         increase="5%"
                         icon={
