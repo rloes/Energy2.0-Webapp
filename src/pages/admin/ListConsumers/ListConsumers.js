@@ -127,7 +127,7 @@ function ListConsumers({producerId, withoutTitle=false}) {
                                                 e.stopPropagation()
                                                 navigate('/kunden/' + consumer.id + "/bearbeiten")
                                             }}>
-                                                Bearbeiten
+                                                {!withoutTitle && "Bearbeiten"}
                                             </StyledButton>
                                             <IconButton onClick={(e) => {
                                                 e.stopPropagation()

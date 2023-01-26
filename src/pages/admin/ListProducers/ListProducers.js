@@ -105,7 +105,7 @@ function ListProducers({withoutTitle}) {
                                                 e.stopPropagation()
                                                 navigate('/solaranlagen/' + producer.id + "/bearbeiten")
                                             }}>
-                                                Bearbeiten
+                                                {!withoutTitle && "Bearbeiten"}
                                             </StyledButton>
                                             <IconButton onClick={(e) => {
                                                 e.stopPropagation()
