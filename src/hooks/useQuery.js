@@ -43,10 +43,14 @@ function useQuery(options) {
     }
 
     useEffect(() => {
+        let subscribe = true
         if (requestOnLoad) {
-            request()
+            if(subscribe) request()
         } else {
             setLoading(false)
+        }
+        return () => {
+            subscribe = false
         }
     }, [url])
 

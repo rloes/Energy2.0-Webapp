@@ -30,7 +30,6 @@ function Login(props) {
                 navigate('/solaranlagen')
                 setNotification({message:"Angemeldet", severity:"success"})
             }, error => {
-                console.log(error.response.status)
                 if(error.response.status === 400){
                     setNotification({message: "Anmeldung fehlgeschlagen", severity:"error"})
                 }else {

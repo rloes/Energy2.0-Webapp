@@ -29,7 +29,7 @@ function SidebarMenu(props) {
 
     }
     return (
-        <aside className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen"}>
+        <aside className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
             <div className={"flex flex-col justify-start items-center gap-3"}>
                 <h2 className={"uppercase"}>
                     Energy 2.0

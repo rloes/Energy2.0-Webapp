@@ -61,11 +61,11 @@ function ListConsumers({producerId, withoutTitle=false}) {
     }
 
     return (
-        <div>
+        <div className={withoutTitle && "max-h-full relative h-full"}>
             {!withoutTitle &&
-                <h2 className={"page-title"}>{producerId ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
+                <h2 className={"page-title"}>{withoutTitle ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
             }
-            <WidgetComponent>
+            <WidgetComponent className={withoutTitle && "flex flex-col max-h-full h-full"}>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>
                         Kunden
@@ -86,9 +86,9 @@ function ListConsumers({producerId, withoutTitle=false}) {
                     }
 
                 </div>
-                <TableContainer>
+                <TableContainer className={withoutTitle && "flex overflow-y-auto"}>
                     <Table>
-                        <TableHead>
+                        <TableHead className={withoutTitle && "sticky top-0 bg-white z-10"}>
                             <TableRow>
                                 {tableColumns.map((column) => (
                                     <TableCell>

@@ -9,7 +9,7 @@ function useDashboard(producerId, consumerId) {
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
-    const [selectedTimeframe, setSelectedTimeframe] = useState(2)
+    const [selectedTimeframe, setSelectedTimeframe] = useState(0)
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
@@ -44,7 +44,7 @@ function useDashboard(producerId, consumerId) {
             ...prev,
             "lineChartData": lineChartData(data),
             "totalSavedData": totalSavedData(data),
-            "ConsumptionData": ConsumptionData(data)
+            "consumptionData": consumptionData(data)
         }))
     }, [data])
 
@@ -181,11 +181,11 @@ function useDashboard(producerId, consumerId) {
                 total_saved = data.totalSaved;
             }
         }
-
+        total_saved = Number(total_saved) / 100
         return roundToN(total_saved, 2);
     }
 
-    const ConsumptionData = () => {
+    const consumptionData = () => {
         let CC = 0;
         if (data) {
             if (data.consumersTotalConsumption) {
