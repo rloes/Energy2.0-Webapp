@@ -22,7 +22,6 @@ import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesS
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
 import PowerMix from "./components/PowerMix";
-import Umsaetze from "./components/Umsaetze"
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 
 const theme = createTheme({
@@ -325,11 +324,10 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                         fontWeight="600"
                         sx={{marginBottom: "15px"}}
                     >
-                        Wirtschaftliche KPIS
-                        <p>Tagesumsatz</p>
-                        <p>Monatsumsatz</p>
-                        <p>Jahresumsatz</p>    
-                        <Umsaetze/>    
+                        <h1>Gesamte Einnahmen</h1>
+                        <div className={"flex h-[250px] mt-[-25px] justify-center items-center w-full"}>
+                        {transformedData.totalRevenueData} €     
+                        </div>
                     </Typography>
                     <Box height="200px">
                         {/* <GeographyChart isDashboard={true} /> */}

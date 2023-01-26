@@ -43,7 +43,8 @@ function useDashboard(producerId, consumerId) {
         if (data) setTransformedData((prev) => ({
             ...prev,
             "lineChartData": lineChartData(data),
-            "totalSavedData": totalSavedData(data)
+            "totalSavedData": totalSavedData(data),
+            "totalRevenueData": totalRevenueData(data)
         }))
     }, [data])
 
@@ -182,6 +183,24 @@ function useDashboard(producerId, consumerId) {
         }
 
         return roundToN(total_saved, 2);
+    }
+    /**
+     * Fetches total_revenue from backend /output/ so that it is usable in box "Wirtschaftliche KPIs"
+     * @returns total_revenue
+     */
+    const totalRevenueData = () => {
+        let total_revenue = 0
+        if (data) {
+            if(data.producersTotalRevenue) {
+                total_revenue = data.producersTotalRevenue
+            } else if (data.consumersTotalRevenue) {
+                total_revenue = data.consumersTotalRevenue
+            } else if (data.totalRevenue) {
+                total_revenue = data.totalRevenue
+            }
+        }
+
+        return roundToN(total_revenue, 2)
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
