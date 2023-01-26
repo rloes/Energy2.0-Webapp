@@ -160,7 +160,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  render={
                                      <LineChart data={transformedData.lineChartData}
                                                 selectedTimeframe={selectedTimeframe}/>
-                                 } loading={loading} displayText={false}/>
+                                 } loading={loading}/>
                 </div>
 
                 <div className={"col-span-4 row-span-2 relative"}>
