@@ -124,7 +124,6 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                     />
                 </Box>
 
-                {/*EINSPARUNG MONAT */}
                 <Box
                     gridColumn="span 3"
                     display="flex"
@@ -139,7 +138,7 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                     }}
                 >
                     <StatBox
-                        title={"Einsparung: " + transformedData.totalSavedData}
+                        title={"Einsparung"}
                         subtitle="hoeher als im Letzten Monat"
                         increase="+10%"
                         icon={
@@ -147,8 +146,33 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
                             />
                         }
-                    />
+                    >
+                    </StatBox>
+                    <Box
+                        display="flex"
+                        alignItems="flex-start"
+                        justifyContent="center"
+                        position="relative"
+                        sx={{
+                            width: '50px',
+                            height: '50px',
+                            p: 2
+                        }}
+                    >
+                        <Box>
+                            <Typography
+                                variant="h8"
+                                fontWeight="bold"
+                                color="blue"
+                            >
+                                {/* würde das hier gern oben in title integrieren, aber dann lädt circularProgress leider nicht.
+                                Richtig positioniert kriege ich es auch nicht, vllt hat wer anderes noch ne Idee*/}
+                                {!loading ? transformedData.totalSavedData : <CircularProgress />}
+                            </Typography>
+                        </Box>
+                    </Box>
                 </Box>
+
 
                 {/*STORMMIX MONAT */}
                 <Box
@@ -312,7 +336,7 @@ const Dashboard_mfh = ({ producerId, cosumerId }) => {
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 };
 
