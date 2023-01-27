@@ -222,10 +222,10 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                         fontWeight="600"
                         sx={{marginBottom: "15px"}}
                     >
-                        Wirtschaftliche KPIS
-                        <p>Tagesumsatz</p>
-                        <p>Monatsumsatz</p>
-                        <p>Jahresumsatz</p>
+                        <h1>Gesamte Einnahmen</h1>
+                        <div className={"flex h-[250px] mt-[-25px] justify-center items-center w-full"}>
+                        {transformedData.totalRevenueData} €
+                        </div>
                     </Typography>
                     <Box height="200px">
                         {/* <GeographyChart isDashboard={true} /> */}
