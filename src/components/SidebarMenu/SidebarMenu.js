@@ -40,12 +40,12 @@ function SidebarMenu(props) {
             <nav className={"flex flex-col justify-between items-start gap-0.5"}>
                 {
                     Object.entries(menuStructure).map(([key, buttons], index) => (
-                        <React.Fragment>
+                        <React.Fragment key={key}>
                             <h3 className={"text-[1.5rem] font-semibold"}>
                                 {key}
                             </h3>
                             {buttons.map((button) => (
-                                <Link to={button.link}>
+                                <Link to={button.link} key={button.name}>
                                     <StyledButton startIcon={button.icon} className={"font-medium"}>
                                         {button.name}
                                     </StyledButton>

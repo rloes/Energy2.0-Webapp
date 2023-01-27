@@ -10,7 +10,7 @@ function NotificationBar(props) {
 
     const open = message && severity ? true : false
     const handleClose = () => {
-        setNotification({message: "", severity: ""})
+        setNotification({message: "", severity: "info"})
     }
     return (
         <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}

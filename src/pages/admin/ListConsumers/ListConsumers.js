@@ -69,11 +69,11 @@ function ListConsumers({producerId, withoutTitle = false}) {
 
     const consumers = query === "" ? data : filteredData
     return (
-        <div className={withoutTitle && "max-h-full relative h-full"}>
+        <div className={withoutTitle ? "max-h-full relative h-full":""}>
             {!withoutTitle &&
                 <h2 className={"page-title"}>{withoutTitle ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
             }
-            <WidgetComponent className={withoutTitle && "flex flex-col max-h-full h-full"}>
+            <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full h-full":""}>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>
                         Kunden
@@ -97,12 +97,12 @@ function ListConsumers({producerId, withoutTitle = false}) {
                                    size={"small"} className={"!ml-auto"} placeholder={"Suchen...."}/>
                     }
                 </div>
-                <TableContainer className={withoutTitle && "flex overflow-y-auto"}>
+                <TableContainer className={withoutTitle ? "flex overflow-y-auto":""}>
                     <Table>
-                        <TableHead className={withoutTitle && "sticky top-0 bg-white z-10"}>
+                        <TableHead className={withoutTitle ? "sticky top-0 bg-white z-10":""}>
                             <TableRow>
                                 {tableColumns.map((column) => (
-                                    <TableCell>
+                                    <TableCell key={column}>
                                         <h4 className={"font-semibold"}>
                                             {columnTitles[column]}
                                         </h4>
@@ -127,9 +127,9 @@ function ListConsumers({producerId, withoutTitle = false}) {
                                 :
                                 consumers.map((consumer) => (
                                     <TableRow onClick={() => navigate("/kunden/" + consumer.id)}
-                                              className={"hover:bg-gray-100 cursor-pointer"}>
+                                              className={"hover:bg-gray-100 cursor-pointer"} key={consumer.id}>
                                         {tableColumns.map((column) => (
-                                            <TableCell>
+                                            <TableCell key={column}>
                                                 {consumer[column]}{column === "peakPower" && " kWp"}
                                             </TableCell>
                                         ))}

@@ -73,7 +73,7 @@ function ListRates(props) {
                         <TableHead>
                             <TableRow>
                                 {tableColumns.map((column) => (
-                                    <TableCell>
+                                    <TableCell key={column}>
                                         <h4 className={"font-semibold"}>{columnTitles[column]}</h4>
                                     </TableCell>
                                 ))}
@@ -93,9 +93,9 @@ function ListRates(props) {
                                 </TableRow>
                             ) : (
                                 rates.map((rate) => (
-                                    <TableRow>
+                                    <TableRow key={rate.id}>
                                         {tableColumns.map((column) => (
-                                            <TableCell>{column !== "flexible" ?
+                                            <TableCell key={column}>{column !== "flexible" ?
                                                 column === "price" || column === "reducedPrice" ?
                                                     roundToN(Number(rate[column]), 0) + "ct" : rate[column]
                                                 :

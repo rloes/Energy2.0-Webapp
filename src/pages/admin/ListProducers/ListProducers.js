@@ -44,9 +44,9 @@ function ListProducers({withoutTitle}) {
     }
 
     const producers = query === "" ? data : filteredData
-    return (<div className={withoutTitle && "max-h-full relative h-full"}>
+    return (<div className={withoutTitle ? "max-h-full relative h-full" : ""}>
         {!withoutTitle && <h2 className={"page-title"}>Solaranlagenverwaltung</h2>}
-        <WidgetComponent className={withoutTitle && "flex flex-col max-h-full"}>
+        <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full" : ""}>
             <div className={"flex"}>
                 <h3 className={"text-lg font-bold px-4"}>
                     Solaranlagen
@@ -63,13 +63,14 @@ function ListProducers({withoutTitle}) {
             </div>
             <TableContainer className={"flex"}>
                 <Table>
-                    <TableHead className={withoutTitle && "sticky top-0 bg-white z-10"}>
+                    <TableHead className={withoutTitle ? "sticky top-0 bg-white z-10" : ""}>
                         <TableRow>
-                            {tableColumns.map((column) => (<TableCell>
-                                <h4 className={"font-semibold"}>
-                                    {columnTitles[column]}
-                                </h4>
-                            </TableCell>))}
+                            {tableColumns.map((column) => (
+                                <TableCell  key={column}>
+                                    <h4 className={"font-semibold"}>
+                                        {columnTitles[column]}
+                                    </h4>
+                                </TableCell>))}
                             <TableCell>
                                 <h4 className={"font-bold"}>
                                     Aktionen
@@ -87,10 +88,11 @@ function ListProducers({withoutTitle}) {
                         </TableRow> : producers.map((producer) => (
                             <TableRow onClick={() => (navigate("/solaranlagen/" + String(producer.id)))}
                                       className={"cursor-pointer hover:bg-gray-100"} href={String(producer.id)}
-                            key={producer.id}>
-                                {tableColumns.map((column) => (<TableCell>
-                                    {producer[column]}{column === "peakPower" && " kWp"}
-                                </TableCell>))}
+                                      key={producer.id}>
+                                {tableColumns.map((column) => (
+                                    <TableCell key={column}>
+                                        {producer[column]}{column === "peakPower" && " kWp"}
+                                    </TableCell>))}
                                 <TableCell>
                                     <StyledButton startIcon={<Edit/>} onClick={(e) => {
                                         e.stopPropagation()
