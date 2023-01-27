@@ -8,7 +8,7 @@ import {
     TableHead,
     TableRow,
     Button,
-    IconButton,
+    IconButton, TextField,
 } from "@mui/material";
 import useQuery from "../../../hooks/useQuery";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
@@ -17,6 +17,7 @@ import {Link, useNavigate} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import {roundToN} from "../../../helpers";
+import useFilter from "../../../hooks/useFilter";
 
 const tableColumns = ["name", "reducedPrice", "price", "flexible"];
 const columnTitles = {
@@ -25,6 +26,7 @@ const columnTitles = {
     price: "Netzpreis (ct/kWh)",
     flexible: "Flexibler Tarif",
 };
+
 // TODO: setNotification einbinden
 function ListRates(props) {
     const {data, error, loading, request} = useQuery({
@@ -34,6 +36,12 @@ function ListRates(props) {
     });
     const {apiRequest} = useApi();
     const navigate = useNavigate();
+
+    const {value: filteredData, setQuery, query} = useFilter({
+        params:
+            {name: true, street: true, zipCode: true, city: true},
+        data: data
+    })
 
     const handleDelete = (id) => {
         apiRequest({
@@ -46,6 +54,7 @@ function ListRates(props) {
         return <div>error</div>;
     }
 
+    const rates = query === "" ? data : filteredData
     return (
         <div>
             <h2 className={"page-title"}>Tarifverwaltung</h2>
@@ -55,6 +64,9 @@ function ListRates(props) {
                     <Link to={"./erstellen"}>
                         <StyledButton>Tarif hinzufügen</StyledButton>
                     </Link>
+                    <TextField value={query} onChange={(e) => setQuery(e.target.value)}
+                               size={"small"} className={"!ml-auto"} placeholder={"Suchen...."}/>
+
                 </div>
                 <TableContainer>
                     <Table>
@@ -80,12 +92,12 @@ function ListRates(props) {
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                data.map((rate) => (
+                                rates.map((rate) => (
                                     <TableRow>
                                         {tableColumns.map((column) => (
                                             <TableCell>{column !== "flexible" ?
-                                                column === "price" || column === "reducedPrice"?
-                                                    roundToN(Number(rate[column]), 0)+"ct" : rate[column]
+                                                column === "price" || column === "reducedPrice" ?
+                                                    roundToN(Number(rate[column]), 0) + "ct" : rate[column]
                                                 :
                                                 rate[column] ? "ja" : "nein"}</TableCell>
 

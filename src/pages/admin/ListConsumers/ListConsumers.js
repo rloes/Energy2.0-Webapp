@@ -7,7 +7,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Button, IconButton, Dialog
+    Button, IconButton, Dialog, TextField
 } from "@mui/material";
 import useQuery from "../../../hooks/useQuery";
 import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
@@ -17,6 +17,7 @@ import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 import AddConsumer from "../AddConsumer/AddConsumer";
+import useFilter from "../../../hooks/useFilter";
 
 const columnTitles = {
     id: "Kunden-ID",
@@ -31,8 +32,8 @@ const columnTitles = {
  * @param producerId - is set when List is rendered under AddProducer
  * @returns {JSX.Element}
  */
-function ListConsumers({producerId, withoutTitle=false}) {
-    const tableColumns = !producerId? ['id', 'name', 'contract', 'mail', 'phone'] : ['name']
+function ListConsumers({producerId, withoutTitle = false}) {
+    const tableColumns = !producerId ? ['id', 'name', 'contract', 'mail', 'phone'] : ['name']
     const [openDialog, setOpenDialog] = useState(false)
 
     const {data, error, loading, request} = useQuery({
@@ -43,6 +44,12 @@ function ListConsumers({producerId, withoutTitle=false}) {
     const {apiRequest} = useApi()
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
+
+    const {value: filteredData, setQuery, query} = useFilter({
+        params:
+            {name: true},
+        data: data
+    })
 
     const handleDelete = (id) => {
         apiRequest({
@@ -60,6 +67,7 @@ function ListConsumers({producerId, withoutTitle=false}) {
         )
     }
 
+    const consumers = query === "" ? data : filteredData
     return (
         <div className={withoutTitle && "max-h-full relative h-full"}>
             {!withoutTitle &&
@@ -84,7 +92,10 @@ function ListConsumers({producerId, withoutTitle=false}) {
                             Kunde hinzufügen
                         </StyledButton>
                     }
-
+                    {!withoutTitle &&
+                        <TextField value={query} onChange={(e) => setQuery(e.target.value)}
+                                   size={"small"} className={"!ml-auto"} placeholder={"Suchen...."}/>
+                    }
                 </div>
                 <TableContainer className={withoutTitle && "flex overflow-y-auto"}>
                     <Table>
@@ -114,9 +125,9 @@ function ListConsumers({producerId, withoutTitle=false}) {
                                     </TableCell>
                                 </TableRow>
                                 :
-                                data.map((consumer) => (
-                                    <TableRow onClick={() => navigate("/kunden/"+consumer.id)}
-                                    className={"hover:bg-gray-100 cursor-pointer"}>
+                                consumers.map((consumer) => (
+                                    <TableRow onClick={() => navigate("/kunden/" + consumer.id)}
+                                              className={"hover:bg-gray-100 cursor-pointer"}>
                                         {tableColumns.map((column) => (
                                             <TableCell>
                                                 {consumer[column]}{column === "peakPower" && " kWp"}

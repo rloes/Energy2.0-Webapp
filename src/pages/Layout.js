@@ -8,7 +8,7 @@ function Layout(props) {
             <SidebarMenu/>
             <div className={"relative w-full p-16 h-full overflow-y-auto flex"}>
                 <img src={"/bg-img.jpg"} className={"fixed top-0 left-0 w-full object-cover opacity-30"}/>
-                <section className={"relative"}>
+                <section className={"relative w-full"}>
                     <Outlet />
                 </section>
             </div>
