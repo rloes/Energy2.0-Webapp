@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import useQuery from "../../../hooks/useQuery";
 import {FormControl, InputLabel, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
+import useApi from "../../../hooks/useApi";
 
 
 function useDashboard(producerId, consumerId) {
@@ -10,6 +11,7 @@ function useDashboard(producerId, consumerId) {
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
     const [selectedTimeframe, setSelectedTimeframe] = useState(2)
+    const {apiRequest} = useApi()
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
@@ -46,6 +48,10 @@ function useDashboard(producerId, consumerId) {
             "totalSavedData": totalSavedData(data)
         }))
     }, [data])
+
+    useEffect(() => {
+        getDetails()
+    }, [])
 
 
     /**
@@ -126,6 +132,19 @@ function useDashboard(producerId, consumerId) {
         0: (timeStr) => timeStr.split("T")[0] + "T00:00:00",
         2: (timeStr) => timeStr.split(":")[0] + ":00:00",
     }
+
+    const getDetails = () => {
+        apiRequest({
+            method: "GET",
+            url: "/producers/" + 12 + "/"
+        }).then((res) => {
+            console.log(res)
+            setTransformedData((prev) => ({
+                ...prev, producerData: res.data
+            }))
+        })
+      }
+
 
     /**
      * reduces the number of points in dataset by taking the sum of a certain timerange and adding it as a single point
