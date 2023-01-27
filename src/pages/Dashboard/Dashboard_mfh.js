@@ -101,7 +101,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                      padding: "5px"
                  }}>
 
-                <Header title={"Dashboard" + (producerId? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "")}/>
+                <Header title={"Dashboard" + (producerId ? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "")}/>
                 <TimeframeSelect handleSelectChange={handleSelectChange} selectedTimeframe={selectedTimeframe}/>
             </Box>
 
@@ -156,7 +156,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 <div className={"col-span-8 row-span-2"}>
                     <DataDisplay titel={"Verlauf"}
                                  value={transformedData.lineChartData}
-                                 icon={<Timeline />}
+                                 icon={<Timeline/>}
                                  render={
                                      <LineChart data={transformedData.lineChartData}
                                                 selectedTimeframe={selectedTimeframe}/>
@@ -205,32 +205,35 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 </Box>
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
-                <Box
-                    gridColumn="span 4"
-                    gridRow="span 2"
-                    padding="30px"
-                    sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 2,
-                        minWidth: 300,
-                    }}
-                >
-                    <Typography
-                        variant="h5"
-                        fontWeight="600"
-                        sx={{marginBottom: "15px"}}
-                    >
-                        <h1>Gesamte Einnahmen</h1>
-                        <div className={"flex h-[250px] mt-[-25px] justify-center items-center w-full"}>
-                        {transformedData.totalRevenueData} €
-                        </div>
-                    </Typography>
-                    <Box height="200px">
-                        {/* <GeographyChart isDashboard={true} /> */}
-                    </Box>
-                </Box>
+                {/*    <Box*/}
+                {/*        gridColumn="span 4"*/}
+                {/*        gridRow="span 2"*/}
+                {/*        padding="30px"*/}
+                {/*        sx={{*/}
+                {/*            bgcolor: 'background.paper',*/}
+                {/*            boxShadow: 1,*/}
+                {/*            borderRadius: 2,*/}
+                {/*            p: 2,*/}
+                {/*            minWidth: 300,*/}
+                {/*        }}*/}
+                {/*    >*/}
+                {/*        <Typography*/}
+                {/*            variant="h5"*/}
+                {/*            fontWeight="600"*/}
+                {/*            sx={{marginBottom: "15px"}}*/}
+                {/*        >*/}
+                {/*            <h1>Gesamte Einnahmen</h1>*/}
+                {/*            <div className={"flex h-[250px] mt-[-25px] justify-center items-center w-full"}>*/}
+                {/*            {transformedData.totalRevenueData} €*/}
+                {/*            </div>*/}
+                {/*        </Typography>*/}
+                {/*        <Box height="200px">*/}
+                {/*            /!* <GeographyChart isDashboard={true} /> *!/*/}
+                {/*        </Box>*/}
+                {/*    </Box>*/}
+                <div className={"col-span-4 row-span-2"}>
+                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={"Einnahmen"} loading={loading}/>
+                </div>
             </Box>
         </Box>
     );
