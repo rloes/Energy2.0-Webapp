@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from "axios";
-import useApi from "./useApi";
+import useApi, {BASE_URL} from "./useApi";
 
 
 /**
@@ -18,6 +18,7 @@ function useQuery(options) {
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(true)
     const controllerRef = new AbortController();
+    const requestURL = useRef(url)
     const {apiRequest} = useApi()
 
 
@@ -34,7 +35,10 @@ function useQuery(options) {
             const response = await apiRequest({
                 ...options, signal: controllerRef.signal
             })
-            setData(response.data)
+            console.log(response.request.responseURL, BASE_URL+requestURL.current, BASE_URL+requestURL.current === response.request.responseURL)
+            if (BASE_URL+requestURL.current === response.request.responseURL) {
+                setData(response.data)
+            }
             return response
         } catch (error) {
             console.log(error)
@@ -43,9 +47,10 @@ function useQuery(options) {
     }
 
     useEffect(() => {
+        requestURL.current = url
         let subscribe = true
         if (requestOnLoad) {
-            if(subscribe) request()
+            if (subscribe) request()
         } else {
             setLoading(false)
         }
@@ -57,7 +62,6 @@ function useQuery(options) {
     useEffect(() => {
         if (data || error) {
             setLoading(false)
-            console.log(data, error)
         }
     }, [data, error])
 

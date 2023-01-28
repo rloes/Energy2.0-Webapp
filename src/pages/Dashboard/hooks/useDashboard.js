@@ -14,7 +14,7 @@ function useDashboard(producerId, consumerId) {
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
-        url: "/output/?" + (producerId? "producer_id="+producerId+ "&" : consumerId? "consumer_id="+consumerId+"&":"")
+        url: "output/?" + (producerId? "producer_id="+producerId+ "&" : consumerId? "consumer_id="+consumerId+"&":"")
             + url,
         // url: "/output/?consumer_id=3&" + url,
         requestOnLoad: true

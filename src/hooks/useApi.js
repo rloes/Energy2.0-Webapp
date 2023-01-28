@@ -5,7 +5,7 @@ import camelize from "camelize";
 import useAuthStore from "../stores/useAuthStore";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../stores/useNotificationStore";
-
+export const BASE_URL = "http://127.0.0.1:8000/"
 function useApi(props) {
     // Authorization Toke received and stored on login
     const token = localStorage.getItem('token');
@@ -30,7 +30,7 @@ function useApi(props) {
             // api request
             const response = await axios({
                 method: method,
-                baseURL: "http://127.0.0.1:8000/",
+                baseURL: BASE_URL,
                 url: url,
                 headers: {
                     // only add token if one exist and noAuthorization is not set to true
