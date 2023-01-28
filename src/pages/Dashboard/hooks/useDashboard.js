@@ -2,14 +2,15 @@ import React, {useEffect, useState} from 'react';
 import useQuery from "../../../hooks/useQuery";
 import {FormControl, InputLabel, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
-
+import useApi from "../../../hooks/useApi";
 
 function useDashboard(producerId, consumerId) {
 
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
-    const [selectedTimeframe, setSelectedTimeframe] = useState(2)
+    const [selectedTimeframe, setSelectedTimeframe] = useState(0)
+    const {apiRequest} = useApi()
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
@@ -43,9 +44,15 @@ function useDashboard(producerId, consumerId) {
         if (data) setTransformedData((prev) => ({
             ...prev,
             "lineChartData": lineChartData(data),
-            "totalSavedData": totalSavedData(data)
+            "totalSavedData": totalSavedData(data),
+            "totalRevenueData": totalRevenueData(data),
+            "consumptionData": consumptionData(data)
         }))
     }, [data])
+
+    useEffect(() => {
+        getDetails()
+    }, [])
 
 
     /**
@@ -127,6 +134,21 @@ function useDashboard(producerId, consumerId) {
         2: (timeStr) => timeStr.split(":")[0] + ":00:00",
     }
 
+    const getDetails = () => {
+        if(producerId) {
+            apiRequest({
+                method: "GET",
+                url: "/producers/" + producerId + "/"
+            }).then((res) => {
+                console.log(res)
+                setTransformedData((prev) => ({
+                    ...prev, producerData: res.data
+                }))
+            })
+        }
+      }
+
+
     /**
      * reduces the number of points in dataset by taking the sum of a certain timerange and adding it as a single point
      * This function gets a single point from a transformation function(e.g. lineChartData) and decides given on date,
@@ -180,8 +202,44 @@ function useDashboard(producerId, consumerId) {
                 total_saved = data.totalSaved;
             }
         }
-
+        total_saved = Number(total_saved) / 100
         return roundToN(total_saved, 2);
+    }
+    /**
+     * Fetches total_revenue from backend /output/ so that it is usable in box "Wirtschaftliche KPIs"
+     * @returns total_revenue
+     */
+    const totalRevenueData = () => {
+        let totalRevenue = 0
+        if (data) {
+            if(data.producersTotalRevenue) {
+                totalRevenue = data.producersTotalRevenue
+            } else if (data.consumersTotalRevenue) {
+                totalRevenue = data.consumersTotalRevenue
+            } else if (data.totalPrice) {
+                totalRevenue = data.totalPrice
+                let totalGridPrice = data.totalGridPrice
+            }
+        totalRevenue = totalRevenue / 100
+        }
+        return roundToN(totalRevenue, 2)
+    }
+
+    const consumptionData = () => {
+        let CC = 0;
+        if (data) {
+            if (data.consumersTotalConsumption) {
+                CC = data.consumersTotalConsumption;
+            } else if (data.totalConsumption) {
+                CC = data.totalConsumption;
+            } else if (data.producersTotalConsumption
+            ) {
+                CC = data.producersTotalConsumption
+                ;
+            }
+        }
+
+        return roundToN(CC, 2);
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};

@@ -20,7 +20,7 @@ function App() {
         <BrowserRouter>
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route index element={<Dashboard_mfh  />}/>
+                        <Route index element={<DashboardWrapper  />}/>
                         <Route path={"dashboard"} element={<Dashboard />} />
                         <Route path={"solaranlagen"}>
                             <Route index element={<ListProducers/>} />
