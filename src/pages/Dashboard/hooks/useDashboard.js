@@ -4,7 +4,6 @@ import {FormControl, InputLabel, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
 import useApi from "../../../hooks/useApi";
 
-
 function useDashboard(producerId, consumerId) {
 
     // transformed data for charts ares stored here after transformation
@@ -211,18 +210,19 @@ function useDashboard(producerId, consumerId) {
      * @returns total_revenue
      */
     const totalRevenueData = () => {
-        let total_revenue = 0
+        let totalRevenue = 0
         if (data) {
             if(data.producersTotalRevenue) {
-                total_revenue = data.producersTotalRevenue
+                totalRevenue = data.producersTotalRevenue
             } else if (data.consumersTotalRevenue) {
-                total_revenue = data.consumersTotalRevenue
+                totalRevenue = data.consumersTotalRevenue
             } else if (data.totalPrice) {
-                total_revenue = data.totalPrice
+                totalRevenue = data.totalPrice
+                let totalGridPrice = data.totalGridPrice
             }
+        totalRevenue = totalRevenue / 100
         }
-
-        return roundToN(total_revenue, 2)
+        return roundToN(totalRevenue, 2)
     }
 
     const consumptionData = () => {

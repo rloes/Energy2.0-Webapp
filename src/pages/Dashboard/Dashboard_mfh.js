@@ -24,10 +24,12 @@ import PowerMix from "./components/PowerMix";
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
-import {Insights, Timeline} from "@mui/icons-material";
-import { styled } from '@mui/material/styles';
+import {MonetizationOn, Timeline} from "@mui/icons-material";
+import {styled} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
+import Item from './components/Item'
+import {formatDateTime} from "../../helpers";
 
 const theme = createTheme({
     palette: {
@@ -89,25 +91,6 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
             "color": "hsl(290, 70%, 50%)"
         }
     ];
-
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-      }));
-
-    const formatDateTime = (dateTime) => {
-        const date = new Date(dateTime);
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        const seconds = date.getSeconds().toString().padStart(2, "0");
-        return `${day}.${month}.${year} - ${hours}:${minutes}:${seconds} Uhr`;
-      }
 
     return (
         <Box m="0px">
@@ -221,30 +204,36 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                             color={colors.greenAccent[500]}
                             sx={{mt: "15px"}}
                         >
-                            <Box sx={{ flexGrow: 1 }}>
+                            <Box sx={{flexGrow: 1}}>
                                 <Grid container spacing={2} justify="flex-start">
                                     <Grid xs={4}>
                                         <Item><b>Bezeichnung </b>< br/>
-                                                {transformedData.producerData && transformedData.producerData.name}</Item>
+                                            {transformedData.producerData && transformedData.producerData.name}
+                                        </Item>
                                     </Grid>
                                     <Grid xs={4}>
                                         <Item><b>Adresse </b>< br/>
-                                                {transformedData.producerData && transformedData.producerData.street} <br/>
-                                                {transformedData.producerData && transformedData.producerData.zipCode} &nbsp;
-                                                {transformedData.producerData && transformedData.producerData.city}
-                                                </Item>
+                                            {transformedData.producerData && transformedData.producerData.street} <br/>
+                                            {transformedData.producerData && transformedData.producerData.zipCode} &nbsp;
+                                            {transformedData.producerData && transformedData.producerData.city}
+                                        </Item>
                                     </Grid>
                                     <Grid xs={4}>
-                                        <Item><b>Installierte Leistung </b>< br/> {transformedData.producerData && transformedData.producerData.peakPower} kWh</Item>
+                                        <Item><b>Installierte
+                                            Leistung </b>< br/> {transformedData.producerData && transformedData.producerData.peakPower} kWh</Item>
                                     </Grid>
                                     <Grid xs={4}>
-                                        <Item><b>Produktionszählernummer </b>< br/> {transformedData.producerData && transformedData.producerData.productionSensor.deviceId}</Item>
+                                        <Item><b>Produktionszählernummer </b>< br/> {transformedData.producerData && transformedData.producerData.productionSensor.deviceId}
+                                        </Item>
                                     </Grid>
                                     <Grid xs={4}>
-                                        <Item><b>Netzzähler </b>< br/> {transformedData.producerData && transformedData.producerData.gridSensor.deviceId}</Item>
+                                        <Item><b>Netzzähler </b>< br/> {transformedData.producerData && transformedData.producerData.gridSensor.deviceId}
+                                        </Item>
                                     </Grid>
                                     <Grid xs={4}>
-                                        <Item><b>Letzte Daten von </b>< br/> {transformedData.producerData && formatDateTime(transformedData.producerData.lastProductionReading)}</Item>
+                                        <Item><b>Letzte Daten
+                                            von </b>< br/> {transformedData.producerData && formatDateTime(transformedData.producerData.lastProductionReading)}
+                                        </Item>
                                     </Grid>
 
 
@@ -256,7 +245,8 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
-                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={"Einnahmen"} loading={loading}/>
+                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={"Einnahmen"} loading={loading}
+                                 icon={<MonetizationOn/>}/>
                 </div>
             </Box>
         </Box>
