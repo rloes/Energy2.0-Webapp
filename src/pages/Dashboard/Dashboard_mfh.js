@@ -1,22 +1,16 @@
 import React from 'react';
 import {
     Box,
-    Button,
-    CircularProgress,
     FormControl,
-    IconButton,
     InputLabel, MenuItem,
     Select,
     Typography,
     useTheme
 } from "@mui/material"
 import StatBox from './components/StatBox'
-import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
-import {ThemeProvider, createTheme} from '@mui/system';
 import Header from "./components/Header"
 import {tokens} from "../../theme";
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
-import EuroSymbolSharpIcon from '@mui/icons-material/EuroSymbolSharp';
 import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesSharp';
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
@@ -24,30 +18,10 @@ import PowerMix from "./components/PowerMix";
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
-import {MonetizationOn, Timeline} from "@mui/icons-material";
-import {styled} from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import {Euro, Savings, Timeline} from "@mui/icons-material";
 import Grid from '@mui/material/Unstable_Grid2';
 import Item from './components/Item'
 import {formatDateTime} from "../../helpers";
-
-const theme = createTheme({
-    palette: {
-        background: {
-            paper: '#fff',
-        },
-        text: {
-            primary: '#173A5E',
-            secondary: '#46505A',
-        },
-        action: {
-            active: '#001E3C',
-        },
-        success: {
-            dark: '#009688',
-        },
-    },
-});
 
 const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
     <FormControl className={"w-[175px]"} size={"small"}>
@@ -124,7 +98,13 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 </div>
                 <div className={"col-span-3"}>
                     <DataDisplay value={transformedData.totalSavedData + " €"} titel={"Einsparungen"}
-                                 icon={<EuroSymbolSharpIcon/>} loading={loading}/>
+                                 icon={<Savings/>} loading={loading} subtitle={
+                        <>
+                        <span className={"text-green-600 self-center"}>{transformedData.savedC02Data} kg </span>CO<sub>2</sub>
+                        {" "}eingespart
+                        </>
+
+                    }/>
                 </div>
 
                 {/*STORMMIX MONAT */}
@@ -246,7 +226,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
                     <DataDisplay value={transformedData.totalRevenueData + " €"} titel={"Einnahmen"} loading={loading}
-                                 icon={<MonetizationOn/>}/>
+                                 icon={<Euro/>}/>
                 </div>
             </Box>
         </Box>

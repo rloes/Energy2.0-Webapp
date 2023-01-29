@@ -43,10 +43,11 @@ function useDashboard(producerId, consumerId) {
     useEffect(() => {
         if (data) setTransformedData((prev) => ({
             ...prev,
-            "lineChartData": lineChartData(data),
-            "totalSavedData": totalSavedData(data),
-            "totalRevenueData": totalRevenueData(data),
-            "consumptionData": consumptionData(data)
+            "lineChartData": lineChartData(),
+            "totalSavedData": totalSavedData(),
+            "totalRevenueData": totalRevenueData(),
+            "consumptionData": consumptionData(),
+            "savedC02Data": savedCO2()
         }))
     }, [data])
 
@@ -226,21 +227,36 @@ function useDashboard(producerId, consumerId) {
     }
 
     const consumptionData = () => {
-        let CC = 0;
+        let totalConsumption = 0;
         if (data) {
             if (data.consumersTotalConsumption) {
-                CC = data.consumersTotalConsumption;
+                totalConsumption = data.consumersTotalConsumption;
             } else if (data.totalConsumption) {
-                CC = data.totalConsumption;
+                totalConsumption = data.totalConsumption;
             } else if (data.producersTotalConsumption
             ) {
-                CC = data.producersTotalConsumption
+                totalConsumption = data.producersTotalConsumption
                 ;
             }
         }
 
-        return roundToN(CC, 2);
+        return roundToN(totalConsumption, 2);
     }
+
+    const savedCO2 = () => {
+        const savingPerKwh = 0.35 // 400g CO2/kWh deutscher Strom und Solaranlage ca. 50g/kWh -> 350g = 0.35kg
+        let usedSelfProduction = 0
+        if(data.producersTotalUsed){
+            usedSelfProduction = data.producersTotalUsed
+        } else if(data.totalUsed){
+            usedSelfProduction = data.totalUsed
+        } else if(data.totalSelfConsumption){
+            usedSelfProduction = data.totalSelfConsumption
+        }
+
+        return roundToN(savingPerKwh * usedSelfProduction, 1)
+    }
+
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
 }

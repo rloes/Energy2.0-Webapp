@@ -27,7 +27,7 @@ function Login(props) {
             .then(res => {
                 localStorage.setItem('token', res.data.token);
                 setAuthStore('token', res.data.token)
-                navigate('/solaranlagen')
+                navigate('/')
                 setNotification({message:"Angemeldet", severity:"success"})
             }, error => {
                 if(error.response.status === 400){

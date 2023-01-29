@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import axios from "axios";
 import useApi, {BASE_URL} from "./useApi";
 
 
@@ -35,7 +34,7 @@ function useQuery(options) {
             const response = await apiRequest({
                 ...options, signal: controllerRef.signal
             })
-            console.log(response.request.responseURL, BASE_URL+requestURL.current, BASE_URL+requestURL.current === response.request.responseURL)
+            // latest url is stored in useRef.current -> data is only set if it comes from latest request
             if (BASE_URL+requestURL.current === response.request.responseURL) {
                 setData(response.data)
             }
@@ -48,14 +47,10 @@ function useQuery(options) {
 
     useEffect(() => {
         requestURL.current = url
-        let subscribe = true
         if (requestOnLoad) {
-            if (subscribe) request()
+            request()
         } else {
             setLoading(false)
-        }
-        return () => {
-            subscribe = false
         }
     }, [url])
 
