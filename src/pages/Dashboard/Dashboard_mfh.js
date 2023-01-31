@@ -152,7 +152,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                         }
                     />
                     <Box height="90px" width="250px" m="-20px 0 0 0">
-                        <PowerMix data={exampleData} selectedTimeframe={selectedTimeframe}/>
+                        <PowerMix data={transformedData.pieChartData ? transformedData.pieChartData:[]} selectedTimeframe={selectedTimeframe}/>
                     </Box>
                 </Box>
 

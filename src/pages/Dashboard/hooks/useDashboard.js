@@ -46,7 +46,8 @@ function useDashboard(producerId, consumerId) {
             "lineChartData": lineChartData(data),
             "totalSavedData": totalSavedData(data),
             "totalRevenueData": totalRevenueData(data),
-            "consumptionData": consumptionData(data)
+            "consumptionData": consumptionData(data),
+            "pieChartData": pieChartData()
         }))
     }, [data])
 
@@ -240,6 +241,21 @@ function useDashboard(producerId, consumerId) {
         }
 
         return roundToN(CC, 2);
+    }
+
+    const pieChartData = () => {
+        const pieChartData = [];
+        if(data.totalProduction) { //Haussicht
+            pieChartData.push({"id":"used","label":"Verbraucht", "value":roundToN(data.totalUsed, 2)});
+            pieChartData.push({"id":"PV","label":"Eingespeist", "value":roundToN(data.totalProduction-data.totalUsed, 2)});
+        } else if(data.producersTotalProduction){ //Gesamtansicht
+            pieChartData.push({"id":"used","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
+            pieChartData.push({"id":"PV","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
+        } else if(data.totalSelfConsumption){ //Consumersicht
+            pieChartData.push({"id":"used","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
+            pieChartData.push({"id":"PV","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+        }
+        return pieChartData;
     }
 
     return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
