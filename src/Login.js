@@ -20,6 +20,7 @@ function Login(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
+
     const handleLogin = () => {
         apiRequest({
             method: 'post', url: '/login/', requestData: values, noAuthorization:true, throwError:true
@@ -27,6 +28,7 @@ function Login(props) {
             .then(res => {
                 localStorage.setItem('token', res.data.token);
                 setAuthStore('token', res.data.token)
+                setAuthStore('username',values.username)
                 navigate('/solaranlagen')
                 setNotification({message:"Angemeldet", severity:"success"})
             }, error => {
