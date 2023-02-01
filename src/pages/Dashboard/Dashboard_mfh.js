@@ -1,17 +1,15 @@
 import React from 'react';
 import {
-    Box, Checkbox,
-    FormControl, FormControlLabel, FormGroup,
+    Box,
+    FormControl,
     InputLabel, MenuItem,
     Select,
     Typography,
     useTheme
-} from "@mui/material"
-import StatBox from './components/StatBox'
-import Header from "./components/Header"
+} from "@mui/material"import Header from "./components/Header"
 import {tokens} from "../../theme";
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
-import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesSharp';
+import BalanceIcon from '@mui/icons-material/Balance';
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
 import PowerMix from "./components/PowerMix";
@@ -117,33 +115,17 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 </div>
 
                 {/*STORMMIX MONAT */}
-                <Box
-                    gridColumn="span 6"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 2,
-                        minWidth: 300,
-                    }}
-                >
-                    <StatBox
-                        title="Strommix Monat"
-                        subtitle="New Clients"
-                        increase="+5%"
-                        icon={
-                            <ElectricalServicesSharpIcon
-                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
-                            />
-                        }
-                    />
-                    <Box height="90px" width="250px" m="-20px 0 0 0">
-                        <PowerMix data={exampleData} selectedTimeframe={selectedTimeframe}/>
-                    </Box>
-                </Box>
+                <div className={"col-span-6 row-span-1"}>
+                    <DataDisplay icon={<BalanceIcon/>}
+                                 titel={"Strommix"}
+                                 value={transformedData.pieChartData}
+                                 render={
+                                        <PowerMix data={transformedData.pieChartData}
+                                                    selectedTimeframe={selectedTimeframe}/>
+                                 }
+                                 loading={loading}/>
+                </div>
+
 
                 {/* ROW 2 */}
                 {/*VERBRAUCH UND PRODUKTION */}
