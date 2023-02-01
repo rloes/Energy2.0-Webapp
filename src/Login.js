@@ -25,11 +25,14 @@ function Login(props) {
         })
             .then(res => {
                 localStorage.setItem('token', res.data.token);
+                localStorage.setItem('username', values.username);
+                localStorage.setItem('isAdmin', res.data.isAdmin);
                 setAuthStore('token', res.data.token)
                 setAuthStore('isAdmin', res.data.isAdmin)
                 setAuthStore('username', values.username)
                 if (!res.data.isAdmin) {
                     setAuthStore('consumerId', res.data.consumerId)
+                    localStorage.setItem('consumerID', res.data.consumerId);
                 }
                 navigate('/')
                 setNotification({message: "Angemeldet", severity: "success"})

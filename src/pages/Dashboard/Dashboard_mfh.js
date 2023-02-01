@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-    Box,
-    FormControl,
+    Box, Checkbox,
+    FormControl, FormControlLabel, FormGroup,
     InputLabel, MenuItem,
     Select,
     Typography,
     useTheme
-} from "@mui/material"import Header from "./components/Header"
+} from "@mui/material"
+import Header from "./components/Header"
 import {tokens} from "../../theme";
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import BalanceIcon from '@mui/icons-material/Balance';
@@ -56,22 +57,8 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
         aggregateConsumption,
         setAggregateConsumption
     } = useDashboard(producerId, consumerId)
-    const isAdmin = useAuthStore(state => state.isAdmin)
-    const exampleData = [
-        {
-            "id": "Netz",
-            "label": "netz",
-            "value": 89,
-            "color": "hsl(325, 70%, 50%)"
-        },
-        {
-            "id": "PV",
-            "label": "pv",
-            "value": 25,
-            "color": "hsl(290, 70%, 50%)"
-        }
-    ];
 
+    const isAdmin = useAuthStore(state => state.isAdmin)
     return (
         <Box m="0px">
             {/* HEADER */}

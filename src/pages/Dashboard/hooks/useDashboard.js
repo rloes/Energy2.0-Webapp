@@ -9,7 +9,7 @@ function useDashboard(producerId, consumerId) {
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
     const [url, setUrl] = useState("")
-    const [selectedTimeframe, setSelectedTimeframe] = useState(0)
+    const [selectedTimeframe, setSelectedTimeframe] = useState(1)
     const {apiRequest} = useApi()
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({

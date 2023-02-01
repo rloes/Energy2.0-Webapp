@@ -5,6 +5,7 @@ import StyledButton from "../StyledButton";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../../stores/useNotificationStore";
 import useAuthStore from '../../stores/useAuthStore';
+import {Avatar} from "@mui/material";
 
 
 const menuStructure = {
@@ -64,9 +65,8 @@ function SidebarMenu(props) {
                     ))
                 }
             </nav>
-            <StyledButton endIcon={<Settings/>} onClick={handleLogout}>
-                Administrator
-               <div> {username} </div>
+            <StyledButton onClick={handleLogout} startIcon={<Avatar />} className={"w-[200px] !justify-start gap-10"}>
+               {username}
             </StyledButton>
         </aside>
     );
