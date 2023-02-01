@@ -14,7 +14,7 @@ function useDashboard(producerId, consumerId) {
 
     const {data, loading, error, request, setLoading, cancel} = useQuery({
         method: "GET",
-        url: "output/?" + (producerId? "producer_id="+producerId+ "&" : consumerId? "consumer_id="+consumerId+"&":"")
+        url: "output/?" + (producerId ? "producer_id=" + producerId + "&" : consumerId ? "consumer_id=" + consumerId + "&" : "")
             + url,
         // url: "/output/?consumer_id=3&" + url,
         requestOnLoad: true
@@ -56,6 +56,12 @@ function useDashboard(producerId, consumerId) {
     }, [])
 
 
+    const [aggregateConsumption, setAggregateConsumption] = useState(false)
+    useEffect(() => {
+        setTransformedData((prev) => ({
+            ...prev, 'lineChartData': lineChartData()
+        }))
+    }, [aggregateConsumption])
     /**
      * Transforms data from backend /output/ to array that is usable by @nivo's LineChart
      * @returns {*[] || undefined}
@@ -95,14 +101,16 @@ function useDashboard(producerId, consumerId) {
         }
 
         // depending on view(consumer, producer, overall) -> consumers in different objects
-        const consumers = data.consumers ? Object.values(data.consumers) : [{'consumptions': data.consumptions}]
-        // const consumers = [{'consumptions': data.consumptions}]
-        if(consumers[0].consumptions) {
+        let consumers = data.consumers ? Object.values(data.consumers) : [{'consumptions': data.consumptions}]
+        if (data.consumptions && aggregateConsumption) {
+            consumers = [{'consumptions': data.consumptions}]
+        }
+        if (consumers[0].consumptions) {
             for (let j = 0; j < consumers.length; j++) {
                 // for each consumer
                 const consumer = consumers[j]
-                const consumptions = {"id": data.consumers ? Object.keys(data.consumers)[j] : "Verbrauch", 'data': []}
-                // const consumptions = {"id": "Verbrauch", 'data': []}
+                const consumptions = {"id": data.consumers && !(data.consumptions && aggregateConsumption) ?
+                        Object.keys(data.consumers)[j] : "Verbrauch", 'data': []}
                 let consumption_sum = 0
                 for (let i = 0; i < consumer.consumptions.length; i++) {
                     // map through all consumptions -> set x = datetime and y = consumption
@@ -134,21 +142,6 @@ function useDashboard(producerId, consumerId) {
         0: (timeStr) => timeStr.split("T")[0] + "T00:00:00",
         2: (timeStr) => timeStr.split(":")[0] + ":00:00",
     }
-
-    const getDetails = () => {
-        if(producerId) {
-            apiRequest({
-                method: "GET",
-                url: "/producers/" + producerId + "/"
-            }).then((res) => {
-                console.log(res)
-                setTransformedData((prev) => ({
-                    ...prev, producerData: res.data
-                }))
-            })
-        }
-      }
-
 
     /**
      * reduces the number of points in dataset by taking the sum of a certain timerange and adding it as a single point
@@ -189,6 +182,20 @@ function useDashboard(producerId, consumerId) {
         }
     }
 
+    const getDetails = () => {
+        if (producerId) {
+            apiRequest({
+                method: "GET",
+                url: "/producers/" + producerId + "/"
+            }).then((res) => {
+                console.log(res)
+                setTransformedData((prev) => ({
+                    ...prev, producerData: res.data
+                }))
+            })
+        }
+    }
+
     /**
      * Fetches total_saved from backend /output/ so that it is usable in box "Einsparung"
      */
@@ -213,7 +220,7 @@ function useDashboard(producerId, consumerId) {
     const totalRevenueData = () => {
         let totalRevenue = 0
         if (data) {
-            if(data.producersTotalRevenue) {
+            if (data.producersTotalRevenue) {
                 totalRevenue = data.producersTotalRevenue
             } else if (data.consumersTotalRevenue) {
                 totalRevenue = data.consumersTotalRevenue
@@ -221,7 +228,7 @@ function useDashboard(producerId, consumerId) {
                 totalRevenue = data.totalPrice
                 let totalGridPrice = data.totalGridPrice
             }
-        totalRevenue = totalRevenue / 100
+            totalRevenue = totalRevenue / 100
         }
         return roundToN(totalRevenue, 2)
     }
@@ -244,13 +251,13 @@ function useDashboard(producerId, consumerId) {
     }
 
     const savedCO2 = () => {
-        const savingPerKwh = 0.35 // 400g CO2/kWh deutscher Strom und Solaranlage ca. 50g/kWh -> 350g = 0.35kg
+        const savingPerKwh = 0.35 // 400g/kWh deutscher Strom und Solaranlage ca. 50g/kWh -> 350g = 0.35kg
         let usedSelfProduction = 0
-        if(data.producersTotalUsed){
+        if (data.producersTotalUsed) {
             usedSelfProduction = data.producersTotalUsed
-        } else if(data.totalUsed){
+        } else if (data.totalUsed) {
             usedSelfProduction = data.totalUsed
-        } else if(data.totalSelfConsumption){
+        } else if (data.totalSelfConsumption) {
             usedSelfProduction = data.totalSelfConsumption
         }
 
@@ -258,7 +265,16 @@ function useDashboard(producerId, consumerId) {
     }
 
 
-    return {lineChartData, transformedData, selectedTimeframe, handleSelectChange, loading, data};
+    return {
+        lineChartData,
+        transformedData,
+        selectedTimeframe,
+        handleSelectChange,
+        loading,
+        data,
+        aggregateConsumption,
+        setAggregateConsumption
+    };
 }
 
 export default useDashboard;

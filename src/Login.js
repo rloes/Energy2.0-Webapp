@@ -9,7 +9,6 @@ import {useNavigate} from "react-router-dom";
 import useNotificationStore from "./stores/useNotificationStore";
 
 
-
 function Login(props) {
 
     const {values, handleChange} = useForm({
@@ -22,18 +21,23 @@ function Login(props) {
 
     const handleLogin = () => {
         apiRequest({
-            method: 'post', url: '/login/', requestData: values, noAuthorization:true, throwError:true
+            method: 'post', url: '/login/', requestData: values, noAuthorization: true, throwError: true
         })
             .then(res => {
                 localStorage.setItem('token', res.data.token);
                 setAuthStore('token', res.data.token)
+                setAuthStore('isAdmin', res.data.isAdmin)
+                if (!res.data.isAdmin) {
+                    setAuthStore('consumerId', res.data.consumerId)
+                }
                 navigate('/')
-                setNotification({message:"Angemeldet", severity:"success"})
+                setNotification({message: "Angemeldet", severity: "success"})
+
             }, error => {
-                if(error.response.status === 400){
-                    setNotification({message: "Anmeldung fehlgeschlagen", severity:"error"})
-                }else {
-                    setNotification({message:error.message || "Ein Fehler ist aufgetreten", severity:"error"})
+                if (error.response.status === 400) {
+                    setNotification({message: "Anmeldung fehlgeschlagen", severity: "error"})
+                } else {
+                    setNotification({message: error.message || "Ein Fehler ist aufgetreten", severity: "error"})
                 }
             })
     }
@@ -49,7 +53,7 @@ function Login(props) {
                 </h2>
                 <TextField value={values.username} onChange={handleChange} name={"username"} label={"Benutzername"}/>
                 <TextField value={values.password} onChange={handleChange} name={"password"} label={"Password"}
-                type={"password"}/>
+                           type={"password"}/>
                 <StyledButton onClick={handleLogin}>
                     Anmelden
                 </StyledButton>

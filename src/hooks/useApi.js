@@ -20,7 +20,8 @@ function useApi(props) {
                                   formatData,
                                   noAuthorization,
                                   throwError = false,
-                                  signal = undefined
+                                  signal = undefined,
+                                  extraToken = false
                               }) {
         try {
             // if a function is passed via the formatData param, this function is called first
@@ -34,7 +35,8 @@ function useApi(props) {
                 url: url,
                 headers: {
                     // only add token if one exist and noAuthorization is not set to true
-                    ...(token && !noAuthorization) && {"Authorization": "Token " + token}
+                    ...((token || extraToken) && !noAuthorization) && {"Authorization": "Token " + (extraToken ?
+                            extraToken : token)}
                 },
                 data: snakeize(requestData), //api uses snake_case
                 signal: signal

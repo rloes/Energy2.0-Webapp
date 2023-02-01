@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-    Box,
-    FormControl,
+    Box, Checkbox,
+    FormControl, FormControlLabel, FormGroup,
     InputLabel, MenuItem,
     Select,
     Typography,
@@ -22,6 +22,7 @@ import {Euro, Savings, Timeline} from "@mui/icons-material";
 import Grid from '@mui/material/Unstable_Grid2';
 import Item from './components/Item'
 import {formatDateTime} from "../../helpers";
+import useAuthStore from "../../stores/useAuthStore";
 
 const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
     <FormControl className={"w-[175px]"} size={"small"}>
@@ -49,8 +50,15 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
 const Dashboard_mfh = ({producerId, consumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId)
-
+    const {
+        transformedData,
+        selectedTimeframe,
+        handleSelectChange,
+        loading,
+        aggregateConsumption,
+        setAggregateConsumption
+    } = useDashboard(producerId, consumerId)
+    const isAdmin = useAuthStore(state => state.isAdmin)
     const exampleData = [
         {
             "id": "Netz",
@@ -100,8 +108,9 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                     <DataDisplay value={transformedData.totalSavedData + " €"} titel={"Einsparungen"}
                                  icon={<Savings/>} loading={loading} subtitle={
                         <>
-                        <span className={"text-green-600 self-center"}>{transformedData.savedC02Data} kg </span>CO<sub>2</sub>
-                        {" "}eingespart
+                            <span
+                                className={"text-green-600 self-center"}>{transformedData.savedC02Data} kg </span>CO<sub>2</sub>
+                            {" "}eingespart
                         </>
 
                     }/>
@@ -143,8 +152,17 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  value={transformedData.lineChartData}
                                  icon={<Timeline/>}
                                  render={
-                                     <LineChart data={transformedData.lineChartData}
-                                                selectedTimeframe={selectedTimeframe}/>
+                                     <>
+                                         {producerId &&
+                                             <FormGroup className={"absolute top-0"}>
+                                                 <FormControlLabel control={<Checkbox value={aggregateConsumption}
+                                                 onChange={(e) => setAggregateConsumption(e.target.checked)}/>}
+                                                                   label={"Verbräuche summieren"}/>
+                                             </FormGroup>
+                                         }
+                                         <LineChart data={transformedData.lineChartData}
+                                                    selectedTimeframe={selectedTimeframe}/>
+                                     </>
                                  } loading={loading}/>
                 </div>
 
@@ -225,8 +243,8 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
-                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={"Einnahmen"} loading={loading}
-                                 icon={<Euro/>}/>
+                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={isAdmin? "Einnahmen" : "Kosten"}
+                                 loading={loading} icon={<Euro/>}/>
                 </div>
             </Box>
         </Box>
