@@ -27,6 +27,7 @@ function Login(props) {
                 localStorage.setItem('token', res.data.token);
                 setAuthStore('token', res.data.token)
                 setAuthStore('isAdmin', res.data.isAdmin)
+                setAuthStore('username', values.username)
                 if (!res.data.isAdmin) {
                     setAuthStore('consumerId', res.data.consumerId)
                 }
