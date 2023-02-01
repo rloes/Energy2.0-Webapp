@@ -5,7 +5,7 @@ function PowerMix(props){
     return (
         <ResponsivePie
             data={props.data}
-            margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+            margin={{ top: 12, right: 10, bottom: 0, left: 10 }}
             startAngle={90}
             endAngle={-90}
             innerRadius={0.5}
@@ -21,6 +21,7 @@ function PowerMix(props){
                     ]
                 ]
             }}
+            enableArcLinkLabels={false}
             arcLinkLabelsSkipAngle={10}
             arcLinkLabelsTextColor="#333333"
             arcLinkLabelsThickness={2}
@@ -107,15 +108,15 @@ function PowerMix(props){
             ]}
             legends={[
                 {
-                    anchor: 'bottom',
-                    direction: 'row',
+                    anchor: 'right',
+                    direction: 'column',
                     justify: false,
-                    translateX: 0,
-                    translateY: 56,
-                    itemsSpacing: 0,
-                    itemWidth: 100,
-                    itemHeight: 18,
-                    itemTextColor: '#999',
+                    translateX: -70,
+                    translateY: 0,
+                    itemWidth: 20,
+                    itemHeight: 20,
+                    itemsSpacing: 5,
+                    symbolSize: 36,
                     itemDirection: 'left-to-right',
                     itemOpacity: 1,
                     symbolSize: 18,

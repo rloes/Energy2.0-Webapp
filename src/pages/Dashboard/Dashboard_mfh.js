@@ -17,6 +17,7 @@ import Header from "./components/Header"
 import {tokens} from "../../theme";
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import EuroSymbolSharpIcon from '@mui/icons-material/EuroSymbolSharp';
+import BalanceIcon from '@mui/icons-material/Balance';
 import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesSharp';
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
@@ -24,7 +25,7 @@ import PowerMix from "./components/PowerMix";
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
-import {MonetizationOn, Timeline} from "@mui/icons-material";
+import {MonetizationOn, PieChart, Timeline} from "@mui/icons-material";
 import {styled} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -75,22 +76,7 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
 const Dashboard_mfh = ({producerId, consumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId)
-
-    const exampleData = [
-        {
-            "id": "Netz",
-            "label": "netz",
-            "value": 89,
-            "color": "hsl(325, 70%, 50%)"
-        },
-        {
-            "id": "PV",
-            "label": "pv",
-            "value": 25,
-            "color": "hsl(290, 70%, 50%)"
-        }
-    ];
+    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId);
 
     return (
         <Box m="0px">
@@ -128,33 +114,17 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 </div>
 
                 {/*STORMMIX MONAT */}
-                <Box
-                    gridColumn="span 6"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 2,
-                        minWidth: 300,
-                    }}
-                >
-                    <StatBox
-                        title="Strommix Monat"
-                        subtitle="New Clients"
-                        increase="+5%"
-                        icon={
-                            <ElectricalServicesSharpIcon
-                                sx={{color: colors.greenAccent[600], fontSize: "26px"}}
-                            />
-                        }
-                    />
-                    <Box height="90px" width="250px" m="-20px 0 0 0">
-                        <PowerMix data={transformedData.pieChartData ? transformedData.pieChartData:[]} selectedTimeframe={selectedTimeframe}/>
-                    </Box>
-                </Box>
+                <div className={"col-span-6 row-span-1"}>
+                    <DataDisplay icon={<BalanceIcon/>} 
+                                 titel={"Strommix"}
+                                 value={transformedData.pieChartData} 
+                                 render={
+                                        <PowerMix data={transformedData.pieChartData}
+                                                    selectedTimeframe={selectedTimeframe}/>
+                                 }
+                                 loading={loading}/>
+                </div>
+
 
                 {/* ROW 2 */}
                 {/*VERBRAUCH UND PRODUKTION */}
