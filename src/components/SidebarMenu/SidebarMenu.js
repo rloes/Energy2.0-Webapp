@@ -6,11 +6,9 @@ import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../../stores/useNotificationStore";
 import useAuthStore from '../../stores/useAuthStore';
 import {Avatar} from "@mui/material";
-
+import MenuListComposition from "../Menu";
 
 const menuStructure = {
-
-    
     "Verwaltung": [
         {name: "Dashboard", link: "", icon: <Dashboard/>},
         {name: "Kunden", link: "/kunden", icon: <Person/>},
@@ -26,12 +24,6 @@ const menuStructure = {
 function SidebarMenu(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
-    const handleLogout = () => {
-        localStorage.setItem('token', "");
-        navigate('/login')
-        setNotification({message:"Abgemeldet", severity:"success"})
-
-    }
 
     const username = useAuthStore(state => state.username)
 
@@ -65,9 +57,11 @@ function SidebarMenu(props) {
                     ))
                 }
             </nav>
-            <StyledButton onClick={handleLogout} startIcon={<Avatar />} className={"w-[200px] !justify-start gap-10"}>
+            <StyledButton onClick={""} startIcon={<Avatar />} className={"w-[200px] !justify-start gap-10"}>
                {username}
             </StyledButton>
+            <MenuListComposition>
+            </MenuListComposition>
         </aside>
     );
 
