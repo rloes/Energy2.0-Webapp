@@ -56,7 +56,6 @@ function Login(props) {
                     Anmelden
                 </h2>
                 <TextField value={values.username} onChange={handleChange} name={"username"} label={"Benutzername"}/>
-                {localStorage.setItem('username', values.username)}
                 <TextField value={values.password} onChange={handleChange} name={"password"} label={"Password"}
                            type={"password"}/>
                 <StyledButton onClick={handleLogin}>

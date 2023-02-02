@@ -10,18 +10,21 @@ import Stack from '@mui/material/Stack';
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../stores/useNotificationStore";
 import {Settings} from "@mui/icons-material";
+import {IconButton} from "@mui/material";
+import useAuthStore from "../stores/useAuthStore";
 
-export default function MenuListComposition() {
+function Menu() {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
+    const setAuthStore = useAuthStore(state => state.setState)
+    const logout = useAuthStore(state => state.logout)
 
     const handleLogout = () => {
-        localStorage.setItem('token', "");
+        logout()
         navigate('/login')
         setNotification({message:"Abgemeldet", severity:"success"})
-
     }
 
     const handleToggle = () => {
@@ -56,9 +59,8 @@ export default function MenuListComposition() {
     }, [open]);
 
     return (
-        <Stack direction="row" spacing={2}>
-            <div>
-                <Button
+            <>
+                <IconButton
                     ref={anchorRef}
                     id="composition-button"
                     aria-controls={open ? 'composition-menu' : undefined}
@@ -66,8 +68,8 @@ export default function MenuListComposition() {
                     aria-haspopup="true"
                     onClick={handleToggle}
                 >
-                    {<Settings/>} &nbsp;    {localStorage.getItem('username')}
-                </Button>
+                    <Settings/>
+                </IconButton>
                 <Popper
                     open={open}
                     anchorEl={anchorRef.current}
@@ -100,7 +102,9 @@ export default function MenuListComposition() {
                         </Grow>
                     )}
                 </Popper>
-            </div>
-        </Stack>
+            </>
+
     );
 }
+
+export default Menu

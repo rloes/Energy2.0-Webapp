@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../../stores/useNotificationStore";
 import useAuthStore from '../../stores/useAuthStore';
 import {Avatar} from "@mui/material";
-import MenuListComposition from "../Menu";
+import Menu from "../Menu";
 
 const menuStructure = {
     "Verwaltung": [
@@ -28,7 +28,8 @@ function SidebarMenu(props) {
     const username = useAuthStore(state => state.username)
 
     return (
-        <aside className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
+        <aside
+            className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
             <div className={"flex flex-col justify-start items-center gap-3"}>
                 <h2 className={"uppercase"}>
                     Energy 2.0
@@ -57,11 +58,12 @@ function SidebarMenu(props) {
                     ))
                 }
             </nav>
-            <StyledButton onClick={""} startIcon={<Avatar />} className={"w-[200px] !justify-start gap-10"}>
-               {username}
-            </StyledButton>
-            <MenuListComposition>
-            </MenuListComposition>
+            <div className={"flex"}>
+                <StyledButton startIcon={<Avatar/>} className={"w-[200px] !justify-start gap-10"}>
+                    {username}
+                </StyledButton>
+                <Menu/>
+            </div>
         </aside>
     );
 
