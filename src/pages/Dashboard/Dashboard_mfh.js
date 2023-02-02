@@ -22,10 +22,11 @@ import ElectricalServicesSharpIcon from '@mui/icons-material/ElectricalServicesS
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
 import PowerMix from "./components/PowerMix";
+import PowerMixValues from './components/PowerMixValues';
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
-import {MonetizationOn, PieChart, Timeline} from "@mui/icons-material";
+import {LanOutlined, MonetizationOn, PieChart, Timeline} from "@mui/icons-material";
 import {styled} from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -119,8 +120,12 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  titel={"Strommix"}
                                  value={transformedData.pieChartData} 
                                  render={
+                                    <>
+                                        <PowerMixValues data={transformedData.pieChartData}
+                                                        selectedTimeframe={selectedTimeframe}/>
                                         <PowerMix data={transformedData.pieChartData}
                                                     selectedTimeframe={selectedTimeframe}/>
+                                    </>
                                  }
                                  loading={loading}/>
                 </div>
