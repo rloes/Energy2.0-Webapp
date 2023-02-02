@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import StyledButton from "../StyledButton";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../../stores/useNotificationStore";
-
+import MenuListComposition from "../Menu";
 
 const menuStructure = {
     "Verwaltung": [
@@ -22,12 +22,7 @@ const menuStructure = {
 function SidebarMenu(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
-    const handleLogout = () => {
-        localStorage.setItem('token', "");
-        navigate('/login')
-        setNotification({message:"Abgemeldet", severity:"success"})
 
-    }
     return (
         <aside className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
             <div className={"flex flex-col justify-start items-center gap-3"}>
@@ -58,9 +53,8 @@ function SidebarMenu(props) {
                     ))
                 }
             </nav>
-            <StyledButton endIcon={<Settings/>} onClick={handleLogout}>
-                Administrator
-            </StyledButton>
+            <MenuListComposition>
+            </MenuListComposition>
         </aside>
     );
 
