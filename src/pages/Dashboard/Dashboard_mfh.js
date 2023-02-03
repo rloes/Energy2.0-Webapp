@@ -77,7 +77,7 @@ const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
 const Dashboard_mfh = ({producerId, consumerId}) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const {transformedData, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId);
+    const {transformedData, data, selectedTimeframe, handleSelectChange, loading} = useDashboard(producerId, consumerId);
 
     return (
         <Box m="0px">
@@ -121,7 +121,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  value={transformedData.pieChartData} 
                                  render={
                                     <>
-                                        <PowerMixValues data={transformedData.pieChartData}
+                                        <PowerMixValues data={transformedData.powerMixData}
                                                         selectedTimeframe={selectedTimeframe}/>
                                         <PowerMix data={transformedData.pieChartData}
                                                     selectedTimeframe={selectedTimeframe}/>
