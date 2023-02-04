@@ -1,5 +1,16 @@
 import {ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line'
-
+import {Paper} from "@mui/material";
+import {formatDateTime} from "../../../helpers";
+const LineTooltip = (props) => {
+    const {x, yFormatted: y} = props.point.data
+    const {color} = props.point
+    return(
+        <Paper className={"flex p-4 justify-between items-center gap-4"}>
+            <div className={"w-4 h-4 rounded-full"} style={{backgroundColor: color}}/>
+            {formatDateTime(x, false) + " - " + y+" kWh"}
+        </Paper>
+    )
+}
 function LineChart(props) {
     const tickValues = {
         0: "every 2 days",
@@ -18,13 +29,14 @@ function LineChart(props) {
      * @returns {JSX.Element}
      */
     const Line = (lineProps) => (
-        props.selectedTimeframe !== false? <ResponsiveLine {...lineProps} /> : <ResponsiveLineCanvas {...lineProps} />
+        props.selectedTimeframe !== false? <ResponsiveLine {...lineProps}/> : <ResponsiveLineCanvas {...lineProps} />
     )
     return (
         <Line
+            tooltip={LineTooltip}
             data={props.data}
             margin={{top: 50, right: 110, bottom: 50, left: 60}}
-            xScale={{ type: 'time', format: "%Y-%m-%dT%H:%M:%S", precision: "second",}}
+            xScale={{ type: 'time', format: "%Y-%m-%dT%H:%M:%S", precision: "minute", useUTC: false}}
             enablePoints={false}
             // xFormat={"time:%Y-%m-%dT%H:%M:%S"}
             curve={"monotoneX"}

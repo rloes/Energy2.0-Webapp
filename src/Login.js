@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Button, TextField} from "@mui/material";
 import useForm from "./hooks/useForm";
 import useApi from "./hooks/useApi";
@@ -19,11 +19,18 @@ function Login(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
+    const loginButton = useRef(null)
+    function handlePressEnter(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            loginButton.current.click()
+        }
+    }
+
     const handleLogin = () => {
         apiRequest({
             method: 'post', url: '/login/', requestData: values, noAuthorization: true, throwError: true
-        })
-            .then(res => {
+        }).then(res => {
                 localStorage.setItem('token', res.data.token);
                 localStorage.setItem('username', values.username);
                 localStorage.setItem('isAdmin', res.data.isAdmin);
@@ -55,12 +62,15 @@ function Login(props) {
                 <h2 className={"font-bold text-lg"}>
                     Anmelden
                 </h2>
-                <TextField value={values.username} onChange={handleChange} name={"username"} label={"Benutzername"}/>
-                <TextField value={values.password} onChange={handleChange} name={"password"} label={"Password"}
-                           type={"password"}/>
-                <StyledButton onClick={handleLogin}>
-                    Anmelden
-                </StyledButton>
+                <form onKeyDown={handlePressEnter} className={"flex flex-col items-center gap-4 max-w-[300px] wr"}>
+                    <TextField value={values.username} onChange={handleChange} name={"username"}
+                               label={"Benutzername"}/>
+                    <TextField value={values.password} onChange={handleChange} name={"password"} label={"Password"}
+                               type={"password"}/>
+                    <Button onClick={handleLogin} ref={loginButton}>
+                        Anmelden
+                    </Button>
+                </form>
             </WidgetComponent>
         </div>
     );

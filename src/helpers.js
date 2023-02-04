@@ -17,7 +17,7 @@ export function getMonday() {
     return date.toISOString().split("T")[0]
 }
 
-export function formatDateTime(dateTime){
+export function formatDateTime(dateTime, withSeconds=true){
     const date = new Date(dateTime);
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -25,5 +25,7 @@ export function formatDateTime(dateTime){
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    return `${day}.${month}.${year} - ${hours}:${minutes}:${seconds} Uhr`;
+    let result =`${day}.${month}.${year} - ${hours}:${minutes}`
+    if(withSeconds) result += `:${seconds}`;
+    return result
 }
