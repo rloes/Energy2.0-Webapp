@@ -14,6 +14,7 @@ import BalanceIcon from '@mui/icons-material/Balance';
 import useDashboard from "./hooks/useDashboard";
 import LineChart from "./components/LineChart";
 import PowerMix from "./components/PowerMix";
+import PowerMixValues from './components/PowerMixValues';
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
@@ -103,12 +104,16 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*STORMMIX MONAT */}
                 <div className={"col-span-6 row-span-1"}>
-                    <DataDisplay icon={<BalanceIcon/>}
+                    <DataDisplay icon={<BalanceIcon/>} 
                                  titel={"Strommix"}
-                                 value={transformedData.pieChartData}
+                                 value={transformedData.pieChartData} 
                                  render={
+                                    <>
+                                        <PowerMixValues data={transformedData.powerMixData}
+                                                        selectedTimeframe={selectedTimeframe}/>
                                         <PowerMix data={transformedData.pieChartData}
                                                     selectedTimeframe={selectedTimeframe}/>
+                                    </>
                                  }
                                  loading={loading}/>
                 </div>

@@ -48,7 +48,8 @@ function useDashboard(producerId, consumerId) {
             "totalRevenueData": totalRevenueData(),
             "consumptionData": consumptionData(),
             "savedC02Data": savedCO2(),
-            "pieChartData": pieChartData()
+            "pieChartData": pieChartData(),
+            "powerMixData": powerMixData()
         }))
     }, [data])
 
@@ -279,6 +280,39 @@ function useDashboard(producerId, consumerId) {
         return pieChartData;
     }
 
+    const powerMixData = () => {
+        const powerMixData = {};
+        if(data.totalProduction) { //Haussicht
+            powerMixData.top = {
+                title: "Produktion: ",
+                value: roundToN(data.totalProduction, 2)
+            };
+            powerMixData.bottom = {
+                title: "Verbrauch: ",
+                value:roundToN(data.totalUsed, 2)
+            };
+        } else if(data.producersTotalProduction){ //Gesamtansicht
+            powerMixData.top = {
+                title: "Produktion: ",
+                value: roundToN(data.producersTotalProduction, 2)
+            };
+            powerMixData.bottom = {
+                title: "Verbrauch: ",
+                value:roundToN(data.producersTotalUsed, 2)
+            };
+        } else if(data.totalSelfConsumption){ //Consumersicht
+            powerMixData.top = {
+                title: "Produktion: ",
+                value: roundToN(data.totalGridConsumption, 2)
+            };
+            powerMixData.bottom = {
+                title: "Verbrauch: ",
+                value:roundToN(data.totalSelfConsumption, 2)
+            };
+        }
+        return powerMixData;
+    }
+
     return {
         lineChartData,
         transformedData,
@@ -288,6 +322,8 @@ function useDashboard(producerId, consumerId) {
         data,
         aggregateConsumption,
         setAggregateConsumption
-    }}
+    }
+}
+
 
 export default useDashboard;
