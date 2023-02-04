@@ -104,16 +104,19 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*STORMMIX MONAT */}
                 <div className={"col-span-6 row-span-1"}>
-                    <DataDisplay icon={<BalanceIcon/>} 
+                    <DataDisplay icon={<BalanceIcon/>}
                                  titel={"Strommix"}
-                                 value={transformedData.pieChartData} 
+                                 value={transformedData.pieChartData}
                                  render={
-                                    <>
-                                        <PowerMixValues data={transformedData.powerMixData}
-                                                        selectedTimeframe={selectedTimeframe}/>
-                                        <PowerMix data={transformedData.pieChartData}
-                                                    selectedTimeframe={selectedTimeframe}/>
-                                    </>
+                                     <>
+
+                                         <PowerMixValues data={transformedData.powerMixData}
+                                                         selectedTimeframe={selectedTimeframe}/>
+                                         <div className={"min-w-[350px] flex-grow"}>
+                                             <PowerMix data={transformedData.pieChartData}
+                                                       selectedTimeframe={selectedTimeframe}/>
+                                         </div>
+                                     </>
                                  }
                                  loading={loading}/>
                 </div>
@@ -130,7 +133,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                          {producerId &&
                                              <FormGroup className={"absolute top-0"}>
                                                  <FormControlLabel control={<Checkbox value={aggregateConsumption}
-                                                 onChange={(e) => setAggregateConsumption(e.target.checked)}/>}
+                                                                                      onChange={(e) => setAggregateConsumption(e.target.checked)}/>}
                                                                    label={"Verbräuche summieren"}/>
                                              </FormGroup>
                                          }
@@ -217,7 +220,8 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
-                    <DataDisplay value={transformedData.totalRevenueData + " €"} titel={isAdmin? "Einnahmen" : "Kosten"}
+                    <DataDisplay value={transformedData.totalRevenueData + " €"}
+                                 titel={isAdmin ? "Einnahmen" : "Kosten"}
                                  loading={loading} icon={<Euro/>}/>
                 </div>
             </Box>

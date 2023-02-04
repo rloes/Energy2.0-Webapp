@@ -5,7 +5,7 @@ function PowerMix(props){
     return (
         <ResponsivePie
             data={props.data}
-            margin={{ top: 12, right: 10, bottom: 0, left: 10 }}
+            margin={{ top: 12, right: 0, bottom: 0, left: 0 }}
             startAngle={90}
             endAngle={-90}
             innerRadius={0.5}
@@ -116,7 +116,6 @@ function PowerMix(props){
                     itemWidth: 20,
                     itemHeight: 20,
                     itemsSpacing: 5,
-                    symbolSize: 36,
                     itemDirection: 'left-to-right',
                     itemOpacity: 1,
                     symbolSize: 18,

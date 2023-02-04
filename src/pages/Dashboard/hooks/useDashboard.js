@@ -73,10 +73,12 @@ function useDashboard(producerId, consumerId) {
         if (!data) {
             return
         }
+        // if data.producers exists -> show multiple production lines, else only one producer with data.productions
         const producers = data.producers ? Object.values(data.producers) : [{'productions': data.productions}]
-        if (producers[0].productions) {
+        if (producers[0].productions) { // if no productions exists -> smth worng dont loop
             for (let j = 0; j < producers.length; j++) {
                 const producer = producers[j]
+                // this object will represent one line in the chart
                 const productions = {
                     "id": data.producers ? "Produktion " + Object.keys(data.producers)[j] : "Produktion",
                     'data': []
@@ -136,6 +138,11 @@ function useDashboard(producerId, consumerId) {
 
         return _transformedData
     }
+    /**
+     * if timeframe = 30 days -> reduced to sum per day
+     * if timeframe = 1 week -> reduce to sum per hour
+     * @type {{"0": (function(*, *): boolean), "2": (function(*, *): boolean)}}
+     */
     const reductions = {
         0: (date, nextDate) => date.getDate() !== nextDate.getDate(),
         2: (date, nextDate) => date.getHours() !== nextDate.getHours()
@@ -274,40 +281,41 @@ function useDashboard(producerId, consumerId) {
             pieChartData.push({"id":"used","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
             pieChartData.push({"id":"PV","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
         } else if(data.totalSelfConsumption){ //Consumersicht
-            pieChartData.push({"id":"used","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
-            pieChartData.push({"id":"PV","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({"id":"grid","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({"id":"self","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
         }
         return pieChartData;
     }
 
     const powerMixData = () => {
         const powerMixData = {};
-        if(data.totalProduction) { //Haussicht
+        console.log(data)
+        if(data.totalProduction || data.totalProduction === 0) { //Haussicht
             powerMixData.top = {
                 title: "Produktion: ",
                 value: roundToN(data.totalProduction, 2)
             };
             powerMixData.bottom = {
-                title: "Verbrauch: ",
+                title: "Davon genutzt: ",
                 value:roundToN(data.totalUsed, 2)
             };
-        } else if(data.producersTotalProduction){ //Gesamtansicht
+        } else if(data.producersTotalProduction || data.producersTotalProduction === 0){ //Gesamtansicht
             powerMixData.top = {
                 title: "Produktion: ",
                 value: roundToN(data.producersTotalProduction, 2)
             };
             powerMixData.bottom = {
-                title: "Verbrauch: ",
+                title: "Davon genutzt: ",
                 value:roundToN(data.producersTotalUsed, 2)
             };
-        } else if(data.totalSelfConsumption){ //Consumersicht
+        } else if(data.totalSelfConsumption || data.totalSelfConsumption === 0){ //Consumersicht
             powerMixData.top = {
-                title: "Produktion: ",
-                value: roundToN(data.totalGridConsumption, 2)
+                title: "Solarstromverbrauch: ",
+                value: roundToN(data.totalSelfConsumption, 2)
             };
             powerMixData.bottom = {
-                title: "Verbrauch: ",
-                value:roundToN(data.totalSelfConsumption, 2)
+                title: "Zusätzlicher Verbrauch: ",
+                value:roundToN(data.totalGridConsumption, 2)
             };
         }
         return powerMixData;
