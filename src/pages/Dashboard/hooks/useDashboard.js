@@ -135,18 +135,25 @@ function useDashboard(producerId, consumerId) {
     }
 
     const getDetails = () => {
-        if(producerId) {
-            apiRequest({
-                method: "GET",
-                url: "/producers/" + producerId + "/"
-            }).then((res) => {
-                console.log(res)
-                setTransformedData((prev) => ({
-                    ...prev, producerData: res.data
-                }))
-            })
+        let url = '';
+        if (consumerId) {
+            url = "/consumers/" + consumerId + "/";
         }
-      }
+        else if (producerId) {
+            url = "/producers/" + producerId + "/";
+        }
+    
+
+        apiRequest({
+            method: "GET",
+            url: url
+        }).then((res) => {
+            console.log(res)
+                setTransformedData((prev) => ({
+                    ...prev, detailData: res.data
+                }))
+        })
+    }
 
 
     /**
