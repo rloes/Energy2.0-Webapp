@@ -1,5 +1,28 @@
 import { ResponsivePie } from '@nivo/pie'
 
+/**Function to display value in middle of pie chart */
+const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+    // total: sum of all values in object
+    let total = 0
+    dataWithArc.forEach(datum => {
+        total += datum.value
+    })
+    return (
+        <text
+            x={centerX}
+            y={centerY}
+            textAnchor="middle"
+            dominantBaseline="top"
+            style={{
+                fontSize: '12px',
+                fontWeight: 600,
+            }}
+        >
+            {total}
+        </text>
+    )
+}
+
 
 function PowerMix(props){
     return (
@@ -130,6 +153,7 @@ function PowerMix(props){
                     ]
                 }
             ]}
+            layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}        
         />
     )
 }
