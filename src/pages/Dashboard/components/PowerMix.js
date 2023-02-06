@@ -3,11 +3,12 @@ import { roundToN } from '../../../helpers';
 
 /**Function to display value in middle of pie chart */
 const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
-    // total: sum of all values in object
-    let total = 0
+    const powerValues = [];
     dataWithArc.forEach(datum => {
-        total += datum.value
+        powerValues.push(datum.value)
     })
+    const percentage = roundToN(powerValues[1]/powerValues[0],4)*100;
+
     return (
         <text
             x={centerX}
@@ -19,7 +20,7 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
                 fontWeight: 600,
             }}
         >
-            {roundToN(total,2)}
+            {percentage + "%"}
         </text>
     )
 }
