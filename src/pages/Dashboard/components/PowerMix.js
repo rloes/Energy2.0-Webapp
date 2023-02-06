@@ -1,4 +1,5 @@
 import { ResponsivePie } from '@nivo/pie'
+import { roundToN } from '../../../helpers';
 
 /**Function to display value in middle of pie chart */
 const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
@@ -18,7 +19,7 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
                 fontWeight: 600,
             }}
         >
-            {total}
+            {roundToN(total,2)}
         </text>
     )
 }

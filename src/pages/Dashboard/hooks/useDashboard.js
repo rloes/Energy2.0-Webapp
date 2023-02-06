@@ -247,14 +247,14 @@ function useDashboard(producerId, consumerId) {
     const pieChartData = () => {
         const pieChartData = [];
         if(data.totalProduction) { //Haussicht
-            pieChartData.push({"id":"used","label":"Verbraucht", "value":roundToN(data.totalUsed, 2)});
-            pieChartData.push({"id":"PV","label":"Eingespeist", "value":roundToN(data.totalProduction-data.totalUsed, 2)});
+            pieChartData.push({"id":"Verbraucht","label":"Verbraucht", "value":roundToN(data.totalUsed, 2)});
+            pieChartData.push({"id":"Eingespeist","label":"Eingespeist", "value":roundToN(data.totalProduction-data.totalUsed, 2)});
         } else if(data.producersTotalProduction){ //Gesamtansicht
-            pieChartData.push({"id":"used","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
-            pieChartData.push({"id":"PV","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
+            pieChartData.push({"id":"Verbraucht","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
+            pieChartData.push({"id":"Eingespeist","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
         } else if(data.totalSelfConsumption){ //Consumersicht
-            pieChartData.push({"id":"used","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
-            pieChartData.push({"id":"PV","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({"id":"Verbraucht","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({"id":"Eingespeist","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
         }
         return pieChartData;
     }
@@ -281,11 +281,11 @@ function useDashboard(producerId, consumerId) {
             };
         } else if(data.totalSelfConsumption){ //Consumersicht
             powerMixData.top = { 
-                title: "Produktion: ",
+                title: "Netzenergie: ",
                 value: roundToN(data.totalGridConsumption, 2)
             };
             powerMixData.bottom = { 
-                title: "Verbrauch: ",
+                title: "Solarenergie: ",
                 value:roundToN(data.totalSelfConsumption, 2)
             };
         }
