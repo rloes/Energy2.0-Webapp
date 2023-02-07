@@ -69,7 +69,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
 
     const consumers = query === "" ? data : filteredData
     return (
-        <div className={withoutTitle ? "max-h-full relative h-full":""}>
+        <div className={(withoutTitle ? "max-h-full relative h-full":"")+" w-max"}>
             {!withoutTitle &&
                 <h2 className={"page-title"}>{withoutTitle ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
             }

@@ -155,7 +155,7 @@ function AddConsumer({producerId, onClose}) {
             <h2 className={"page-title"}>
                 Kunde {consumerId ? "bearbeiten" : "hinzufügen"}
             </h2>
-            <WidgetComponent>
+            <WidgetComponent className={"w-max"}>
                 <form className={"flex flex-col gap-4 px-4"}>
                     <TextField
                         name={"name"}
