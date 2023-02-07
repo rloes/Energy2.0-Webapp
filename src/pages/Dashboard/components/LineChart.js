@@ -11,6 +11,10 @@ const LineTooltip = (props) => {
         </Paper>
     )
 }
+const Line = (props) => {
+    return(
+        props.selectedTimeframe !== false? <ResponsiveLine {...props}/> : <ResponsiveLineCanvas {...props} />
+    )}
 function LineChart(props) {
     const tickValues = {
         0: "every 2 days",
@@ -28,11 +32,12 @@ function LineChart(props) {
      * @param lineProps
      * @returns {JSX.Element}
      */
-    const Line = (lineProps) => (
-        props.selectedTimeframe !== false? <ResponsiveLine {...lineProps}/> : <ResponsiveLineCanvas {...lineProps} />
-    )
+    // const Line = (lineProps) => (
+    //     props.selectedTimeframe !== false? <ResponsiveLine {...lineProps}/> : <ResponsiveLineCanvas {...lineProps} />
+    // )
     return (
         <Line
+            selectedTimeframe={props.selectedTimeframe}
             tooltip={LineTooltip}
             data={props.data}
             margin={{top: 50, right: 110, bottom: 50, left: 60}}
