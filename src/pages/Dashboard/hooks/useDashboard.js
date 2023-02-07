@@ -1,9 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import useQuery from "../../../hooks/useQuery";
-import {FormControl, InputLabel, Select} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
 import useApi from "../../../hooks/useApi";
 
+const TimeframeSelect = ({selectedTimeframe, onChange}) => (
+    <FormControl className={"w-[175px]"} size={"small"}>
+        <InputLabel id="demo-simple-select-label">Zeit</InputLabel>
+        <Select
+            labelId="demo-simple-select-label"
+            value={selectedTimeframe}
+            label="Zeit"
+            onChange={onChange}
+        >
+            <MenuItem value={0}>30 Tage</MenuItem>
+            <MenuItem value={1}>Heute</MenuItem>
+            <MenuItem value={2}>Aktuelle Woche</MenuItem>
+        </Select>
+    </FormControl>
+)
 function useDashboard(producerId, consumerId) {
 
     // transformed data for charts ares stored here after transformation
@@ -25,14 +40,15 @@ function useDashboard(producerId, consumerId) {
         // Cancel all open requests
         cancel()
     }
-
     // functions to set the url params after a different timeframe is selected
     const timeFrames = {
         0: () => "",
         1: () => "start_date=" + getISODateWithDelta(0) + "&end_date=" + getISODateWithDelta(1),
         2: () => "start_date=" + getMonday()
     }
-    // if selectedTimeFrame changes -> new URL -> new request
+    /**
+     *  if selectedTimeFrame changes -> new URL -> new request
+     */
     useEffect(() => {
         setUrl(timeFrames[selectedTimeframe])
         setLoading(true)
@@ -59,6 +75,9 @@ function useDashboard(producerId, consumerId) {
 
 
     const [aggregateConsumption, setAggregateConsumption] = useState(false)
+    /**
+     * If aggregate changes -> recalculate lineChartData
+     */
     useEffect(() => {
         setTransformedData((prev) => ({
             ...prev, 'lineChartData': lineChartData()
@@ -329,7 +348,8 @@ function useDashboard(producerId, consumerId) {
         loading,
         data,
         aggregateConsumption,
-        setAggregateConsumption
+        setAggregateConsumption,
+        TimeframeSelect
     }
 }
 

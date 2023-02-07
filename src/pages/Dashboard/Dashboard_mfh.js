@@ -24,22 +24,6 @@ import Item from './components/Item'
 import {formatDateTime} from "../../helpers";
 import useAuthStore from "../../stores/useAuthStore";
 
-const TimeframeSelect = ({selectedTimeframe, handleSelectChange}) => (
-    <FormControl className={"w-[175px]"} size={"small"}>
-        <InputLabel id="demo-simple-select-label">Zeit</InputLabel>
-        <Select
-            labelId="demo-simple-select-label"
-            value={selectedTimeframe}
-            label="Zeit"
-            onChange={handleSelectChange}
-        >
-            <MenuItem value={0}>30 Tage</MenuItem>
-            <MenuItem value={1}>Heute</MenuItem>
-            <MenuItem value={2}>Aktuelle Woche</MenuItem>
-        </Select>
-    </FormControl>
-)
-
 /**
  *
  * @param producerId -> können später genutzt werden um ANsicht zu unterscheiden
@@ -56,7 +40,9 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
         handleSelectChange,
         loading,
         aggregateConsumption,
-        setAggregateConsumption
+        setAggregateConsumption,
+        TimeframeSelect,
+        data
     } = useDashboard(producerId, consumerId)
 
     const isAdmin = useAuthStore(state => state.isAdmin)
@@ -75,7 +61,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                  }}>
 
                 <Header title={"Dashboard" + (producerId ? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "")}/>
-                <TimeframeSelect handleSelectChange={handleSelectChange} selectedTimeframe={selectedTimeframe}/>
+                <TimeframeSelect selectedTimeframe={selectedTimeframe} onChange={handleSelectChange}/>
             </Box>
 
             {/* GRID & CHARTS */}
@@ -114,7 +100,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                                          selectedTimeframe={selectedTimeframe}/>
                                          <div className={"min-w-[350px] flex-grow"}>
                                              <PowerMix data={transformedData.pieChartData}
-                                                       selectedTimeframe={selectedTimeframe}/>
+                                                       selectedTimeframe={selectedTimeframe} centerValue={data?.selfUsagePercentage}/>
                                          </div>
                                      </>
                                  }
@@ -132,7 +118,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                      <>
                                          {producerId &&
                                              <FormGroup className={"absolute top-0"}>
-                                                 <FormControlLabel control={<Checkbox value={aggregateConsumption}
+                                                 <FormControlLabel control={<Checkbox checked={aggregateConsumption}
                                                                                       onChange={(e) => setAggregateConsumption(e.target.checked)}/>}
                                                                    label={"Verbräuche summieren"}/>
                                              </FormGroup>
@@ -220,7 +206,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
-                    <DataDisplay value={transformedData.totalRevenueData + " €"}
+                    <DataDisplay value={transformedData.totalRevenueData?.toFixed(2) + " €"}
                                  titel={isAdmin ? "Einnahmen" : "Kosten"}
                                  loading={loading} icon={<Euro/>}/>
                 </div>
