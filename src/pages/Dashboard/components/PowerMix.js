@@ -7,7 +7,7 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     dataWithArc.forEach(datum => {
         powerValues.push(datum.value)
     })
-    const percentage = roundToN(powerValues[1]/powerValues[0],4)*100;
+    const percentage = roundToN(powerValues[1]/powerValues[0]*100,2);
 
     return (
         <text
