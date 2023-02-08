@@ -13,6 +13,8 @@ import ListRates from "./pages/admin/ListRates/ListRates";
 import Dashboard_mfh from "./pages/Dashboard/Dashboard_mfh"
 import ListConsumers from "./pages/admin/ListConsumers/ListConsumers";
 import DashboardWrapper from "./pages/Dashboard/DashboardWrapper";
+import Imprint from "./pages/admin/Imprint/Imprint";
+import Contact from "./pages/admin/Contact/Contact";
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
                             <Route path={"erstellen"} element={<AddRate />} />
                             <Route path={":rateId/bearbeiten"} element={<AddRate />} />
                         </Route>
+                        <Route path={"impressum"} element={<Imprint/>} />
+                        <Route path={"contact"} element={<Contact/>} />
                     </Route>
                     <Route path={"/login"} element={<Login/>}/>
                 </Routes>
