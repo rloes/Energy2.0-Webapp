@@ -13,18 +13,18 @@ const LineTooltip = (props) => {
 }
 const Line = (props) => {
     return(
-        props.selectedTimeframe !== false? <ResponsiveLine {...props}/> : <ResponsiveLineCanvas {...props} />
+        props.selectedReduction !== false? <ResponsiveLine {...props}/> : <ResponsiveLineCanvas {...props} />
     )}
-function LineChart(props) {
+function LineChart({selectedReduction, data}) {
     const tickValues = {
-        0: "every 2 days",
-        1: "every 2 hours",
-        2: "every 12 hours"
+        no: "every 2 days",
+        day: "every 2 hours",
+        hour: "every 12 hours",
     }
     const tickFormat = {
-        0: "%d.%m",
-        1: "%H",
-        2: "%d.%m %H:%M",
+        no: "%d.%m",
+        day: "%H",
+        hour: "%d.%m %H:%M",
     }
 
     /**
@@ -37,9 +37,9 @@ function LineChart(props) {
     // )
     return (
         <Line
-            selectedTimeframe={props.selectedTimeframe}
+            selectedTimeframe={selectedReduction}
             tooltip={LineTooltip}
-            data={props.data}
+            data={data}
             margin={{top: 50, right: 110, bottom: 50, left: 60}}
             xScale={{ type: 'time', format: "%Y-%m-%dT%H:%M:%S", precision: "minute", useUTC: false}}
             enablePoints={false}
@@ -48,11 +48,11 @@ function LineChart(props) {
             yScale={{ type: 'linear', min:0}}
             yFormat=" >-.2f"
             axisBottom={{
-                tickValues: props.selectedTimeframe? tickValues[props.selectedTimeframe] : "every 2 days",
+                tickValues: selectedReduction? tickValues[selectedReduction] : "every 2 days",
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                format: props.selectedTimeframe? tickFormat[props.selectedTimeframe] : "%d.%m",
+                format: selectedReduction? tickFormat[selectedReduction] : "%d.%m",
                 legend: "Time",
                 legendOffset: 36,
                 legendPosition: "middle"

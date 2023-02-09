@@ -5,7 +5,6 @@ import useDashboard from '../hooks/useDashboard';
 
 
 function PowerMixValues({data}) {
-    console.log({data})
     return (
         <div className='text-md whitespace-nowrap self-start h-full flex flex-col justify-around'>
                     <h3>{data.top.title}{data.top.value} kWh</h3>

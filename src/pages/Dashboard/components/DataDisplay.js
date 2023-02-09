@@ -16,7 +16,7 @@ function DataDisplay({titel, value, icon, loading, render = false, subtitle = fa
                             {value && !loading ? value : <CircularProgress/>}
                         </div>
                         {(subtitle && !loading && value) &&
-                            <div class={"self-center"}>
+                            <div className={"self-center"}>
                                 {subtitle}
                             </div>
                         }

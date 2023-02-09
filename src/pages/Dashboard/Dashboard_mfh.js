@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-    Box, Checkbox,
-    FormControl, FormControlLabel, FormGroup,
+    Box, Button, Checkbox, Dialog,
+    FormControl, FormControlLabel, FormGroup, IconButton,
     InputLabel, MenuItem,
     Select,
     Typography,
@@ -18,11 +18,12 @@ import PowerMixValues from './components/PowerMixValues';
 import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
-import {Euro, Savings, Timeline} from "@mui/icons-material";
+import {CalendarMonth, Euro, Savings, Timeline} from "@mui/icons-material";
 import Grid from '@mui/material/Unstable_Grid2';
 import Item from './components/Item'
 import {formatDateTime} from "../../helpers";
 import useAuthStore from "../../stores/useAuthStore";
+import EditTimeframe from "./components/EditTimeframe";
 
 /**
  *
@@ -42,7 +43,12 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
         aggregateConsumption,
         setAggregateConsumption,
         TimeframeSelect,
-        data
+        data,
+        setOpenCustomTimeframe,
+        openCustomTimeframe,
+        handleSubmitCustomTimeframe,
+        handleReductionChange,
+        selectedReduction
     } = useDashboard(producerId, consumerId)
 
     const isAdmin = useAuthStore(state => state.isAdmin)
@@ -61,7 +67,18 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                  }}>
 
                 <Header title={"Dashboard" + (producerId ? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "")}/>
-                <TimeframeSelect selectedTimeframe={selectedTimeframe} onChange={handleSelectChange}/>
+                <div className={"flex items-center"}>
+                    <TimeframeSelect selectedTimeframe={selectedTimeframe} onChange={handleSelectChange}/>
+                    <IconButton onClick={() => setOpenCustomTimeframe(true)}>
+                        <CalendarMonth/>
+                    </IconButton>
+                </div>
+
+
+                <Dialog open={openCustomTimeframe} onClose={() => setOpenCustomTimeframe(false)} keepMounted>
+                    <EditTimeframe onSubmit={handleSubmitCustomTimeframe}
+                                   onClose={() => setOpenCustomTimeframe(false)}/>
+                </Dialog>
             </Box>
 
             {/* GRID & CHARTS */}
@@ -100,7 +117,8 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                                          selectedTimeframe={selectedTimeframe}/>
                                          <div className={"min-w-[350px] flex-grow"}>
                                              <PowerMix data={transformedData.pieChartData}
-                                                       selectedTimeframe={selectedTimeframe} centerValue={data?.selfUsagePercentage}/>
+                                                       selectedTimeframe={selectedTimeframe}
+                                                       centerValue={data?.selfUsagePercentage}/>
                                          </div>
                                      </>
                                  }
@@ -116,15 +134,35 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  icon={<Timeline/>}
                                  render={
                                      <>
-                                         {producerId &&
-                                             <FormGroup className={"absolute top-0"}>
-                                                 <FormControlLabel control={<Checkbox checked={aggregateConsumption}
-                                                                                      onChange={(e) => setAggregateConsumption(e.target.checked)}/>}
-                                                                   label={"Verbräuche summieren"}/>
-                                             </FormGroup>
-                                         }
+                                         {(producerId || selectedTimeframe === 3) &&
+                                             <div className={"absolute top-0 flex !flex-row"}>
+                                                 {producerId &&
+                                                     <FormGroup>
+                                                         <FormControlLabel control={
+                                                             <Checkbox checked={aggregateConsumption}
+                                                                       onChange={(e) =>
+                                                                           setAggregateConsumption(e.target.checked)}/>
+                                                         } label={"Verbräuche summieren"} className={""}
+                                                         />
+                                                     </FormGroup>}
+                                                 {selectedTimeframe === 3 &&
+                                                     <FormControl className={"w-[175px]"} size={"small"}>
+                                                         <InputLabel id="reduction-select-label">Zeit</InputLabel>
+                                                         <Select
+                                                             labelId={"reduction-select-label"}
+                                                             value={selectedReduction}
+                                                             label="Zusammenfassen"
+                                                             onChange={handleReductionChange}
+                                                         >
+                                                             <MenuItem value={"no"}>Genau</MenuItem>
+                                                             <MenuItem value={"hour"}>Stündlich</MenuItem>
+                                                             <MenuItem value={"day"}>Täglich</MenuItem>
+                                                         </Select>
+                                                     </FormControl>}
+                                             </div>
+                                                 }
                                          <LineChart data={transformedData.lineChartData}
-                                                    selectedTimeframe={selectedTimeframe}/>
+                                                    selectedReduction={selectedReduction}/>
                                      </>
                                  } loading={loading}/>
                 </div>
