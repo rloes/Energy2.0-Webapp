@@ -1,13 +1,18 @@
-import { ResponsivePie } from '@nivo/pie'
-import { roundToN } from '../../../helpers';
+import {ResponsivePie} from '@nivo/pie'
+import {roundToN} from '../../../helpers';
 
 /**Function to display value in middle of pie chart */
-const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+const CenteredMetric = ({dataWithArc, centerX, centerY}) => {
     const powerValues = [];
     dataWithArc.forEach(datum => {
         powerValues.push(datum.value)
     })
-    const percentage = roundToN(powerValues[1]/powerValues[0]*100,2);
+    let percentage = 0
+    if (dataWithArc[0].id !== "Netz") {
+        percentage = roundToN(powerValues[0] / (powerValues[0] + powerValues[1]) * 100, 2);
+    } else {
+        percentage = roundToN(powerValues[1] / (powerValues[0] + powerValues[1]) * 100, 2);
+    }
 
     return (
         <text
@@ -26,11 +31,11 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
 }
 
 
-function PowerMix(props){
+function PowerMix(props) {
     return (
         <ResponsivePie
             data={props.data}
-            margin={{ top: 12, right: 0, bottom: 0, left: 0 }}
+            margin={{top: 12, right: 0, bottom: 0, left: 0}}
             startAngle={90}
             endAngle={-90}
             innerRadius={0.5}
@@ -46,11 +51,12 @@ function PowerMix(props){
                     ]
                 ]
             }}
+            fit={true}
             enableArcLinkLabels={false}
             arcLinkLabelsSkipAngle={10}
             arcLinkLabelsTextColor="#333333"
             arcLinkLabelsThickness={2}
-            arcLinkLabelsColor={{ from: 'color' }}
+            arcLinkLabelsColor={{from: 'color'}}
             arcLabelsSkipAngle={10}
             arcLabelsTextColor={{
                 from: 'color',
@@ -155,7 +161,7 @@ function PowerMix(props){
                     ]
                 }
             ]}
-            layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}        
+            layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', CenteredMetric]}
         />
     )
 }

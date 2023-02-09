@@ -2,16 +2,12 @@ import React from 'react';
 
 function PowerMixValues({data}) {
     return (
-        <div className='text-sm grid grid-col content-center'>
+        <div className='text-sm h-full flex flex-col justify-center gap-2'>
             <div className='flex flew-row'>
-                <div>{data.top.title}</div>
-                <div>{data.top.value}</div>
-                <div>{" kWh"}</div>
+                {data.top.title} {data.top.value}{" kWh"}
             </div>
             <div className='flex flew-row'>
-                <div>{data.bottom.title}</div>
-                <div>{data.bottom.value}</div>
-                <div>{" kWh"}</div>
+                {data.bottom.title} {data.bottom.value}{" kWh"}
             </div>
         </div>
     );

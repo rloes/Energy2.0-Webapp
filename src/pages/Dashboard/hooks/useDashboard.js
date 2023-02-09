@@ -345,8 +345,8 @@ function useDashboard(producerId, consumerId) {
             pieChartData.push({"id":"Verbraucht","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
             pieChartData.push({"id":"Eingespeist","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
         } else if(data.totalSelfConsumption){ //Consumersicht
-            pieChartData.push({"id":"Verbraucht","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
-            pieChartData.push({"id":"Eingespeist","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
+            pieChartData.push({"id":"Netz","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({"id":"Solar","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
         }
         return pieChartData;
     }

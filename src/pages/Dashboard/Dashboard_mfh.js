@@ -115,7 +115,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                                          <PowerMixValues data={transformedData.powerMixData}
                                                          selectedTimeframe={selectedTimeframe}/>
-                                         <div className={"min-w-[350px] flex-grow"}>
+                                         <div className={"min-w-[350px] flex-grow ml-[-15%]"}>
                                              <PowerMix data={transformedData.pieChartData}
                                                        selectedTimeframe={selectedTimeframe}
                                                        centerValue={data?.selfUsagePercentage}/>

@@ -17,13 +17,13 @@ const Line = (props) => {
     )}
 function LineChart({selectedReduction, data}) {
     const tickValues = {
-        no: "every 2 days",
-        day: "every 2 hours",
+        no: "every 2 hours",
+        day: "every 2 days",
         hour: "every 12 hours",
     }
     const tickFormat = {
-        no: "%d.%m",
-        day: "%H",
+        no: "%H",
+        day: "%d.%m",
         hour: "%d.%m %H:%M",
     }
 
