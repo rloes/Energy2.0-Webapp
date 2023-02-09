@@ -73,7 +73,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
             {!withoutTitle &&
                 <h2 className={"page-title"}>{withoutTitle ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
             }
-            <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full h-full":""}>
+            <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full h-full":"w-max"}>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>
                         Kunden

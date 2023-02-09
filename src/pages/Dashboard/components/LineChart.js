@@ -1,15 +1,30 @@
 import {ResponsiveLine, ResponsiveLineCanvas} from '@nivo/line'
-
-function LineChart(props) {
+import {Paper} from "@mui/material";
+import {formatDateTime} from "../../../helpers";
+const LineTooltip = (props) => {
+    const {x, yFormatted: y} = props.point.data
+    const {color} = props.point
+    return(
+        <Paper className={"flex p-4 justify-between items-center gap-4"}>
+            <div className={"w-4 h-4 rounded-full"} style={{backgroundColor: color}}/>
+            {formatDateTime(x, false) + " - " + y+" kWh"}
+        </Paper>
+    )
+}
+const Line = (props) => {
+    return(
+        props.selectedReduction !== false? <ResponsiveLine {...props}/> : <ResponsiveLineCanvas {...props} />
+    )}
+function LineChart({selectedReduction, data}) {
     const tickValues = {
-        0: "every 2 days",
-        1: "every 2 hours",
-        2: "every 12 hours"
+        no: "every 2 hours",
+        day: "every 2 days",
+        hour: "every 12 hours",
     }
     const tickFormat = {
-        0: "%d.%m",
-        1: "%H",
-        2: "%d.%m %H:%M",
+        no: "%H",
+        day: "%d.%m",
+        hour: "%d.%m %H:%M",
     }
 
     /**
@@ -17,25 +32,27 @@ function LineChart(props) {
      * @param lineProps
      * @returns {JSX.Element}
      */
-    const Line = (lineProps) => (
-        props.selectedTimeframe !== false? <ResponsiveLine {...lineProps} /> : <ResponsiveLineCanvas {...lineProps} />
-    )
+    // const Line = (lineProps) => (
+    //     props.selectedTimeframe !== false? <ResponsiveLine {...lineProps}/> : <ResponsiveLineCanvas {...lineProps} />
+    // )
     return (
         <Line
-            data={props.data}
+            selectedTimeframe={selectedReduction}
+            tooltip={LineTooltip}
+            data={data}
             margin={{top: 50, right: 110, bottom: 50, left: 60}}
-            xScale={{ type: 'time', format: "%Y-%m-%dT%H:%M:%S", precision: "second",}}
+            xScale={{ type: 'time', format: "%Y-%m-%dT%H:%M:%S", precision: "minute", useUTC: false}}
             enablePoints={false}
             // xFormat={"time:%Y-%m-%dT%H:%M:%S"}
             curve={"monotoneX"}
             yScale={{ type: 'linear', min:0}}
             yFormat=" >-.2f"
             axisBottom={{
-                tickValues: props.selectedTimeframe? tickValues[props.selectedTimeframe] : "every 2 days",
+                tickValues: selectedReduction? tickValues[selectedReduction] : "every 2 days",
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                format: props.selectedTimeframe? tickFormat[props.selectedTimeframe] : "%d.%m",
+                format: selectedReduction? tickFormat[selectedReduction] : "%d.%m",
                 legend: "Time",
                 legendOffset: 36,
                 legendPosition: "middle"

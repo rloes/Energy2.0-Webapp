@@ -76,7 +76,7 @@ function AddProducer(props) {
     return (
         <div>
             <h2 className={"page-title"}>Solaranlage {producerId ? "bearbeiten" : "hinzufügen"}</h2>
-            <WidgetComponent>
+            <WidgetComponent className={"w-max"}>
                 <form className={"flex flex-col gap-4 px-4"}>
                     <TextField name={"name"} value={values.name} onChange={handleChange} placeholder={"Name"}
                                label={"Name"}/>

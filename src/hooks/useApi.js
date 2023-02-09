@@ -5,13 +5,16 @@ import camelize from "camelize";
 import useAuthStore from "../stores/useAuthStore";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../stores/useNotificationStore";
+
 export const BASE_URL = "http://127.0.0.1:8000/"
+
 function useApi(props) {
     // Authorization Toke received and stored on login
-    const token = localStorage.getItem('token');
     const setAuthStore = useAuthStore(state => state.setState)
+    const token = useAuthStore(state => state.token)
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
+    const logout = useAuthStore(state => state.logout)
 
     async function apiRequest({
                                   method,
@@ -50,7 +53,7 @@ function useApi(props) {
             // no authorization, no permission errors are handled
             if (status === 401 || status === 403) {
                 // delete token
-                setAuthStore('token', '')
+                logout()
                 // send back to login
                 navigate("/login")
                 setNotification({

@@ -58,7 +58,7 @@ function ListRates(props) {
     return (
         <div>
             <h2 className={"page-title"}>Tarifverwaltung</h2>
-            <WidgetComponent>
+            <WidgetComponent className={"w-max"}>
                 <div className={"flex"}>
                     <h3 className={"text-lg font-bold px-4"}>Tarife</h3>
                     <Link to={"./erstellen"}>

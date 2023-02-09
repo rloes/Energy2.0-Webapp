@@ -46,7 +46,7 @@ function ListProducers({withoutTitle}) {
     const producers = query === "" ? data : filteredData
     return (<div className={withoutTitle ? "max-h-full relative h-full" : ""}>
         {!withoutTitle && <h2 className={"page-title"}>Solaranlagenverwaltung</h2>}
-        <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full" : ""}>
+        <WidgetComponent className={(withoutTitle ? "flex flex-col max-h-full" : "")+" w-max"}>
             <div className={"flex"}>
                 <h3 className={"text-lg font-bold px-4"}>
                     Solaranlagen

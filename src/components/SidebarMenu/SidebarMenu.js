@@ -4,7 +4,9 @@ import {Link} from "react-router-dom";
 import StyledButton from "../StyledButton";
 import {useNavigate} from "react-router-dom";
 import useNotificationStore from "../../stores/useNotificationStore";
-
+import useAuthStore from '../../stores/useAuthStore';
+import {Avatar} from "@mui/material";
+import Menu from "../Menu";
 
 const menuStructure = {
     "Verwaltung": [
@@ -22,14 +24,12 @@ const menuStructure = {
 function SidebarMenu(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
-    const handleLogout = () => {
-        localStorage.setItem('token', "");
-        navigate('/login')
-        setNotification({message:"Abgemeldet", severity:"success"})
 
-    }
+    const username = useAuthStore(state => state.username)
+
     return (
-        <aside className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
+        <aside
+            className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
             <div className={"flex flex-col justify-start items-center gap-3"}>
                 <h2 className={"uppercase"}>
                     Energy 2.0
@@ -58,9 +58,12 @@ function SidebarMenu(props) {
                     ))
                 }
             </nav>
-            <StyledButton endIcon={<Settings/>} onClick={handleLogout}>
-                Administrator
-            </StyledButton>
+            <div className={"flex"}>
+                <StyledButton startIcon={<Avatar/>} className={"w-[200px] !justify-start gap-10"}>
+                    {username}
+                </StyledButton>
+                <Menu/>
+            </div>
         </aside>
     );
 
