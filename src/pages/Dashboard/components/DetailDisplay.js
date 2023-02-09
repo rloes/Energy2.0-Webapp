@@ -21,8 +21,7 @@ const consumerTitels = {name: "Name",
 function DetailDisplay({detailData, producerId, consumerId}) {
 
     const titels =  consumerId? consumerTitels : producerId? producerTitels : false
-
-
+    console.log(detailData)
     return (
 
         titels?

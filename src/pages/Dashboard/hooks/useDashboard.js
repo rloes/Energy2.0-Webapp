@@ -124,7 +124,7 @@ function useDashboard(producerId, consumerId) {
 
     useEffect(() => {
         getDetails()
-    }, [])
+    }, [url])
 
 
     const [aggregateConsumption, setAggregateConsumption] = useState(false)
@@ -216,28 +216,6 @@ function useDashboard(producerId, consumerId) {
         return _transformedData
     }
 
-    const getDetails = () => {
-        let url = false;
-        if (consumerId) {
-            url = "/consumers/" + consumerId + "/";
-        } else if (producerId) {
-            url = "/producers/" + producerId + "/";
-        }
-
-        if (url) {
-            apiRequest({
-                method: "GET",
-                url: url
-            }).then((res) => {
-                console.log(res)
-                setTransformedData((prev) => ({
-                    ...prev, detailData: res.data
-                }))
-            })
-        }
-    }
-
-
     /**
      * reduces the number of points in dataset by taking the sum of a certain timerange and adding it as a single point
      * This function gets a single point from a transformation function(e.g. lineChartData) and decides given on date,
@@ -274,6 +252,27 @@ function useDashboard(producerId, consumerId) {
                 "y": sum + Number(point[valueKey])
             })
             add(-sum)
+        }
+    }
+
+    const getDetails = () => {
+        let url = false;
+        if (consumerId) {
+            url = "/consumers/" + consumerId + "/";
+        } else if (producerId) {
+            url = "/producers/" + producerId + "/";
+        }
+
+        if (url) {
+            apiRequest({
+                method: "GET",
+                url: url
+            }).then((res) => {
+                console.log(res)
+                setTransformedData((prev) => ({
+                    ...prev, detailData: res.data
+                }))
+            })
         }
     }
 
