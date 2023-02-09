@@ -16,7 +16,7 @@ const menuStructure = {
         {name: "Tarife", link: "/tarife", icon: <RequestQuote/>},
     ],
     "Support": [
-        {name: "Kontakt", link: "/contact", icon: <Phone/>},
+        {name: "Kontakt", link: "/kontakt", icon: <Phone/>},
         {name: "Impressum", link: "/impressum", icon: <ContactPage/>}
     ]
 }

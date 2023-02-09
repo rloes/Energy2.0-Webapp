@@ -10,14 +10,14 @@ import {
     Button,
     IconButton, TextField,
 } from "@mui/material";
-import useQuery from "../../../hooks/useQuery";
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import useQuery from "../../hooks/useQuery";
+import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
 import {DeleteForever, Edit} from "@mui/icons-material";
 import {Link, useNavigate} from "react-router-dom";
-import useApi from "../../../hooks/useApi";
-import StyledButton from "../../../components/StyledButton";
-import {roundToN} from "../../../helpers";
-import useFilter from "../../../hooks/useFilter";
+import useApi from "../../hooks/useApi";
+import StyledButton from "../../components/StyledButton";
+import {roundToN} from "../../helpers";
+import useFilter from "../../hooks/useFilter";
 
 function Imprint() {
 

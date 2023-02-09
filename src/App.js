@@ -15,8 +15,8 @@ import ListConsumers from "./pages/admin/ListConsumers/ListConsumers";
 import DashboardWrapper from "./pages/Dashboard/DashboardWrapper";
 import {useEffect, useState} from "react";
 import useAuthStore from "./stores/useAuthStore";
-import Imprint from "./pages/admin/Imprint/Imprint";
-import Contact from "./pages/admin/Contact/Contact";
+import Imprint from "./pages/Imprint/Imprint";
+import Contact from "./pages/Contact/Contact";
 
 function App() {
     const setAuthStore = useAuthStore(state => state.setState)
