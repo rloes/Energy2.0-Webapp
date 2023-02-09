@@ -3,12 +3,9 @@ import {
     Box, Button, Checkbox, Dialog,
     FormControl, FormControlLabel, FormGroup, IconButton,
     InputLabel, MenuItem,
-    Select,
-    Typography,
-    useTheme
+    Select
 } from "@mui/material"
 import Header from "./components/Header"
-import {tokens} from "../../theme";
 import BoltSharpIcon from '@mui/icons-material/BoltSharp';
 import BalanceIcon from '@mui/icons-material/Balance';
 import useDashboard from "./hooks/useDashboard";
@@ -19,9 +16,6 @@ import ListConsumers from "../admin/ListConsumers/ListConsumers";
 import DataDisplay from "./components/DataDisplay";
 import ListProducers from "../admin/ListProducers/ListProducers";
 import {CalendarMonth, Euro, Savings, Timeline} from "@mui/icons-material";
-import Grid from '@mui/material/Unstable_Grid2';
-import Item from './components/Item'
-import {formatDateTime} from "../../helpers";
 import useAuthStore from "../../stores/useAuthStore";
 import EditTimeframe from "./components/EditTimeframe";
 import DetailDisplay from './components/DetailDisplay';
@@ -34,8 +28,6 @@ import DetailDisplay from './components/DetailDisplay';
  * @constructor
  */
 const Dashboard_mfh = ({producerId, consumerId}) => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const {
         transformedData,
         selectedTimeframe,
@@ -129,7 +121,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
 
                 {/* ROW 2 */}
                 {/*VERBRAUCH UND PRODUKTION */}
-                <div className={"col-span-8 row-span-2"}>
+                <div className={"col-span-8 row-span-3"}>
                     <DataDisplay titel={"Verlauf"}
                                  value={transformedData.lineChartData}
                                  icon={<Timeline/>}
@@ -168,7 +160,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                  } loading={loading}/>
                 </div>
 
-                <div className={"col-span-4 row-span-2 relative"}>
+                <div className={"col-span-4 row-span-3 relative"}>
                     {producerId ?
                         <ListConsumers producerId={producerId} withoutTitle/>
                         :
