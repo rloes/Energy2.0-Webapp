@@ -24,6 +24,7 @@ import Item from './components/Item'
 import {formatDateTime} from "../../helpers";
 import useAuthStore from "../../stores/useAuthStore";
 import EditTimeframe from "./components/EditTimeframe";
+import DetailDisplay from './components/DetailDisplay';
 
 /**
  *
@@ -177,70 +178,20 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 </div>
                 {/* ROW 3 */}
                 {/*ANLAGEDETAILS*/}
-                <Box
-                    gridColumn="span 8"
-                    gridRow="span 2"
-                    p="30px"
-                    sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 2,
-                        minWidth: 300,
-                    }}
-                >
-                    <Typography variant="h5" fontWeight="600">
-                        Anlagedetails
-                    </Typography>
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="flex-start"
-                        mt="25px"
-                    >
-                        <Typography
-                            variant="h5"
-                            color={colors.greenAccent[500]}
-                            sx={{mt: "15px"}}
-                        >
-                            <Box sx={{flexGrow: 1}}>
-                                <Grid container spacing={2} justify="flex-start">
-                                    <Grid xs={4}>
-                                        <Item><b>Bezeichnung </b>< br/>
-                                            {transformedData.producerData && transformedData.producerData.name}
-                                        </Item>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <Item><b>Adresse </b>< br/>
-                                            {transformedData.producerData && transformedData.producerData.street} <br/>
-                                            {transformedData.producerData && transformedData.producerData.zipCode} &nbsp;
-                                            {transformedData.producerData && transformedData.producerData.city}
-                                        </Item>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <Item><b>Installierte
-                                            Leistung </b>< br/> {transformedData.producerData && transformedData.producerData.peakPower} kWh</Item>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <Item><b>Produktionszählernummer </b>< br/> {transformedData.producerData && transformedData.producerData.productionSensor.deviceId}
-                                        </Item>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <Item><b>Netzzähler </b>< br/> {transformedData.producerData && transformedData.producerData.gridSensor.deviceId}
-                                        </Item>
-                                    </Grid>
-                                    <Grid xs={4}>
-                                        <Item><b>Letzte Daten
-                                            von </b>< br/> {transformedData.producerData && formatDateTime(transformedData.producerData.lastProductionReading)}
-                                        </Item>
-                                    </Grid>
 
+                <div className={"col-span-8 row-span-2"}>
+                    <DataDisplay titel = {"Anlagedetails"}
+                                value={transformedData.detailData}
+                                icon={<Timeline/>}
+                                render={
+                                   < DetailDisplay detailData={transformedData.detailData}
+                                   producerId = {producerId}
+                                   consumerId = {consumerId}
+                                    />
+                                }
+                                />
+                </div>
 
-                                </Grid>
-                            </Box>
-                        </Typography>
-                    </Box>
-                </Box>
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>

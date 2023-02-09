@@ -63,17 +63,17 @@ function useDashboard(producerId, consumerId) {
     const [openCustomTimeframe, setOpenCustomTimeframe] = useState(false)
     const handleSelectChange = (e) => {
         const value = e.target.value
-        if(value !== 3) {
+        if (value !== 3) {
             setSelectedTimeframe(value)
             // Cancel all open requests
             cancel()
-        }else{
+        } else {
             setOpenCustomTimeframe(true)
         }
     }
 
     const handleSubmitCustomTimeframe = (newUrl) => {
-        if(newUrl !== url) {
+        if (newUrl !== url) {
             setSelectedTimeframe(3)
             setUrl(newUrl)
         }
@@ -98,10 +98,10 @@ function useDashboard(producerId, consumerId) {
             setUrl(defaultTimeFrames[selectedTimeframe])
             // if default for selectedTimeframe exist
             console.log(Object.keys(defaultReductions))
-            if(Object.keys(defaultReductions).includes(String(selectedTimeframe))) {
+            if (Object.keys(defaultReductions).includes(String(selectedTimeframe))) {
                 setSelectedReduction(defaultReductions[selectedTimeframe])
             }
-        }else{
+        } else {
             setSelectedReduction(defaultReductions[2])
         }
         setLoading(true)
@@ -160,7 +160,7 @@ function useDashboard(producerId, consumerId) {
                     // map through all productions -> set x = datetime and y = produced
                     const production = producer.productions[i]
                     if (selectedReduction !== "no") {
-                    // if (Object.keys(reductions).includes(String(selectedTimeframe))) {
+                        // if (Object.keys(reductions).includes(String(selectedTimeframe))) {
                         // if timeframe = 30 days -> reduced to sum per day
                         // if timeframe = 1 week -> reduce to sum per hour
                         const add = (val) => production_sum += val
@@ -195,8 +195,8 @@ function useDashboard(producerId, consumerId) {
                     // map through all consumptions -> set x = datetime and y = consumption
                     const consumption = consumer.consumptions[i]
                     if (selectedReduction !== "no") {
-                    // if (Object.keys(reductions).includes(String(selectedTimeframe))) {
-                    // if (selectedTimeframe === 0 || selectedTimeframe === 2) {
+                        // if (Object.keys(reductions).includes(String(selectedTimeframe))) {
+                        // if (selectedTimeframe === 0 || selectedTimeframe === 2) {
                         // if timeframe = 30 days -> reduced to sum per day
                         // if timeframe = 1 week -> reduce to sum per hour
                         const add = (val) => consumption_sum += val
@@ -215,6 +215,28 @@ function useDashboard(producerId, consumerId) {
 
         return _transformedData
     }
+
+    const getDetails = () => {
+        let url = false;
+        if (consumerId) {
+            url = "/consumers/" + consumerId + "/";
+        } else if (producerId) {
+            url = "/producers/" + producerId + "/";
+        }
+
+        if (url) {
+            apiRequest({
+                method: "GET",
+                url: url
+            }).then((res) => {
+                console.log(res)
+                setTransformedData((prev) => ({
+                    ...prev, detailData: res.data
+                }))
+            })
+        }
+    }
+
 
     /**
      * reduces the number of points in dataset by taking the sum of a certain timerange and adding it as a single point
@@ -252,20 +274,6 @@ function useDashboard(producerId, consumerId) {
                 "y": sum + Number(point[valueKey])
             })
             add(-sum)
-        }
-    }
-
-    const getDetails = () => {
-        if (producerId) {
-            apiRequest({
-                method: "GET",
-                url: "/producers/" + producerId + "/"
-            }).then((res) => {
-                console.log(res)
-                setTransformedData((prev) => ({
-                    ...prev, producerData: res.data
-                }))
-            })
         }
     }
 
@@ -338,15 +346,31 @@ function useDashboard(producerId, consumerId) {
 
     const pieChartData = () => {
         const pieChartData = [];
-        if(data.totalProduction) { //Haussicht
-            pieChartData.push({"id":"Verbraucht","label":"Verbraucht", "value":roundToN(data.totalUsed, 2)});
-            pieChartData.push({"id":"Eingespeist","label":"Eingespeist", "value":roundToN(data.totalProduction-data.totalUsed, 2)});
-        } else if(data.producersTotalProduction){ //Gesamtansicht
-            pieChartData.push({"id":"Verbraucht","label":"Verbraucht", "value":roundToN(data.producersTotalUsed, 2)});
-            pieChartData.push({"id":"Eingespeist","label":"Eingespeist", "value":roundToN(data.producersTotalProduction-data.producersTotalUsed, 2)});
-        } else if(data.totalSelfConsumption){ //Consumersicht
-            pieChartData.push({"id":"Netz","label":"Netzenergie", "value":roundToN(data.totalGridConsumption, 2)});
-            pieChartData.push({"id":"Solar","label":"Solarenergie", "value":roundToN(data.totalSelfConsumption, 2)});
+        if (data.totalProduction) { //Haussicht
+            pieChartData.push({"id": "Verbraucht", "label": "Verbraucht", "value": roundToN(data.totalUsed, 2)});
+            pieChartData.push({
+                "id": "Eingespeist",
+                "label": "Eingespeist",
+                "value": roundToN(data.totalProduction - data.totalUsed, 2)
+            });
+        } else if (data.producersTotalProduction) { //Gesamtansicht
+            pieChartData.push({
+                "id": "Verbraucht",
+                "label": "Verbraucht",
+                "value": roundToN(data.producersTotalUsed, 2)
+            });
+            pieChartData.push({
+                "id": "Eingespeist",
+                "label": "Eingespeist",
+                "value": roundToN(data.producersTotalProduction - data.producersTotalUsed, 2)
+            });
+        } else if (data.totalSelfConsumption) { //Consumersicht
+            pieChartData.push({"id": "Netz", "label": "Netzenergie", "value": roundToN(data.totalGridConsumption, 2)});
+            pieChartData.push({
+                "id": "Solar",
+                "label": "Solarenergie",
+                "value": roundToN(data.totalSelfConsumption, 2)
+            });
         }
         return pieChartData;
     }
