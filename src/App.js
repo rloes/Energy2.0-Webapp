@@ -15,6 +15,8 @@ import ListConsumers from "./pages/admin/ListConsumers/ListConsumers";
 import DashboardWrapper from "./pages/Dashboard/DashboardWrapper";
 import {useEffect, useState} from "react";
 import useAuthStore from "./stores/useAuthStore";
+import Imprint from "./pages/admin/Imprint/Imprint";
+import Contact from "./pages/admin/Contact/Contact";
 
 function App() {
     const setAuthStore = useAuthStore(state => state.setState)
@@ -73,6 +75,8 @@ function App() {
                             <Route path={"erstellen"} element={<AddRate/>}/>
                             <Route path={":rateId/bearbeiten"} element={<AddRate/>}/>
                         </Route>
+                        <Route path={"impressum"} element={<Imprint/>} />
+                        <Route path={"kontakt"} element={<Contact/>} />
                     </Route>
                     <Route path={"/login"} element={<Login/>}/>
                 </Routes>
