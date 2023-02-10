@@ -60,6 +60,7 @@ function LineChart({selectedReduction, data}) {
     }
 
     useEffect(() => {
+        // each time, data changes -> run calculateTick
         calculateTick()
     }, [data])
 

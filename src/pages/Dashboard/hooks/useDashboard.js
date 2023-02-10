@@ -124,7 +124,7 @@ function useDashboard(producerId, consumerId) {
 
     useEffect(() => {
         getDetails()
-    }, [url])
+    }, [consumerId, producerId])
 
 
     const [aggregateConsumption, setAggregateConsumption] = useState(false)
