@@ -1,6 +1,16 @@
 import {ResponsivePie} from '@nivo/pie'
-import {roundToN} from '../../../helpers';
+import {formatDateTime, roundToN} from '../../../helpers';
+import {Paper} from "@mui/material";
 
+const PieTooltip = (props) => {
+    const {formattedValue: value, color} = props.datum
+    return(
+        <Paper className={"flex p-4 justify-between items-center gap-4"}>
+            <div className={"w-4 h-4 rounded-full"} style={{backgroundColor: color}}/>
+            {value+ " kWh"}
+        </Paper>
+    )
+}
 /**Function to display value in middle of pie chart */
 const CenteredMetric = ({dataWithArc, centerX, centerY}) => {
     const powerValues = [];
@@ -34,6 +44,7 @@ const CenteredMetric = ({dataWithArc, centerX, centerY}) => {
 function PowerMix(props) {
     return (
         <ResponsivePie
+            tooltip={PieTooltip}
             data={props.data}
             margin={{top: 12, right: 0, bottom: 0, left: 0}}
             startAngle={90}
