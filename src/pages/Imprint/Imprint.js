@@ -27,11 +27,6 @@ function Imprint() {
         <div>
             <h2 className={"page-title"}>Impressum</h2>
             <WidgetComponent>
-
-                <div className={"flex"}>
-                    <h3 className={"text-lg font-bold px-4"}>Impressum</h3>
-
-                </div>
                 <div>
                     &nbsp; <br/>
                     <p>

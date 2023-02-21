@@ -65,7 +65,7 @@ function Login(props) {
                 <form onKeyDown={handlePressEnter} className={"flex flex-col items-center gap-4 max-w-[300px] wr"}>
                     <TextField value={values.username} onChange={handleChange} name={"username"}
                                label={"Benutzername"}/>
-                    <TextField value={values.password} onChange={handleChange} name={"password"} label={"Password"}
+                    <TextField value={values.password} onChange={handleChange} name={"password"} label={"Passwort"}
                                type={"password"}/>
                     <Button onClick={handleLogin} ref={loginButton}>
                         Anmelden

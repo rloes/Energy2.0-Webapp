@@ -22,9 +22,8 @@ import useFilter from "../../../hooks/useFilter";
 const columnTitles = {
     id: "Kunden-ID",
     name: "Name",
-    contract: "Vertrag",
-    mail: "E-Mail",
-    phone: "Telefonnumemr"
+    email: "E-Mail",
+    phone: "Telefonnummer"
 }
 
 /**
@@ -33,7 +32,7 @@ const columnTitles = {
  * @returns {JSX.Element}
  */
 function ListConsumers({producerId, withoutTitle = false}) {
-    const tableColumns = !producerId ? ['id', 'name', 'contract', 'mail', 'phone'] : ['name']
+    const tableColumns = !producerId ? ['id', 'name', 'email', 'phone'] : ['name']
     const [openDialog, setOpenDialog] = useState(false)
 
     const {data, error, loading, request} = useQuery({

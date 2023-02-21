@@ -16,7 +16,7 @@ function Contact() {
                 <Card style={{maxWidth: 450, padding: "20px 5px", margin: "0 auto"}}>
                     <CardContent>
                         <Typography gutterBottom variant="h5">
-                            Kontakt Formular
+                            Kontaktformular
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p" gutterBottom>
                             Füllen Sie das Formular aus. Die Verarbeitung ihrer Anfrage kann bis zu 24 Stunden

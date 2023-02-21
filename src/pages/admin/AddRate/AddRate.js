@@ -71,7 +71,7 @@ function AddRate(props) {
     }
 
     /**
-     * If a producerId is defined => a existing producer is being edited.
+     * If a rateId is defined => a existing producer is being edited.
      * Therefore on component render, the current values for that producer is fetched.
      */
     useEffect(() => {
@@ -112,7 +112,7 @@ function AddRate(props) {
                                 shrink: true
                             }}/>
                             <TextField name={"endDate"} value={values.endDate} onChange={handleChange}
-                                    placeholder={"Endzeit"} label={"Endzeit"} type={"date"} InputLabelProps={{
+                                    placeholder={"Enddatum"} label={"Endzeit"} type={"date"} InputLabelProps={{
                                 shrink: true
                             }}/>
                         </>
