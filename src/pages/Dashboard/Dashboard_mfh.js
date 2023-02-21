@@ -23,7 +23,7 @@ import DetailDisplay from './components/DetailDisplay';
 /**
  *
  * @param producerId -> können später genutzt werden um ANsicht zu unterscheiden
- * @param cosumerId
+ * @param cosumerId -> können später genutzt werden um ANsicht zu unterscheiden
  * @returns {JSX.Element}
  * @constructor
  */
@@ -84,10 +84,10 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
             >
                 <div className={"col-span-3 h-full"}>
                     <DataDisplay icon={<BoltSharpIcon/>} titel={"Verbrauch"}
-                                 value={transformedData.consumptionData + " kWh"} loading={loading}/>
+                                 value={transformedData.consumptionData} unit={"kWh"} loading={loading}/>
                 </div>
                 <div className={"col-span-3"}>
-                    <DataDisplay value={transformedData.totalSavedData + " €"} titel={"Einsparungen"}
+                    <DataDisplay value={transformedData.totalSavedData} unit={"€"} titel={"Einsparungen"}
                                  icon={<Savings/>} loading={loading} subtitle={
                         <>
                             <span
@@ -153,7 +153,7 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                                                          </Select>
                                                      </FormControl>}
                                              </div>
-                                                 }
+                                         }
                                          <LineChart data={transformedData.lineChartData}
                                                     selectedReduction={selectedReduction}/>
                                      </>
@@ -172,22 +172,24 @@ const Dashboard_mfh = ({producerId, consumerId}) => {
                 {/*ANLAGEDETAILS*/}
 
                 <div className={"col-span-8 row-span-2"}>
-                    <DataDisplay titel = {"Anlagedetails"}
-                                value={transformedData.detailData}
-                                icon={<Timeline/>}
-                                render={
-                                   < DetailDisplay detailData={transformedData.detailData}
-                                   producerId = {producerId}
-                                   consumerId = {consumerId}
-                                    />
-                                }
-                                />
+                    <DataDisplay titel={producerId? "Anlagedetails": consumerId? "Kundendetails" : "Details"}
+                                 value={(producerId || consumerId) ? transformedData.detailData : !loading}
+                                 loading={loading}
+                                 icon={<Timeline/>}
+                                 render={
+                                     < DetailDisplay detailData={transformedData.detailData}
+                                                     producerId={producerId}
+                                                     consumerId={consumerId}
+                                     />
+                                 }
+                    />
                 </div>
 
 
                 {/*WIRTSCHAFTLICHE KPIS*/}
                 <div className={"col-span-4 row-span-2"}>
-                    <DataDisplay value={transformedData.totalRevenueData?.toFixed(2) + " €"}
+                    <DataDisplay value={transformedData.totalRevenueData?.toFixed(2)}
+                                 unit={"€"}
                                  titel={isAdmin ? "Einnahmen" : "Kosten"}
                                  loading={loading} icon={<Euro/>}/>
                 </div>

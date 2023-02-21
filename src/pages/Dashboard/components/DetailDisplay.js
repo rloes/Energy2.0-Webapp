@@ -4,6 +4,7 @@ import { Typography, colors } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import Item from './Item';
 import { formatDateTime } from '../../../helpers';
+import {SolarPower} from "@mui/icons-material";
 
 
 
@@ -82,8 +83,9 @@ function DetailDisplay({detailData, producerId, consumerId}) {
         </Box>
 
         : 
-        <div>
-        Nichts Ausgewählt
+        <div className={"flex flex-col justify-center items-center text-gray-400 text-xl max-w-[50%] text-center"}>
+            <SolarPower className={"text-[5rem]"}/>
+            <h5>Bitte wählen Sie eine Anlage oder einen Kunden aus, um Informationen anzuzeigen</h5>
         </div>
     
 

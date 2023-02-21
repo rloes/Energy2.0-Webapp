@@ -60,7 +60,7 @@ function useQuery(options) {
         }
     }, [data, error])
 
-    return {data, error, loading, request, setLoading, cancel}
+    return {data, error, loading, request, setLoading, cancel, setData}
 }
 
 export default useQuery;

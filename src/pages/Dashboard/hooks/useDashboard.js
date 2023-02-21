@@ -40,7 +40,12 @@ function useDashboard(producerId, consumerId) {
     const [url, setUrl] = useState("")
     const {apiRequest} = useApi()
 
-    const {data, loading, error, request, setLoading, cancel} = useQuery({
+    useEffect(() => {
+        setQueryData(null)
+        setTransformedData({})
+    }, [url])
+
+    const {data, loading, error, request, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
         url: "output/?" + (producerId ? "producer_id=" + producerId + "&" : consumerId ? "consumer_id=" + consumerId + "&" : "")
             + url,
