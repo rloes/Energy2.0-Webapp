@@ -44,7 +44,7 @@ function AddProducer(props) {
     const {apiRequest} = useApi()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    const handleSave = () => {
+    const handleSave = (continueEditing=false) => {
         const method = producerId ? "PUT" : "POST"
         const url = producerId ? "producers/" + producerId + "/" : "producers/"
 
@@ -52,7 +52,11 @@ function AddProducer(props) {
             url: url, method: method, requestData: values, formatData: formatApiData
         }).then((response) => {
             if (response.status === 201 || response.status === 200) {
-                navigate('/solaranlagen')
+                if(!continueEditing) {
+                    navigate('/solaranlagen')
+                }else{
+                    navigate("/solaranlagen/"+response.data.id+"/bearbeiten")
+                }
                 setNotification({
                     message: "Solaranlage wurde " + producerId ? "gespeichert" : "angelegt",
                     severity: "success"
@@ -101,6 +105,11 @@ function AddProducer(props) {
                                        onChange={handleNestedChange}
                                        placeholder={"Netzzähler"} label={"Netzzähler"}/>
                         </>
+                    }
+                    {!producerId &&
+                        <StyledButton onClick={() => handleSave(true)}>
+                            Anlegen und Kunden hinzufügen
+                        </StyledButton>
                     }
                     <StyledButton onClick={handleSave}>
                         {producerId ? "Speichern" : "Anlegen"}

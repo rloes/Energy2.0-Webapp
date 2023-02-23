@@ -30,7 +30,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    const {value: filteredData, setQuery, query, handleQueryChange} = useFilter({
+    const {value: filteredData, query, handleQueryChange} = useFilter({
         params:
             {name: true},
         data: data

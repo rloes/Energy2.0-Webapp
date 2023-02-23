@@ -26,7 +26,7 @@ function ListRates({withoutTitle = false}) {
     const {apiRequest} = useApi();
     const navigate = useNavigate();
 
-    const {value: filteredData, setQuery, query, handleQueryChange} = useFilter({
+    const {value: filteredData, query, handleQueryChange} = useFilter({
         params:
             {name: true},
         data: data
