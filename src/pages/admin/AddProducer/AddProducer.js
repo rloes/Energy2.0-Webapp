@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, InputAdornment, TextField as MuiTextField} from "@mui/material";
 import useForm from "../../../hooks/useForm";
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "../../../components/WidgetComponent";
 import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";

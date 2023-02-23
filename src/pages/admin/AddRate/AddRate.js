@@ -3,7 +3,7 @@ import {Button, InputAdornment, Switch, TextField as MuiTextField} from "@mui/ma
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import useForm from "../../../hooks/useForm";
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "../../../components/WidgetComponent";
 import {useNavigate, useParams} from "react-router-dom";
 import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";

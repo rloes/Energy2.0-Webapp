@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import {Button, TextField} from "@mui/material";
 import useForm from "./hooks/useForm";
 import useApi from "./hooks/useApi";
-import WidgetComponent from "./components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "./components/WidgetComponent";
 import StyledButton from "./components/StyledButton";
 import useAuthStore from "./stores/useAuthStore";
 import {useNavigate} from "react-router-dom";

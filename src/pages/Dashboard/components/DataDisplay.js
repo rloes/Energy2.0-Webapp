@@ -1,7 +1,8 @@
 import React from 'react';
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "../../../components/WidgetComponent";
 import {CircularProgress, Skeleton} from "@mui/material";
 import {Error} from "@mui/icons-material";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 function DataDisplay({
                          titel,
@@ -41,10 +42,7 @@ function DataDisplay({
                     <div className={"text-3xl font-bold self-center my-auto"}>
                         {renderOnError ? renderOnError
                             :
-                            <div className={"flex flex-col justify-center items-center font-normal"}>
-                                <Error color={"error"}/>
-                                <div className={"text-[1rem]"}>Ein Fehler is aufgetreten</div>
-                            </div>
+                            <ErrorMessage />
                         }
                     </div>
                 }

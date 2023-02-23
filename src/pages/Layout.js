@@ -1,5 +1,5 @@
 import React from 'react';
-import SidebarMenu from "../components/SidebarMenu/SidebarMenu";
+import SidebarMenu from "../components/SidebarMenu";
 import {Outlet} from "react-router-dom";
 
 function Layout(props) {

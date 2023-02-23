@@ -36,6 +36,11 @@ function useFilter({params, data, mutator}) {
     // parameter that should be used in apply
     const [filterParams, setFilterParams] = useState(params);
     const [query, setQuery] = useState("")
+
+    const handleQueryChange = (e) => {
+        setQuery(e.target.value)
+    }
+
     const handleFilterParamChange = (e) => {
         const { name, checked } = e.target;
         setFilterParams(Object.assign(Object.assign({}, filterParams), { [name]: checked }));
@@ -81,6 +86,6 @@ function useFilter({params, data, mutator}) {
             applyFilter();
         }
     }, [query, data, selectedFilterParams]);
-    return { value, filterParams, handleFilterParamChange, setQuery, query};
+    return { value: (query === "" ? data : value), filterParams, handleFilterParamChange, setQuery, query, handleQueryChange};
 }
 export default useFilter;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "../../../components/WidgetComponent";
 import {Button, TextField} from "@mui/material";
 
 function EditTimeframe({onSubmit, onClose}) {

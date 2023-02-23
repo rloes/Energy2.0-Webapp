@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
-import Dashboard_mfh from "./Dashboard_mfh";
+import Dashboard from "./Dashboard";
 import useAuthStore from "../../stores/useAuthStore";
 
 function DashboardWrapper(props) {
@@ -9,7 +9,7 @@ function DashboardWrapper(props) {
     const consumerId = consumerIdLogin? consumerIdLogin : consumerIdParam
 
     return (
-        <Dashboard_mfh producerId={producerId} consumerId={consumerId} />
+        <Dashboard producerId={producerId} consumerId={consumerId} />
     );
 }
 

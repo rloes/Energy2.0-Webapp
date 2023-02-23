@@ -11,7 +11,7 @@ import {
     IconButton, TextField,
 } from "@mui/material";
 import useQuery from "../../hooks/useQuery";
-import WidgetComponent from "../../components/WidgetComponent/WidgetComponent";
+import WidgetComponent from "../../components/WidgetComponent";
 import {DeleteForever, Edit} from "@mui/icons-material";
 import {Link, useNavigate} from "react-router-dom";
 import useApi from "../../hooks/useApi";

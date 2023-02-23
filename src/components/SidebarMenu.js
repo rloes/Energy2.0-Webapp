@@ -1,14 +1,14 @@
 import React from 'react';
 import {ContactPage, Dashboard, Person, Phone, RequestQuote, Settings, SolarPower} from "@mui/icons-material";
 import {Link} from "react-router-dom";
-import StyledButton from "../StyledButton";
+import StyledButton from "./StyledButton";
 import {useNavigate} from "react-router-dom";
-import useNotificationStore from "../../stores/useNotificationStore";
-import useAuthStore from '../../stores/useAuthStore';
+import useNotificationStore from "../stores/useNotificationStore";
+import useAuthStore from '../stores/useAuthStore';
 import {Avatar} from "@mui/material";
-import Menu from "../Menu";
+import Menu from "./Menu";
 
-const menuStructure = {
+const adminMenuStructure = {
     "Verwaltung": [
         {name: "Dashboard", link: "", icon: <Dashboard/>},
         {name: "Kunden", link: "/kunden", icon: <Person/>},
@@ -21,12 +21,24 @@ const menuStructure = {
     ]
 }
 
+const menuStructure = {
+    "Verwaltung": [
+        {name: "Dashboard", link: "", icon: <Dashboard/>}
+    ],
+    "Support": [
+        {name: "Kontakt", link: "/kontakt", icon: <Phone/>},
+        {name: "Impressum", link: "/impressum", icon: <ContactPage/>}
+    ]
+}
+
+
 function SidebarMenu(props) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
     const username = useAuthStore(state => state.username)
-
+    const isAdmin = useAuthStore(state => state.isAdmin)
+    const structure = isAdmin ? adminMenuStructure : menuStructure
     return (
         <aside
             className={"w-[25vw] px-5 flex flex-col justify-between items-start max-w-[300px] h-screen bg-white z-10"}>
@@ -39,7 +51,7 @@ function SidebarMenu(props) {
             </div>
             <nav className={"flex flex-col justify-between items-start gap-0.5"}>
                 {
-                    Object.entries(menuStructure).map(([key, buttons], index) => (
+                    Object.entries(structure).map(([key, buttons], index) => (
                         <React.Fragment key={key}>
                             <h3 className={"text-[1.5rem] font-semibold"}>
                                 {key}

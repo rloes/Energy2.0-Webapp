@@ -1,23 +1,14 @@
 import React, {useState} from 'react';
-import {
-    CircularProgress,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Button, IconButton, Dialog, TextField
-} from "@mui/material";
+import ListEntityTable from "../../../components/ListEntityTable";
 import useQuery from "../../../hooks/useQuery";
-import WidgetComponent from "../../../components/WidgetComponent/WidgetComponent";
-import {DeleteForever, Edit} from "@mui/icons-material";
-import {Link, useNavigate} from 'react-router-dom'
 import useApi from "../../../hooks/useApi";
-import StyledButton from "../../../components/StyledButton";
+import {Link, useNavigate} from "react-router-dom";
 import useNotificationStore from "../../../stores/useNotificationStore";
-import AddConsumer from "../AddConsumer/AddConsumer";
 import useFilter from "../../../hooks/useFilter";
+import StyledButton from "../../../components/StyledButton";
+import {DeleteForever, Edit} from "@mui/icons-material";
+import {Dialog, IconButton} from "@mui/material";
+import AddConsumer from "../AddConsumer/AddConsumer";
 
 const columnTitles = {
     id: "Kunden-ID",
@@ -26,11 +17,6 @@ const columnTitles = {
     phone: "Telefonnummer"
 }
 
-/**
- *
- * @param producerId - is set when List is rendered under AddProducer
- * @returns {JSX.Element}
- */
 function ListConsumers({producerId, withoutTitle = false}) {
     const tableColumns = !producerId ? ['id', 'name', 'email', 'phone'] : ['name']
     const [openDialog, setOpenDialog] = useState(false)
@@ -44,7 +30,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    const {value: filteredData, setQuery, query} = useFilter({
+    const {value: filteredData, setQuery, query, handleQueryChange} = useFilter({
         params:
             {name: true},
         data: data
@@ -60,99 +46,43 @@ function ListConsumers({producerId, withoutTitle = false}) {
         })
     }
 
-    if (error) {
-        return (
-            <div>error</div>
-        )
-    }
-
-    const consumers = query === "" ? data : filteredData
+    //const consumers = query === "" ? data : filteredData
     return (
-        <div className={withoutTitle ? "max-h-full relative h-full":""}>
-            {!withoutTitle &&
-                <h2 className={"page-title"}>{withoutTitle ? "Enthaltene Wohnungen" : "Kundenverwaltung"}</h2>
-            }
-            <WidgetComponent className={withoutTitle ? "flex flex-col max-h-full h-full":"w-max"}>
-                <div className={"flex"}>
-                    <h3 className={"text-lg font-bold px-4"}>
-                        Kunden
-                    </h3>
-                    {!producerId ?
-                        <Link to={"/kunden/erstellen"}>
-                            <StyledButton>
-                                Kunde hinzufügen
-                            </StyledButton>
-                        </Link>
-                        :
-                        <StyledButton onClick={() => {
-                            setOpenDialog((prev) => (!prev))
-                        }
-                        }>
-                            Kunde hinzufügen
-                        </StyledButton>
-                    }
-                    {!withoutTitle &&
-                        <TextField value={query} onChange={(e) => setQuery(e.target.value)}
-                                   size={"small"} className={"!ml-auto"} placeholder={"Suchen...."}/>
-                    }
-                </div>
-                <TableContainer className={withoutTitle ? "flex overflow-y-auto":""}>
-                    <Table>
-                        <TableHead className={withoutTitle ? "sticky top-0 bg-white z-10":""}>
-                            <TableRow>
-                                {tableColumns.map((column) => (
-                                    <TableCell key={column}>
-                                        <h4 className={"font-semibold"}>
-                                            {columnTitles[column]}
-                                        </h4>
-                                    </TableCell>
-                                ))}
-                                <TableCell>
-                                    <h4 className={"font-bold"}>
-                                        Aktionen
-                                    </h4>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {loading || error ?
-                                <TableRow>
-                                    <TableCell>
-                                        <div>
-                                            <CircularProgress/>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                :
-                                consumers.map((consumer) => (
-                                    <TableRow onClick={() => navigate("/kunden/" + consumer.id)}
-                                              className={"hover:bg-gray-100 cursor-pointer"} key={consumer.id}>
-                                        {tableColumns.map((column) => (
-                                            <TableCell key={column}>
-                                                {consumer[column]}{column === "peakPower" && " kWp"}
-                                            </TableCell>
-                                        ))}
-                                        <TableCell>
-                                            <StyledButton startIcon={<Edit/>} onClick={(e) => {
-                                                e.stopPropagation()
-                                                navigate('/kunden/' + consumer.id + "/bearbeiten")
-                                            }}>
-                                                {!withoutTitle && "Bearbeiten"}
-                                            </StyledButton>
-                                            <IconButton onClick={(e) => {
-                                                e.stopPropagation()
-                                                handleDelete(consumer.id)
-                                            }}>
-                                                <DeleteForever/>
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </WidgetComponent>
+        <>
+            <ListEntityTable data={filteredData} error={error} loading={loading} searchQuery={query}
+                             onQueryChange={handleQueryChange} columns={tableColumns} columnTitles={columnTitles}
+                             pageTitle={"Kundenverwaltung"} title={"Kunden"} withoutTitle={withoutTitle} editMode={producerId}
+                             onRowClick={(consumer) => navigate("/kunden/" + consumer.id)}
+                             AddEntityButton={!producerId ?
+                                 <Link to={"/kunden/erstellen"}>
+                                     <StyledButton>
+                                         Kunde hinzufügen
+                                     </StyledButton>
+                                 </Link>
+                                 :
+                                 <StyledButton onClick={() => {
+                                     setOpenDialog((prev) => (!prev))
+                                 }
+                                 }>
+                                     Kunde hinzufügen
+                                 </StyledButton>}
+                             renderActions={(entity) => (
+                                 <>
+                                     <StyledButton startIcon={<Edit/>} onClick={(e) => {
+                                         e.stopPropagation()
+                                         navigate('/kunden/' + entity.id + "/bearbeiten")
+                                     }}>
+                                         {!withoutTitle && "Bearbeiten"}
+                                     </StyledButton>
+                                     <IconButton onClick={(e) => {
+                                         e.stopPropagation()
+                                         handleDelete(entity.id)
+                                     }}>
+                                         <DeleteForever/>
+                                     </IconButton>
+                                 </>)
+                             }
+            />
             {producerId &&
                 <Dialog open={openDialog}>
                     <AddConsumer producerId={producerId} onClose={() => {
@@ -161,9 +91,8 @@ function ListConsumers({producerId, withoutTitle = false}) {
                     }}/>
                 </Dialog>
             }
-        </div>
-    )
-        ;
+        </>
+    );
 }
 
 export default ListConsumers;

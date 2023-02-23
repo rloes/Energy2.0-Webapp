@@ -40,16 +40,14 @@ function useDashboard(producerId, consumerId) {
     const [url, setUrl] = useState("")
     const {apiRequest} = useApi()
 
-    useEffect(() => {
-        setQueryData(null)
-        setTransformedData({})
-    }, [url])
-
+    /**
+     * output data from current url is stored in data,
+     * refetches each time url changes
+     */
     const {data, loading, error, request, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
         url: "output/?" + (producerId ? "producer_id=" + producerId + "&" : consumerId ? "consumer_id=" + consumerId + "&" : "")
             + url,
-        // url: "/output/?consumer_id=3&" + url,
         requestOnLoad: true
     })
 
@@ -63,6 +61,10 @@ function useDashboard(producerId, consumerId) {
         setSelectedReduction(value)
     }
 
+    /**
+     * stores selected Value of TimeframeSelect
+     * @see TimeframeSelect
+     */
     const [selectedTimeframe, setSelectedTimeframe] = useState(1)
     // either choose predefined timeframe from select or open popup and choose custom
     const [openCustomTimeframe, setOpenCustomTimeframe] = useState(false)
@@ -102,7 +104,6 @@ function useDashboard(producerId, consumerId) {
         if (selectedTimeframe !== 3) {
             setUrl(defaultTimeFrames[selectedTimeframe])
             // if default for selectedTimeframe exist
-            console.log(Object.keys(defaultReductions))
             if (Object.keys(defaultReductions).includes(String(selectedTimeframe))) {
                 setSelectedReduction(defaultReductions[selectedTimeframe])
             }
@@ -112,34 +113,85 @@ function useDashboard(producerId, consumerId) {
         setLoading(true)
     }, [selectedTimeframe])
 
-
-    // if data is set -> transform
-    useEffect(() => {
-        if (data) setTransformedData((prev) => ({
-            ...prev,
-            "lineChartData": lineChartData(),
-            "totalSavedData": totalSavedData(),
-            "totalRevenueData": totalRevenueData(),
-            "consumptionData": consumptionData(),
-            "savedC02Data": savedCO2(),
-            "pieChartData": pieChartData(),
-            "powerMixData": powerMixData()
-        }))
-    }, [data])
-
+    const [detailData, setDetailData] = useState(null)
     useEffect(() => {
         getDetails()
     }, [consumerId, producerId])
-
-
-    const [aggregateConsumption, setAggregateConsumption] = useState(false)
     /**
-     * If aggregate changes -> recalculate lineChartData
+     * get details about producer or consumer depending on which id set
      */
+    const getDetails = () => {
+        let url = false;
+        if (consumerId) {
+            url = "/consumers/" + consumerId + "/";
+        } else if (producerId) {
+            url = "/producers/" + producerId + "/";
+        }
+
+        if (url) {
+            apiRequest({
+                method: "GET",
+                url: url
+            }).then((res) => {
+                setDetailData(res.data)
+            }).catch(() => setDetailData('error'))
+        }
+    }
+
+    // is true when data is fetched but not transformed yet
+    const [transforming, setTransforming] = useState(false)
+    // if transformedData is set
     useEffect(() => {
-        setTransformedData((prev) => ({
-            ...prev, 'lineChartData': lineChartData()
-        }))
+        // as all data is set at once, it doesnt matter which transformedData key is checked here
+        // if data is transformed -> set to false
+        if(transformedData.lineChartData) setTransforming(false)
+    }, [transformedData])
+
+    // Placed in useEffect hook below where the transformedData is set,setTransforming would run at the same time as
+    // setTransformedData, making it useless.
+    // Therefore setTranforming is set if loading is true, but has to be set false, if error loading is set false and
+    // error occurs, because in that case the useEffect above wont run
+    useEffect(() => {
+        if(loading) {
+            setTransforming(true)
+        }else{
+            if(error){
+                setTransforming(false)
+            }
+        }
+
+    }, [loading])
+    // if data is set -> transform
+    useEffect(() => {
+        if (data) {
+            setTransformedData((prev) => ({
+                ...prev,
+                "lineChartData": lineChartData(),
+                "totalSavedData": totalSavedData(),
+                "totalRevenueData": totalRevenueData(),
+                "consumptionData": consumptionData(),
+                "savedC02Data": savedCO2(),
+                "pieChartData": pieChartData(),
+                "powerMixData": powerMixData()
+            }))
+        }
+    }, [data])
+
+    // if new data is fetched, delete old
+    useEffect(() => {
+        setQueryData(null)
+        setTransformedData({})
+    }, [url])
+
+    // if you view data of one producer you can select whether consumptions should be plotted aggregated as just one line
+    const [aggregateConsumption, setAggregateConsumption] = useState(false)
+    // If aggregate changes -> recalculate lineChartData
+    useEffect(() => {
+        if(!loading) {
+            setTransformedData((prev) => ({
+                ...prev, 'lineChartData': lineChartData()
+            }))
+        }
     }, [aggregateConsumption, selectedReduction])
     /**
      * Transforms data from backend /output/ to array that is usable by @nivo's LineChart
@@ -257,27 +309,6 @@ function useDashboard(producerId, consumerId) {
                 "y": sum + Number(point[valueKey])
             })
             add(-sum)
-        }
-    }
-
-    const getDetails = () => {
-        let url = false;
-        if (consumerId) {
-            url = "/consumers/" + consumerId + "/";
-        } else if (producerId) {
-            url = "/producers/" + producerId + "/";
-        }
-
-        if (url) {
-            apiRequest({
-                method: "GET",
-                url: url
-            }).then((res) => {
-                console.log(res)
-                setTransformedData((prev) => ({
-                    ...prev, detailData: res.data
-                }))
-            })
         }
     }
 
@@ -416,7 +447,7 @@ function useDashboard(producerId, consumerId) {
         transformedData,
         selectedTimeframe,
         handleSelectChange,
-        loading,
+        loading: (loading || transforming),
         data,
         aggregateConsumption,
         setAggregateConsumption,
@@ -425,7 +456,8 @@ function useDashboard(producerId, consumerId) {
         setOpenCustomTimeframe,
         handleSubmitCustomTimeframe,
         handleReductionChange,
-        selectedReduction
+        selectedReduction,
+        detailData
     }
 }
 
