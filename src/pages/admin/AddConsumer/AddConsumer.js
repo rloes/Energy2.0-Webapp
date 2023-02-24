@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
     Autocomplete,
-    Button,
-    InputAdornment,
     TextField as MuiTextField,
 } from "@mui/material";
 import useForm from "../../../hooks/useForm";
@@ -12,6 +10,7 @@ import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 import {roundToN} from "../../../helpers";
+import _ from "lodash"
 
 const initalValues = {
     name: "test",
@@ -34,15 +33,18 @@ const TextField = (props) => {
 
 const formatApiData = (data, method) => {
     // before sending it, array of selected array objects have to be converted to array of urls
-    const rates = data.rates.map(rate => rate.url)
-    data.rates = rates
+    // we have to work on clonedData, otherwise values.rates will also change
+    const clonedData = _.cloneDeep(data)
+    const rates = clonedData.rates.map(rate => rate.url)
+    clonedData.rates = rates
     if (method === "PATCH") {
         // User, Sensor and Producer can only be set on create
-        delete data['user']
-        delete data['sensor']
-        delete data['producer']
+        delete clonedData['user']
+        delete clonedData['sensor']
+        delete clonedData['producer']
     }
-    return data
+    console.log(clonedData)
+    return clonedData
 };
 
 /**
@@ -224,7 +226,6 @@ function AddConsumer({producerId, onClose}) {
                             roundToN(option.price, 0) + "ct/" + roundToN(option.reducedPrice, 0) + "ct"
                         }
                         filterSelectedOptions
-                        disableCloseOnSelect
                         isOptionEqualToValue={(option, value) => option.id === value.id}
                         onChange={handleSelectChange}
                         renderInput={(params) => (
