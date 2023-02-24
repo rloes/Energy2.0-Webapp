@@ -59,7 +59,8 @@ const Dashboard = ({producerId, consumerId}) => {
                      padding: "5px"
                  }}>
 
-                <Header title={"Dashboard" + (producerId ? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "")}/>
+                <Header title={"Dashboard" + (producerId ? " - Mehrfamillienhaus " : consumerId ? " - Wohnung" : "") +
+                (detailData?.name? " - " + detailData.name : "")}/>
                 <div className={"flex items-center"}>
                     <TimeframeSelect selectedTimeframe={selectedTimeframe} onChange={handleSelectChange}/>
                     <IconButton onClick={() => setOpenCustomTimeframe(true)}>
@@ -173,7 +174,7 @@ const Dashboard = ({producerId, consumerId}) => {
 
                 <div className={"col-span-8 row-span-2"}>
                     <DataDisplay titel={producerId? "Anlagedetails": consumerId? "Kundendetails" : "Details"}
-                                 value={(producerId || consumerId) ? detailData : !loading}
+                                 value={(producerId || consumerId) ? detailData : true}
                                  loading={detailData === null && (producerId || consumerId)}
                                  icon={<Timeline/>}
                                  render={
