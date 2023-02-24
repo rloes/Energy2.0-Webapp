@@ -1,7 +1,6 @@
 import React from 'react';
 import WidgetComponent from "../../../components/WidgetComponent";
-import {CircularProgress, Skeleton} from "@mui/material";
-import {Error} from "@mui/icons-material";
+import {CircularProgress} from "@mui/material";
 import ErrorMessage from "../../../components/ErrorMessage";
 
 function DataDisplay({
@@ -21,13 +20,13 @@ function DataDisplay({
                     {icon}
                 </div>
                 <h3 className={"font-bold self-start"}>{titel}</h3>
-                {value || loading ?
+                {value || loading || value === 0?
                     render === false ?
                         <>
                             <div className={"text-3xl font-bold self-center my-auto"}>
-                                {value && !loading ? value + (unit && " " + unit) : <CircularProgress/>}
+                                {(value || value === 0) && !loading ? value + (unit && " " + unit) : <CircularProgress/>}
                             </div>
-                            {(subtitle && !loading && value) &&
+                            {(subtitle && !loading && (value || value === 0)) &&
                                 <div className={"self-center"}>
                                     {subtitle}
                                 </div>
