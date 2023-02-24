@@ -14,24 +14,13 @@ const LineTooltip = (props) => {
 }
 /**
  * For smaller datasets a svg linechart can be used which is interactiv. For larger datasets a canvas is rendered
- * @param lineProps
+ * @param props
  * @returns {JSX.Element}
  */
 const Line = (props) => {
     return(
         props.selectedReduction !== false? <ResponsiveLine {...props}/> : <ResponsiveLineCanvas {...props} />
     )}
-
-const tickValues = {
-    no: "every 2 hours",
-    day: "every 2 days",
-    hour: "every 12 hours",
-}
-const tickFormats = {
-    no: "%H",
-    day: "%d.%m",
-    hour: "%d.%m %H:%M",
-}
 
 function LineChart({selectedReduction, data}) {
     const [tickValue, setTickValue] = useState("every 2 days")
@@ -61,7 +50,7 @@ function LineChart({selectedReduction, data}) {
 
     useEffect(() => {
         // each time, data changes -> run calculateTick
-        calculateTick()
+        if(data) calculateTick()
     }, [data])
 
     return (
