@@ -1,5 +1,5 @@
 import {ResponsivePie} from '@nivo/pie'
-import {formatDateTime, roundToN} from '../../../helpers';
+import {roundToN} from '../../../helpers';
 import {Paper} from "@mui/material";
 
 const PieTooltip = (props) => {
@@ -18,13 +18,18 @@ const CenteredMetric = ({dataWithArc, centerX, centerY}) => {
         powerValues.push(datum.value)
     })
     let percentage = 0
-    if (dataWithArc[0].id !== "Netz") {
-        percentage = roundToN(powerValues[0] / (powerValues[0] + powerValues[1]) * 100, 2);
-    } else {
-        percentage = roundToN(powerValues[1] / (powerValues[0] + powerValues[1]) * 100, 2);
+    if(dataWithArc[0]){
+        if (dataWithArc[0].id !== "Netz") {
+            percentage = roundToN(powerValues[0] / (powerValues[0] + powerValues[1]) * 100, 2);
+        } else {
+            percentage = roundToN(powerValues[1] / (powerValues[0] + powerValues[1]) * 100, 2);
+        }
+    }else{
+        console.log(dataWithArc)
     }
 
     return (
+        percentage > 0 &&
         <text
             x={centerX}
             y={centerY}
@@ -96,56 +101,6 @@ function PowerMix(props) {
                     rotation: -45,
                     lineWidth: 6,
                     spacing: 10
-                }
-            ]}
-            fill={[
-                {
-                    match: {
-                        id: 'ruby'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'c'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'go'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'python'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'scala'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'lisp'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'elixir'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'javascript'
-                    },
-                    id: 'lines'
                 }
             ]}
             legends={[
