@@ -28,11 +28,11 @@ function ListProducers({withoutTitle}) {
 
     const handleDelete = (id) => {
         apiRequest({
-            url: 'producers/' + id + "/", method: "DELETE"
+            url: 'producers/' + id + "/", method: "DELETE", throwError:true
         }).then(() => {
             request().then(() => setNotification({message: "Produzent " + id + " gelöscht", severity: "warning"}))
 
-        })
+        }).catch((e) => setNotification({message: e.message, severity: "error"}))
     }
     //const producers = query === "" ? data : filteredData
     return (
