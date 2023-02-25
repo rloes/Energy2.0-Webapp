@@ -72,7 +72,7 @@ function ListEntityTable({
                                 <TableRow>
                                     <TableCell colSpan={(Object.keys(columnTitles).length + 1)}>
                                         {loading ?
-                                            <div>
+                                            <div className={"flex justify-center items-center"}>
                                                 <CircularProgress/>
                                             </div>
                                             :

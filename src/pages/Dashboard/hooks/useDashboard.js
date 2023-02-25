@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import useQuery from "../../../hooks/useQuery";
-import {Dialog, FormControl, InputLabel, MenuItem, Select} from "@mui/material";
+import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
 import useApi from "../../../hooks/useApi";
-import EditTimeframe from "../components/EditTimeframe";
 
 const TimeframeSelect = ({selectedTimeframe, onChange}) => {
     return (
@@ -44,11 +43,18 @@ function useDashboard(producerId, consumerId) {
      * output data from current url is stored in data,
      * refetches each time url changes
      */
-    const {data, loading, error, request, setLoading, cancel, setData: setQueryData} = useQuery({
+    const {data, loading, error, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
-        url: "output/?" + (producerId ? "producer_id=" + producerId + "&" : consumerId ? "consumer_id=" + consumerId + "&" : "")
-            + url,
-        requestOnLoad: true
+        url: "output/?" + (producerId ? "producer_id=" + producerId + "&" :
+                consumerId ? "consumer_id=" + consumerId + "&" : "") + url,
+        requestOnLoad: true,
+        onResponse: (response) => {
+            // if status is 204 -> no content was found, which isnt directly an error, but on the dashboard it should
+            // be displayed as an 404 Not found, otherwise loading state would never stop
+            if (response.status === 204) {
+                throw 404
+            }
+        }
     })
 
     /**
@@ -204,7 +210,7 @@ function useDashboard(producerId, consumerId) {
         }
         // if data.producers exists -> show multiple production lines, else only one producer with data.productions
         const producers = data.producers ? Object.values(data.producers) : [{'productions': data.productions}]
-        if (producers[0].productions) { // if no productions exists -> smth worng dont loop
+        if (producers[0]?.productions) { // if no productions exists -> smth worng dont loop
             for (let j = 0; j < producers.length; j++) {
                 const producer = producers[j]
                 // this object will represent one line in the chart
@@ -342,7 +348,6 @@ function useDashboard(producerId, consumerId) {
                 totalRevenue = data.consumersTotalRevenue
             } else if (data.totalPrice) {
                 totalRevenue = data.totalPrice
-                let totalGridPrice = data.totalGridPrice
             }
             totalRevenue = totalRevenue / 100
         }

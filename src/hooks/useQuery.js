@@ -12,6 +12,7 @@ function useQuery(options) {
         requestData = {},
         requestOnLoad = false,
         formatData,
+        onResponse
     } = options
     const [data, setData] = useState(null)
     const [error, setError] = useState("")
@@ -34,6 +35,7 @@ function useQuery(options) {
             const response = await apiRequest({
                 ...options, signal: controllerRef.signal
             })
+            if(onResponse) onResponse(response)
             // latest url is stored in useRef.current -> data is only set if it comes from latest request
             if (BASE_URL+requestURL.current === response.request.responseURL) {
                 setData(response.data)

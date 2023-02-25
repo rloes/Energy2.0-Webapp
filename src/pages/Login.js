@@ -1,15 +1,14 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {Button, TextField} from "@mui/material";
-import useForm from "./hooks/useForm";
-import useApi from "./hooks/useApi";
-import WidgetComponent from "./components/WidgetComponent";
-import StyledButton from "./components/StyledButton";
-import useAuthStore from "./stores/useAuthStore";
+import useForm from "../hooks/useForm";
+import useApi from "../hooks/useApi";
+import WidgetComponent from "../components/WidgetComponent";
+import useAuthStore from "../stores/useAuthStore";
 import {useNavigate} from "react-router-dom";
-import useNotificationStore from "./stores/useNotificationStore";
+import useNotificationStore from "../stores/useNotificationStore";
 
 
-function Login(props) {
+function Login() {
 
     const {values, handleChange} = useForm({
         username: "",

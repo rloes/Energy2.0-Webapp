@@ -1,15 +1,14 @@
 import './App.css';
-import Login from "./Login";
+import Login from "./pages/Login";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Layout from "./pages/Layout";
 import AddProducer from "./pages/admin/AddProducer/AddProducer";
 import ListProducers from "./pages/admin/ListProducers/ListProducers";
 import AddRate from './pages/admin/AddRate/AddRate';
-import {Alert, Backdrop, CircularProgress, Snackbar} from "@mui/material";
+import {Backdrop, CircularProgress} from "@mui/material";
 import NotificationBar from "./components/NotificationBar";
 import AddConsumer from "./pages/admin/AddConsumer/AddConsumer";
 import ListRates from "./pages/admin/ListRates/ListRates";
-import Dashboard from "./pages/Dashboard/Dashboard"
 import ListConsumers from "./pages/admin/ListConsumers/ListConsumers";
 import DashboardWrapper from "./pages/Dashboard/DashboardWrapper";
 import {useEffect, useState} from "react";
@@ -35,7 +34,7 @@ function App() {
             const username = localStorage.getItem('username');
             if (username) setAuthStore('username', username)
             const isAdmin = localStorage.getItem('isAdmin');
-            if (isAdmin) setAuthStore('isAdmin', isAdmin)
+            if (isAdmin) setAuthStore('isAdmin',Number(isAdmin))
             const consumerId = localStorage.getItem('consumerID');
             if (consumerId) {
                 setAuthStore('consumerId', consumerId)

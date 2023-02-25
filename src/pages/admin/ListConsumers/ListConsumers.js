@@ -84,7 +84,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
                              }
             />
             {producerId &&
-                <Dialog open={openDialog}>
+                <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                     <AddConsumer producerId={producerId} onClose={() => {
                         setOpenDialog(false)
                         request()

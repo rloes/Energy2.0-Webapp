@@ -8,9 +8,8 @@ import useNotificationStore from "../stores/useNotificationStore";
 
 export const BASE_URL = "http://127.0.0.1:8000/"
 
-function useApi(props) {
+function useApi() {
     // Authorization Toke received and stored on login
-    const setAuthStore = useAuthStore(state => state.setState)
     const token = useAuthStore(state => state.token)
     const navigate = useNavigate()
     const setNotification = useNotificationStore(state => state.setNotification)
@@ -26,9 +25,10 @@ function useApi(props) {
                                   signal = undefined
                               }) {
         try {
+            let data = requestData
             // if a function is passed via the formatData param, this function is called first
             if (formatData) {
-                formatData(requestData, method)
+                data = formatData(requestData, method)
             }
             // api request
             const response = await axios({
@@ -39,7 +39,7 @@ function useApi(props) {
                     // only add token if one exist and noAuthorization is not set to true
                     ...(token && !noAuthorization) && {"Authorization": "Token " + token}
                 },
-                data: snakeize(requestData), //api uses snake_case
+                data: snakeize(data), //api uses snake_case
                 signal: signal
             })
             response.data = camelize(response.data) //api sends snake_case but camelCase needed
