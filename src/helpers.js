@@ -1,3 +1,5 @@
+import {data} from "autoprefixer";
+
 export function roundToN(num, n){
     num = Number(num)
     return Math.round((num + Number.EPSILON) * Math.pow(10,n)) / Math.pow(10,n)
@@ -8,6 +10,11 @@ export function getISODateWithDelta(timedelta){
     date.setDate(date.getDate() + (timedelta))
     date.setHours(date.getHours()+1)
     return date.toISOString().split('T')[0]
+}
+
+export function getISODatetime(){
+    const d = new Date()
+    return d.toISOString().split(".")[0]
 }
 
 export function getMonday() {

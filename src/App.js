@@ -34,7 +34,7 @@ function App() {
             const username = localStorage.getItem('username');
             if (username) setAuthStore('username', username)
             const isAdmin = localStorage.getItem('isAdmin');
-            if (isAdmin) setAuthStore('isAdmin', isAdmin)
+            if (isAdmin) setAuthStore('isAdmin',Number(isAdmin))
             const consumerId = localStorage.getItem('consumerID');
             if (consumerId) {
                 setAuthStore('consumerId', consumerId)

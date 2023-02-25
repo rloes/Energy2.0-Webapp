@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {Button, InputAdornment, TextField as MuiTextField} from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import {Button, Dialog, InputAdornment, TextField as MuiTextField} from "@mui/material";
 import useForm from "../../../hooks/useForm";
 import WidgetComponent from "../../../components/WidgetComponent";
 import {useNavigate, useParams} from "react-router-dom";
@@ -7,6 +7,7 @@ import useApi from "../../../hooks/useApi";
 import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 import ListConsumers from "../ListConsumers/ListConsumers";
+import InitializeProducer from "./components/InitializeProducer";
 
 const initalValues = {
     name: "Testanlage",
@@ -44,7 +45,27 @@ function AddProducer(props) {
     const {apiRequest} = useApi()
     const setNotification = useNotificationStore(state => state.setNotification)
 
-    const handleSave = (continueEditing=false) => {
+    const [initializable, setInitializable] = useState(false)
+    const [openInit, setOpenInit] = useState(false)
+
+    useEffect(
+        /**
+         * Check whether a producer can be initialized. This is the case, if he has no data(production, consumption) yet,
+         * therefore send an output request and if the answer is 204(No Content) -> allow initialization
+         */
+        function checkIfInitializable() {
+            if (producerId || producerId == 0) {
+                apiRequest({
+                    method: "get", url: "/output/?producer_id=" + producerId
+                }).then((res) => {
+                    if (res.status === 204) {
+                        setInitializable(true)
+                    }
+                })
+            }
+        }, [producerId])
+
+    const handleSave = (continueEditing = false) => {
         const method = producerId ? "PUT" : "POST"
         const url = producerId ? "producers/" + producerId + "/" : "producers/"
 
@@ -52,10 +73,10 @@ function AddProducer(props) {
             url: url, method: method, requestData: values, formatData: formatApiData
         }).then((response) => {
             if (response.status === 201 || response.status === 200) {
-                if(!continueEditing) {
+                if (!continueEditing) {
                     navigate('/solaranlagen')
-                }else{
-                    navigate("/solaranlagen/"+response.data.id+"/bearbeiten")
+                } else {
+                    navigate("/solaranlagen/" + response.data.id + "/bearbeiten")
                 }
                 setNotification({
                     message: "Solaranlage wurde " + producerId ? "gespeichert" : "angelegt",
@@ -114,6 +135,11 @@ function AddProducer(props) {
                     <StyledButton onClick={handleSave}>
                         {producerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
+                    {initializable &&
+                        <StyledButton onClick={() => setOpenInit(true)}>
+                            Initialisieren
+                        </StyledButton>
+                    }
                     <StyledButton onClick={() => navigate("/solaranlagen")}>
                         Abbrechen
                     </StyledButton>
@@ -122,6 +148,10 @@ function AddProducer(props) {
             {producerId &&
                 <ListConsumers producerId={producerId}/>
             }
+            <Dialog open={openInit} onClose={() => setOpenInit(false)}>
+                <InitializeProducer producerId={producerId} onClose={() => setOpenInit(false)}
+                                    afterInitialize={() => setInitializable(false)}/>
+            </Dialog>
         </div>
     );
 }
