@@ -45,9 +45,16 @@ function useDashboard(producerId, consumerId) {
      */
     const {data, loading, error, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
-        url: "output/?" + (producerId ? "producer_id=" + producerId + "&" : consumerId ? "consumer_id=" + consumerId + "&" : "")
-            + url,
-        requestOnLoad: true
+        url: "output/?" + (producerId ? "producer_id=" + producerId + "&" :
+                consumerId ? "consumer_id=" + consumerId + "&" : "") + url,
+        requestOnLoad: true,
+        onResponse: (response) => {
+            // if status is 204 -> no content was found, which isnt directly an error, but on the dashboard it should
+            // be displayed as an 404 Not found, otherwise loading state would never stop
+            if (response.status === 204) {
+                throw 404
+            }
+        }
     })
 
     /**

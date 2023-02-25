@@ -132,7 +132,7 @@ function AddProducer(props) {
                             Anlegen und Kunden hinzufügen
                         </StyledButton>
                     }
-                    <StyledButton onClick={handleSave}>
+                    <StyledButton onClick={() => handleSave(false)}>
                         {producerId ? "Speichern" : "Anlegen"}
                     </StyledButton>
                     {initializable &&
