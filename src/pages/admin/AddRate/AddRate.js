@@ -10,9 +10,9 @@ import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 
 const initalValues = {
-    "name": "Tarif 1",
-    "price": 10.50,
-    "reducedPrice": 1,
+    "name": "",
+    "price": 0,
+    "reducedPrice": 0,
     "startTime": "",
     "endTime": "",
     "startDate": "",

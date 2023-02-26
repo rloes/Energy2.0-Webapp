@@ -13,16 +13,16 @@ import {roundToN} from "../../../helpers";
 import _ from "lodash"
 
 const initalValues = {
-    name: "test",
+    name: "",
     user: {
-        username: "test78238",
-        password: "testpw123",
+        username: "",
+        password: "",
     },
-    email: "t@t.de",
-    phone: "123",
+    email: "",
+    phone: "",
     producer: "",
     sensor: {
-        deviceId: "92983928",
+        deviceId: "",
         type: "CM",
     },
     rates: [],

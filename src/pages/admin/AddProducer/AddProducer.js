@@ -8,21 +8,23 @@ import StyledButton from "../../../components/StyledButton";
 import useNotificationStore from "../../../stores/useNotificationStore";
 import ListConsumers from "../ListConsumers/ListConsumers";
 import InitializeProducer from "./components/InitializeProducer";
+import _ from "lodash"
+
 
 const initalValues = {
-    name: "Testanlage",
-    street: "Hafenplatz 1",
-    zipCode: "48155",
-    city: "Münster",
-    peakPower: "5",
+    name: "",
+    street: "",
+    zipCode: "",
+    city: "",
+    peakPower: "",
 
     productionSensor: {
-        deviceId: "15235",
+        deviceId: "",
         type: "PM"
     },
 
     gridSensor: {
-        deviceId: "16540",
+        deviceId: "",
         type: "GM"
     }
 }
@@ -32,9 +34,15 @@ const TextField = (props) => {
     )
 }
 
-const formatApiData = (data) => {
-    data.peakPower = Number(data.peakPower)
-    return data
+const formatApiData = (data, method) => {
+    const clonedData = _.cloneDeep(data)
+    clonedData.peakPower = Number(data.peakPower)
+    if (method === "PATCH") {
+        // User, Sensor and Producer can only be set on create
+        delete clonedData['productionSensor']
+        delete clonedData['gridSensor']
+    }
+    return clonedData
 }
 
 function AddProducer(props) {
@@ -66,7 +74,7 @@ function AddProducer(props) {
         }, [producerId])
 
     const handleSave = (continueEditing = false) => {
-        const method = producerId ? "PUT" : "POST"
+        const method = producerId ? "PATCH" : "POST"
         const url = producerId ? "producers/" + producerId + "/" : "producers/"
 
         apiRequest({
