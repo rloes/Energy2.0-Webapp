@@ -11,13 +11,16 @@ const producerTitels = {
     name: "Bezeichnung",
     street: "Adresse",
     peakPower: "Installierte Leistung",
-    lastProductionReading: "Letzte Daten"
+    lastProductionReading: "Letzte Daten",
+    productionMeterReading: "Produktionszählerstand",
+    gridMeterReading: "Einspeisezählerstand"
 }
 const consumerTitels = {
     name: "Name",
     email: "Email",
     phone: "Telefonnummer",
-    lastReading: "Letzte Daten"
+    lastReading: "Letzte Daten",
+    meterReading: "Zählerstand"
 }
 
 
@@ -51,10 +54,11 @@ function DetailDisplay({data, producerId, consumerId}) {
                                         </Grid>
                                     )
                                 }
-                                if (titelKey === "peakPower") {
+                                if (titelKey === "peakPower" || titelKey.toLowerCase().includes("meterreading")) {
                                     return (
                                         <Grid xs={4}>
-                                            <Item><b>Installierte Leistung </b> < br/> {data.peakPower} kWh
+                                            <Item><b>{titels[titelKey]} </b>
+                                                < br/> {data[titelKey] + (titelKey === "peakPower" ? " kWp" : " kWh")}
                                             </Item>
                                         </Grid>
                                     )

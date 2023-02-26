@@ -148,7 +148,7 @@ function useDashboard(producerId, consumerId) {
     const [transforming, setTransforming] = useState(false)
     // if transformedData is set
     useEffect(() => {
-        // as all data is set at once, it doesnt matter which transformedData key is checked here
+        // as all data is set at once, it doesnt matter which transformedData value is checked here
         // if data is transformed -> set to false
         if(transformedData.lineChartData) setTransforming(false)
     }, [transformedData])
@@ -156,7 +156,7 @@ function useDashboard(producerId, consumerId) {
     // Placed in useEffect hook below where the transformedData is set,setTransforming would run at the same time as
     // setTransformedData, making it useless.
     // Therefore setTranforming is set if loading is true, but has to be set false, if error loading is set false and
-    // error occurs, because in that case the useEffect above wont run
+    // error occurs, because in that case the useEffect above won't run
     useEffect(() => {
         if(loading) {
             setTransforming(true)
@@ -170,6 +170,18 @@ function useDashboard(producerId, consumerId) {
     // if data is set -> transform
     useEffect(() => {
         if (data) {
+            if(producerId && data.productions && data.productions.length > 0){
+                setDetailData((prev) => ({...prev,
+                    gridMeterReading: roundToN(data.productions[data.productions.length - 1].gridMeterReading, 4),
+                    productionMeterReading:
+                        roundToN(data.productions[data.productions.length - 1].productionMeterReading, 4)
+                }))
+            }
+            else if(consumerId && data.consumptions && data.consumptions.length > 0){
+                setDetailData((prev) => ({...prev,
+                    meterReading: roundToN(data.consumptions[data.consumptions.length - 1].meterReading, 4),
+                }))
+            }
             setTransformedData((prev) => ({
                 ...prev,
                 "lineChartData": lineChartData(),
