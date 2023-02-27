@@ -3,6 +3,7 @@ import useQuery from "../../../hooks/useQuery";
 import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 import {getMonday, getISODateWithDelta, roundToN} from "../../../helpers";
 import useApi from "../../../hooks/useApi";
+import {flushSync} from "react-dom";
 
 const TimeframeSelect = ({selectedTimeframe, onChange}) => {
     return (
@@ -46,7 +47,7 @@ function useDashboard(producerId, consumerId) {
     const {data, loading, error, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
         url: "output/?" + (producerId ? "producer_id=" + producerId + "&" :
-                consumerId ? "consumer_id=" + consumerId + "&" : "") + url,
+            consumerId ? "consumer_id=" + consumerId + "&" : "") + url,
         requestOnLoad: true,
         onResponse: (response) => {
             // if status is 204 -> no content was found, which isnt directly an error, but on the dashboard it should
@@ -71,7 +72,7 @@ function useDashboard(producerId, consumerId) {
      * stores selected Value of TimeframeSelect
      * @see TimeframeSelect
      */
-    const [selectedTimeframe, setSelectedTimeframe] = useState(1)
+    const [selectedTimeframe, setSelectedTimeframe] = useState(2)
     // either choose predefined timeframe from select or open popup and choose custom
     const [openCustomTimeframe, setOpenCustomTimeframe] = useState(false)
     const handleSelectChange = (e) => {
@@ -150,7 +151,7 @@ function useDashboard(producerId, consumerId) {
     useEffect(() => {
         // as all data is set at once, it doesnt matter which transformedData value is checked here
         // if data is transformed -> set to false
-        if(transformedData.lineChartData) setTransforming(false)
+        if (transformedData.lineChartData) setTransforming(false)
     }, [transformedData])
 
     // Placed in useEffect hook below where the transformedData is set,setTransforming would run at the same time as
@@ -158,27 +159,27 @@ function useDashboard(producerId, consumerId) {
     // Therefore setTranforming is set if loading is true, but has to be set false, if error loading is set false and
     // error occurs, because in that case the useEffect above won't run
     useEffect(() => {
-        if(loading) {
+        if (loading) {
             setTransforming(true)
-        }else{
-            if(error){
-                setTransforming(false)
-            }
+        } else if (error) {
+            setTransforming(false)
         }
 
-    }, [loading])
+
+    }, [loading, error])
     // if data is set -> transform
     useEffect(() => {
         if (data) {
-            if(producerId && data.productions && data.productions.length > 0){
-                setDetailData((prev) => ({...prev,
+            if (producerId && data.productions && data.productions.length > 0) {
+                setDetailData((prev) => ({
+                    ...prev,
                     gridMeterReading: roundToN(data.productions[data.productions.length - 1].gridMeterReading, 4),
                     productionMeterReading:
                         roundToN(data.productions[data.productions.length - 1].productionMeterReading, 4)
                 }))
-            }
-            else if(consumerId && data.consumptions && data.consumptions.length > 0){
-                setDetailData((prev) => ({...prev,
+            } else if (consumerId && data.consumptions && data.consumptions.length > 0) {
+                setDetailData((prev) => ({
+                    ...prev,
                     meterReading: roundToN(data.consumptions[data.consumptions.length - 1].meterReading, 4),
                 }))
             }
@@ -205,7 +206,7 @@ function useDashboard(producerId, consumerId) {
     const [aggregateConsumption, setAggregateConsumption] = useState(false)
     // If aggregate changes -> recalculate lineChartData
     useEffect(() => {
-        if(!loading) {
+        if (!loading) {
             setTransformedData((prev) => ({
                 ...prev, 'lineChartData': lineChartData()
             }))
