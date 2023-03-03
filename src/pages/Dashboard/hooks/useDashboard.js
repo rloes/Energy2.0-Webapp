@@ -37,6 +37,7 @@ function useDashboard(producerId, consumerId) {
 
     // transformed data for charts ares stored here after transformation
     const [transformedData, setTransformedData] = useState({})
+    // part of the url, that defines start_date and end_date
     const [url, setUrl] = useState("")
     const {apiRequest} = useApi()
 
@@ -46,6 +47,7 @@ function useDashboard(producerId, consumerId) {
      */
     const {data, loading, error, setLoading, cancel, setData: setQueryData} = useQuery({
         method: "GET",
+        // if producerId or consumerId is set -> add to url
         url: "output/?" + (producerId ? "producer_id=" + producerId + "&" :
             consumerId ? "consumer_id=" + consumerId + "&" : "") + url,
         requestOnLoad: true,
@@ -170,6 +172,7 @@ function useDashboard(producerId, consumerId) {
     // if data is set -> transform
     useEffect(() => {
         if (data) {
+            // in producer-view: show meter_readings for production and consumption meter
             if (producerId && data.productions && data.productions.length > 0) {
                 setDetailData((prev) => ({
                     ...prev,
@@ -177,7 +180,9 @@ function useDashboard(producerId, consumerId) {
                     productionMeterReading:
                         roundToN(data.productions[data.productions.length - 1].productionMeterReading, 4)
                 }))
-            } else if (consumerId && data.consumptions && data.consumptions.length > 0) {
+            }
+            // in consumer-view: show consumption meter reading
+            else if (consumerId && data.consumptions && data.consumptions.length > 0) {
                 setDetailData((prev) => ({
                     ...prev,
                     meterReading: roundToN(data.consumptions[data.consumptions.length - 1].meterReading, 4),

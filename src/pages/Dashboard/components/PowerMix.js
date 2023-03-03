@@ -24,8 +24,6 @@ const CenteredMetric = ({dataWithArc, centerX, centerY}) => {
         } else {
             percentage = roundToN(powerValues[1] / (powerValues[0] + powerValues[1]) * 100, 2);
         }
-    }else{
-        console.log(dataWithArc)
     }
 
     return (

@@ -130,6 +130,8 @@ const Dashboard = ({producerId, consumerId}) => {
                                      <>
                                          {(producerId || selectedTimeframe === 3) &&
                                              <div className={"absolute top-0 flex !flex-row"}>
+                                                 {/*On single producer view, show checkbox whether consumptions of all
+                                                 producers consumers should be aggregated*/}
                                                  {producerId &&
                                                      <FormGroup>
                                                          <FormControlLabel control={
@@ -139,6 +141,8 @@ const Dashboard = ({producerId, consumerId}) => {
                                                          } label={"Verbräuche summieren"} className={""}
                                                          />
                                                      </FormGroup>}
+                                                 {/*If a custom timeframe is selected show controls over which timespan
+                                                    datapoints should be reduced to a single point*/}
                                                  {selectedTimeframe === 3 &&
                                                      <FormControl className={"w-[175px]"} size={"small"}>
                                                          <InputLabel id="reduction-select-label">Zeit</InputLabel>

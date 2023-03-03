@@ -32,7 +32,7 @@ function ListConsumers({producerId, withoutTitle = false}) {
 
     const {value: filteredData, query, handleQueryChange} = useFilter({
         params:
-            {name: true},
+            {name: true, email: true, phone: true, id: true},
         data: data
     })
 
@@ -46,7 +46,6 @@ function ListConsumers({producerId, withoutTitle = false}) {
         })
     }
 
-    //const consumers = query === "" ? data : filteredData
     return (
         <>
             <ListEntityTable data={filteredData} error={error} loading={loading} searchQuery={query}

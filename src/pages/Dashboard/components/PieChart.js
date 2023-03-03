@@ -3,7 +3,6 @@ import {Pie, ResponsivePie} from '@nivo/pie'
 
 function PieChart(props) {
     const {data} = props
-    console.log("hallo", data)
     return (
         <div className={"max-h-[500px] h-full h-[200px] relative max-w-[500px] w-full w-[500px]"}>
             <ResponsivePie         data={data}

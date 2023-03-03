@@ -64,7 +64,7 @@ function AddProducer(props) {
         function checkIfInitializable() {
             if (producerId || producerId == 0) {
                 apiRequest({
-                    method: "get", url: "/output/?producer_id=" + producerId
+                    method: "get", url: "/output/?start_date=1950-01-01&producer_id=" + producerId
                 }).then((res) => {
                     if (res.status === 204) {
                         setInitializable(true)
@@ -102,7 +102,7 @@ function AddProducer(props) {
         if (producerId) {
             apiRequest({method: "get", url: "producers/" + producerId + "/"}).then(res => {
                 setValues(res.data)
-            }).catch((e) => console.log(e))
+            })
         }
     }, [producerId])
 

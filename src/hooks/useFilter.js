@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
+
 /**
  * Function checks whether propNames of two objects are equal
  * @param subject
@@ -31,6 +32,15 @@ const getIntersectionByProperty = (itemArray, property) => {
     }
     return result;
 };
+
+/**
+ * Hook that can be used to query a list of objects, by selected params
+ * @param params : {paramName: boolean}
+ * @param data : [{}] - Array of objects that should be queried
+ * @param mutator : function(param, query, dataValue) - if set function can be used to format object or query for
+ * certain params
+ * @returns {{query: string, handleFilterParamChange: handleFilterParamChange, setQuery: (value: (((prevState: string) => string) | string)) => void, value: (*|*[]), filterParams: unknown, handleQueryChange: handleQueryChange}}
+ */
 function useFilter({params, data, mutator}) {
     const [value, setValue] = useState([]);
     // parameter that should be used in apply
@@ -42,8 +52,8 @@ function useFilter({params, data, mutator}) {
     }
 
     const handleFilterParamChange = (e) => {
-        const { name, checked } = e.target;
-        setFilterParams(Object.assign(Object.assign({}, filterParams), { [name]: checked }));
+        const {name, checked} = e.target;
+        setFilterParams(Object.assign(Object.assign({}, filterParams), {[name]: checked}));
     };
     const [selectedFilterParams, setSelectedFilterParam] = useState(() => Object.keys(filterParams).filter(key => filterParams[key] === true));
     useEffect(() => {
@@ -86,6 +96,15 @@ function useFilter({params, data, mutator}) {
             applyFilter();
         }
     }, [query, data, selectedFilterParams]);
-    return { value: (query === "" ? data : value), filterParams, handleFilterParamChange, setQuery, query, handleQueryChange};
+    return {
+        // if query is empty -> return all data
+        value: (query === "" ? data : value),
+        filterParams,
+        handleFilterParamChange,
+        setQuery,
+        query,
+        handleQueryChange
+    };
 }
+
 export default useFilter;

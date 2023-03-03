@@ -10,9 +10,10 @@ function useQuery(options) {
         url,
         method = "GET",
         requestData = {},
-        requestOnLoad = false,
+        requestOnLoad = false, // set true, if request should be performed immediately on render
         formatData,
-        onResponse
+        throwError = false,
+        onResponse // if set: function is called right after response comes. response object is passed to function
     } = options
     const [data, setData] = useState(null)
     const [error, setError] = useState("")
@@ -21,6 +22,25 @@ function useQuery(options) {
     const requestURL = useRef(url)
     const {apiRequest} = useApi()
 
+    /**
+     * performs the query to set url
+     */
+    const request = async () => {
+        setLoading(true)
+        try {
+            const response = await apiRequest({
+                ...options, signal: controllerRef.signal
+            })
+            if (onResponse) onResponse(response)
+            // latest url is stored in requestUrl.current -> data is only set if it comes from latest request
+            if (BASE_URL + requestURL.current === response.request.responseURL) {
+                setData(response.data)
+            }
+            return response
+        } catch (error) {
+            setError(error)
+        }
+    }
 
     /**
      * Cancels the API request
@@ -29,24 +49,7 @@ function useQuery(options) {
         controllerRef.abort();
     };
 
-    const request = async () => {
-        setLoading(true)
-        try {
-            const response = await apiRequest({
-                ...options, signal: controllerRef.signal
-            })
-            if(onResponse) onResponse(response)
-            // latest url is stored in useRef.current -> data is only set if it comes from latest request
-            if (BASE_URL+requestURL.current === response.request.responseURL) {
-                setData(response.data)
-            }
-            return response
-        } catch (error) {
-            console.log(error)
-            setError(error)
-        }
-    }
-
+    // perform request when url changes and requestOnLoad is set.
     useEffect(() => {
         requestURL.current = url
         if (requestOnLoad) {
@@ -56,6 +59,7 @@ function useQuery(options) {
         }
     }, [url])
 
+    // cancel Loading state if either data is received or error was raised
     useEffect(() => {
         if (data || error) {
             setLoading(false)

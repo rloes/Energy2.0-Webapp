@@ -43,7 +43,6 @@ const formatApiData = (data, method) => {
         delete clonedData['sensor']
         delete clonedData['producer']
     }
-    console.log(clonedData)
     return clonedData
 };
 
@@ -141,8 +140,7 @@ function AddConsumer({producerId, onClose}) {
                         ...res.data, rates: _rates
                     }
                     setValues(values)
-                })
-                .catch((e) => console.log(e));
+                });
         }
     }, [consumerId, rates]);
 
@@ -207,6 +205,8 @@ function AddConsumer({producerId, onClose}) {
                                     onChange={handleChange}
                                     placeholder={"Produzent"}
                                     label={"Produzent"}
+                                    helperText={"Achtung hier ist das Format: Backend-URL/producers/:id/. " +
+                                        "Einfacher lassen sich Kunden über -Solaranlage bearbeiten- hinzufügen"}
                                 />}
                             <TextField
                                 name={"sensor.deviceId"}

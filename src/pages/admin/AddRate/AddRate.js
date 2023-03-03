@@ -78,7 +78,7 @@ function AddRate(props) {
         if (rateId) {
             apiRequest({method: "get", url: "rates/" + rateId + "/"}).then(res => {
                 setValues(res.data)
-            }).catch((e) => console.log(e))
+            })
         }
     }, [rateId])
 

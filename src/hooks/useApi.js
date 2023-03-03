@@ -15,6 +15,18 @@ function useApi() {
     const setNotification = useNotificationStore(state => state.setNotification)
     const logout = useAuthStore(state => state.logout)
 
+    /**
+     * Sends HTTP-Request to BASIS-URL(set in useApi) + given url.
+     * @param method - HTTP Method (GET, POST, DELETE, ...)
+     * @param url - should contain only the route/path. Base-Url/Domain is set in useApi
+     * @param requestData - data that should added to request
+     * @param formatData - function that is called before sending request - can be used to transform/format data
+     * @param noAuthorization - set true if no Authorization Header should be set (e.g for login)
+     * @param throwError - set true if errors that are not 401 or 403 should be thrown and not handled with a
+     * general error notice. Throw if more specific error handleing is required
+     * @param signal - AbortController().signal can be set here, e.g to cancel request
+     * @see useQuery()
+     */
     async function apiRequest({
                                   method,
                                   url,
@@ -47,9 +59,7 @@ function useApi() {
         } catch (error) {
             // error handling that is the same on every request is handled here
             let errorHandled = false
-            console.log(error)
             const status = error.response?.status || error.message
-            console.log(status)
             // no authorization, no permission errors are handled
             if (status === 401 || status === 403) {
                 // delete token
