@@ -1,49 +1,49 @@
-# Energy 2.0 Webapplication
-This is repository for the Webapplication of the [Energy 2.0 Application](https://github.com/s1n7/Energy2.0)
-created in the context of the project seminar.
+# Energy 2.0 Webanwendung
+Dies ist das Repository für die Webanwendung der [Energy 2.0 Anwendung](https://github.com/s1n7/Energy2.0), die im Rahmen des Projektseminars erstellt wurde.
 
 ## Installation
-1. Install node.js and npm
-2. Clone the repository to your local machine   
-`git clone git@github.com:rloes/Energy2.0-Webapp.git`
-3. Change Directory to project root  
-`cd Energy2.0-Webapp`
-4. Install all dependencies  
-`npm install`
-5. Start developement server  
-`npm start`
+1. Installieren Sie node.js und npm
+2. Klonen Sie das Repository auf Ihren lokalen Computer  
+   `git clone git@github.com:rloes/Energy2.0-Webapp.git`
+3. Ghen sie in das Projektstammverzeichnis  
+   `cd Energy2.0-Webapp`
+4. Installieren Sie alle nötigen Packages  
+   `npm install`
+5. Falls das Backend nicht lokal auf dem Port 8000 läuft -> passen Sie die Backend-URL unter _src/hooks/useApi_ an 
+6. Starten Sie den Entwicklungsserver  
+   `npm start`
 
-## Structure
-The entry point is `src/App.js` where all routes are defined
+## Struktur
+Der Einstiegspunkt ist `src/App.js`, wo alle Routen definiert sind.
 
-- [Components](#components)
-- [Hooks](#hooks)
-- [Pages](#pages)
-- [Stores](#stores)
+- [Komponenten](#komponenten-srccomponents)
+- [Hooks](#hooks-srchooks)
+- [Seiten](#seiten-srcpages)
+- [Stores](#stores-srcstores)
 
-### Components
-All components that are shared over the entire application are stored 
-here. If they require local hooks or style they can be stored in a dedicated folder with hooks and style subdirectories
+### Komponenten (_src/components_)
+Alle Komponenten, die in der gesamten Anwendung geteilt werden, werden hier gespeichert. Wenn sie lokale Hooks oder Styles benötigen, können sie in einem dedizierten Ordner mit Hooks- und Style-Unterverzeichnissen gespeichert werden.
 
-Examples:
-- WidgetComponent
+Beispiele:
+- ListEntityTable
 - StyledButtons
 
-### Hooks
-All hooks that are shared over the entire application
-Examples:
+### Hooks (_src/hooks_)
+Alle Hooks, die in der gesamten Anwendung geteilt werden.
+Beispiele:
 - useForm
 - useApi
 
-### Pages
-All top-level components that are rendered as an own route get stored here.
-They can be stored in a directory if they require local components, hooks or styles
-Examples:
+### Seiten (_src/pages_)
+Alle Top-Level-Komponenten, die als eigene Route gerendert werden, werden hier gespeichert. Sie können in einem Verzeichnis gespeichert werden, wenn sie lokale Komponenten, Hooks oder Styles erfordern.
+
+Beispiele:
 - AddProducer
 - Login
 
-### Stores
-Global state is stored in Stores. We are using [zustand](https://github.com/pmndrs/zustand) for state management.
-Examples:
+### Stores (_src/stores_)
+Der globale Zustand wird in Stores gespeichert. Wir verwenden [zustand](https://github.com/pmndrs/zustand) für das Zustandsmanagement.
+
+Beispiele:
 - AuthorizationStore
 - NotificationStore
